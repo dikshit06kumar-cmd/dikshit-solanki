@@ -1,0 +1,7 @@
+# System & Editor artifacts
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.vscode/
+.idea/
