@@ -223,6 +223,25 @@
         );
       });
 
+      // Smooth reveal for testimonial cards
+      gsap.utils.toArray(".testimonial-card").forEach((card, i) => {
+        gsap.fromTo(card,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.75,
+            delay: i * 0.12,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 92%",
+              once: true
+            }
+          }
+        );
+      });
+
       // Active state updater for navigation links
       const sections = document.querySelectorAll("section[id], div[id='about']");
       const navLinks = document.querySelectorAll(".nav-links a");
