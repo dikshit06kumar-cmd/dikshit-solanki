@@ -122,6 +122,10 @@
       if (!initialTriggered) {
         initialTriggered = true;
         onInitialReady();
+        // Quickly dismiss loader once initial hero frame is painted
+        setTimeout(() => {
+          if (loader) loader.classList.add("loaded");
+        }, 200);
       }
     };
 
@@ -181,34 +185,15 @@
         }
       });
 
-      // Smooth reveal for project cards
-      gsap.utils.toArray(".project-card").forEach((card, i) => {
-        gsap.fromTo(card,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            delay: (i % 2) * 0.15,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              once: true
-            }
-          }
-        );
-      });
-
-      // Smooth reveal for service cards
-      gsap.utils.toArray(".service-card").forEach((card, i) => {
+      // Smooth reveal for showcase cards
+      gsap.utils.toArray(".showcase-card").forEach((card, i) => {
         gsap.fromTo(card,
           { y: 35, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.75,
-            delay: (i % 2) * 0.12,
+            duration: 0.8,
+            delay: i * 0.12,
             ease: "power2.out",
             scrollTrigger: {
               trigger: card,
@@ -219,19 +204,19 @@
         );
       });
 
-      // Smooth reveal for process steps
-      gsap.utils.toArray(".process-step").forEach((step, i) => {
-        gsap.fromTo(step,
-          { y: 30, opacity: 0 },
+      // Smooth reveal for contact action cards
+      gsap.utils.toArray(".action-card").forEach((card, i) => {
+        gsap.fromTo(card,
+          { y: 25, opacity: 0 },
           {
             y: 0,
             opacity: 1,
             duration: 0.7,
-            delay: (i % 5) * 0.1,
+            delay: i * 0.15,
             ease: "power2.out",
             scrollTrigger: {
-              trigger: step,
-              start: "top 92%",
+              trigger: card,
+              start: "top 95%",
               once: true
             }
           }
@@ -239,12 +224,12 @@
       });
 
       // Active state updater for navigation links
-      const sections = document.querySelectorAll("section[id]");
+      const sections = document.querySelectorAll("section[id], div[id='about']");
       const navLinks = document.querySelectorAll(".nav-links a");
 
       window.addEventListener("scroll", () => {
-        let current = "";
-        const scrollY = window.pageYOffset + 200;
+        let current = "home";
+        const scrollY = window.pageYOffset + 220;
 
         sections.forEach((section) => {
           const sectionTop = section.offsetTop;
