@@ -29,10 +29,9 @@
     </div>
   </div>
 
-  <!-- Fixed Canvas Animation Background -->
+  <!-- Fixed Canvas Animation Background (Continuous Across Entire Site) -->
   <div class="canvas-wrapper">
     <canvas id="animation-canvas"></canvas>
-    <div class="hero-ambient-glow"></div>
   </div>
 
   <!-- Page Content Structure -->
@@ -50,7 +49,7 @@
           <li><a href="#home" class="active">Home</a></li>
           <li><a href="#work">Work</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#testimonials">Reviews</a></li>
+          <li><a href="#reviews">Reviews</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
         <a href="#contact" class="btn-pill btn-white">
@@ -65,7 +64,7 @@
       </nav>
     </header>
 
-    <!-- Hero Section -->
+    <!-- SECTION 1: Home / Hero -->
     <section class="hero-section" id="home">
       <div class="hero-container">
         
@@ -121,7 +120,7 @@
       </div>
     </section>
 
-    <!-- Selected Work Section (Minimal 3-Card Editorial Layout) -->
+    <!-- SECTION 2: Work / Portfolio -->
     <section class="section-work" id="work">
       <div class="content-container">
 
@@ -197,11 +196,275 @@
       </div>
     </section>
 
-    <!-- Minimal About & Contact Section -->
+    <!-- SECTION 3: About (Introduction, Skills & Services) -->
+    <section class="section-about" id="about">
+      <div class="content-container">
+
+        <div class="about-grid">
+          
+          <!-- Left: About Narrative & Background -->
+          <div class="about-left">
+            <span class="section-tag">About Me</span>
+            <h2 class="section-title">Creative Execution Rooted in Real Practice</h2>
+            
+            <p class="about-paragraph primary-text">
+              I’m a creative professional with practical experience in YouTube content creation, video editing, thumbnail design, promotional graphics, research, writing, and AI-powered creative tools.
+            </p>
+            
+            <p class="about-paragraph">
+              I enjoy handling the creative process from researching ideas and developing concepts to producing polished visual content for creators, individuals, and businesses. My focus is always on clear pacing, high visual clarity, and presenting ideas in a way that resonates with the audience.
+            </p>
+
+            <div class="about-focus-card">
+              <span class="focus-label">Experience &amp; Focus</span>
+              <p class="focus-text">Self-managed YouTube channels, video pacing, sound design, and creative digital production.</p>
+            </div>
+
+            <div class="about-actions">
+              <a href="#contact" class="btn-pill btn-orange">
+                <span>Let's Talk</span>
+                <span class="btn-arrow-circle white">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </span>
+              </a>
+              <a href="#work" class="btn-pill btn-outline">
+                <span>View Selected Work</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: Core Services & Capabilities -->
+          <div class="about-right">
+            
+            <!-- Services Card -->
+            <div class="about-glass-card">
+              <h3 class="card-heading">What I Do</h3>
+              
+              <div class="about-service-row">
+                <span class="service-tag-num">#01</span>
+                <div>
+                  <h4 class="service-row-title">Video Editing</h4>
+                  <p class="service-row-desc">Long-form narrative pacing, Shorts/Reels formatting, and sound design.</p>
+                </div>
+              </div>
+
+              <div class="about-service-row">
+                <span class="service-tag-num">#02</span>
+                <div>
+                  <h4 class="service-row-title">Thumbnail Design</h4>
+                  <p class="service-row-desc">High-CTR visual psychology, lighting design, and Photoshop compositing.</p>
+                </div>
+              </div>
+
+              <div class="about-service-row">
+                <span class="service-tag-num">#03</span>
+                <div>
+                  <h4 class="service-row-title">Graphic Design</h4>
+                  <p class="service-row-desc">Promotional branding assets, custom digital graphics, and key art.</p>
+                </div>
+              </div>
+
+              <div class="about-service-row">
+                <span class="service-tag-num">#04</span>
+                <div>
+                  <h4 class="service-row-title">AI Creative Production</h4>
+                  <p class="service-row-desc">Prompt engineering, concept art, and audience-retention script research.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Skills & Tools Card -->
+            <div class="about-glass-card">
+              <h3 class="card-heading">Tools &amp; Capabilities</h3>
+              <div class="skills-pill-wrap">
+                <span class="skill-chip">Premiere Pro</span>
+                <span class="skill-chip">CapCut</span>
+                <span class="skill-chip">Photoshop</span>
+                <span class="skill-chip">Audio Pacing</span>
+                <span class="skill-chip">Sound FX</span>
+                <span class="skill-chip">Color Grading</span>
+                <span class="skill-chip">Thumbnail Composition</span>
+                <span class="skill-chip">Midjourney</span>
+                <span class="skill-chip">Prompt Engineering</span>
+                <span class="skill-chip">Hook Formulation</span>
+                <span class="skill-chip">Topic Research</span>
+                <span class="skill-chip">Audience Psychology</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4: Client Feedback / Reviews (Commentable with Interactive Form) -->
+    <section class="section-testimonials" id="reviews">
+      <div class="content-container">
+        
+        <div class="testimonials-header">
+          <div class="testimonials-header-left">
+            <span class="section-tag">Client Feedback</span>
+            <h2 class="section-title">What Creators Say</h2>
+          </div>
+          <p class="testimonials-intro">
+            Real outcomes from YouTube creators and digital brands scaling their reach and audience retention.
+          </p>
+        </div>
+
+        <!-- Featured Genuine Testimonials -->
+        <div class="testimonials-grid" id="featuredReviewsGrid">
+          
+          <!-- Testimonial 1 -->
+          <article class="testimonial-card featured">
+            <div class="testimonial-top">
+              <div class="testimonial-stars" aria-label="5 out of 5 stars">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <span class="result-badge featured-badge">+160% CTR Boost</span>
+            </div>
+            <p class="testimonial-quote">
+              &ldquo;Dikshit completely transformed our YouTube packaging. Our CTR jumped from 4.2% to over 11% in the first two weeks, and average view duration spiked immediately.&rdquo;
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">AR</div>
+              <div class="author-details">
+                <span class="author-name">Alex Reed</span>
+                <span class="author-role">YouTube Creator &bull; 450K Subs</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Testimonial 2 -->
+          <article class="testimonial-card featured">
+            <div class="testimonial-top">
+              <div class="testimonial-stars" aria-label="5 out of 5 stars">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <span class="result-badge featured-badge">Retention +45%</span>
+            </div>
+            <p class="testimonial-quote">
+              &ldquo;The narrative cuts, audio pacing, and subtle sound design brought our videos to documentary standard. Audience drop-off in the first 30 seconds virtually disappeared.&rdquo;
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">MV</div>
+              <div class="author-details">
+                <span class="author-name">Marcus Vance</span>
+                <span class="author-role">Founder &bull; Pulse Media Agency</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Testimonial 3 -->
+          <article class="testimonial-card featured">
+            <div class="testimonial-top">
+              <div class="testimonial-stars" aria-label="5 out of 5 stars">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <span class="result-badge featured-badge">2.4M+ Views</span>
+            </div>
+            <p class="testimonial-quote">
+              &ldquo;Fast turnaround, zero handholding, and incredible creative instincts. He doesn&rsquo;t just edit videos—he crafts visual experiences that viewers can&rsquo;t click away from.&rdquo;
+            </p>
+            <div class="testimonial-author">
+              <div class="author-avatar">SC</div>
+              <div class="author-details">
+                <span class="author-name">Sarah Chen</span>
+                <span class="author-role">Tech &amp; Productivity Creator</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Dynamic Community Feedback Stream -->
+        <div class="community-feedback-section">
+          <div class="community-header">
+            <h3 class="community-title">Community &amp; Client Reviews</h3>
+            <span class="community-count-pill" id="communityCount">Loading...</span>
+          </div>
+
+          <div class="testimonials-grid" id="communityReviewsGrid">
+            <!-- Dynamically populated from /api/feedback & localStorage -->
+          </div>
+        </div>
+
+        <!-- Interactive Feedback Form Card -->
+        <div class="feedback-form-card">
+          <div class="form-header">
+            <span class="form-tag">Leave a Review</span>
+            <h3 class="form-title">Share Your Feedback</h3>
+            <p class="form-desc">Worked together or have feedback on my visual projects? Submit your comment below to be featured on this page.</p>
+          </div>
+
+          <form id="feedbackForm" class="feedback-form" novalidate>
+            <!-- Anti-spam Honeypot Field (invisible to users) -->
+            <input type="text" name="bot_check" id="botCheck" tabindex="-1" autocomplete="off" style="display:none !important;" aria-hidden="true">
+
+            <div class="form-grid">
+              <!-- Name Input -->
+              <div class="form-group">
+                <label for="fbName" class="form-label">Your Name <span class="required-star">*</span></label>
+                <input type="text" id="fbName" name="name" class="form-input" placeholder="e.g. David Miller" maxlength="60" required>
+                <span class="field-error" id="nameError"></span>
+              </div>
+
+              <!-- Rating Selection -->
+              <div class="form-group">
+                <label class="form-label">Rating (Optional)</label>
+                <div class="star-rating-widget" id="starRatingWidget" role="radiogroup" aria-label="Rating out of 5 stars">
+                  <button type="button" class="star-btn active" data-rating="1" aria-label="1 star">★</button>
+                  <button type="button" class="star-btn active" data-rating="2" aria-label="2 stars">★</button>
+                  <button type="button" class="star-btn active" data-rating="3" aria-label="3 stars">★</button>
+                  <button type="button" class="star-btn active" data-rating="4" aria-label="4 stars">★</button>
+                  <button type="button" class="star-btn active" data-rating="5" aria-label="5 stars">★</button>
+                  <span class="star-value-label" id="starValueLabel">5 / 5 Stars</span>
+                </div>
+                <input type="hidden" id="fbRating" name="rating" value="5">
+              </div>
+            </div>
+
+            <!-- Comment Input -->
+            <div class="form-group">
+              <div class="comment-label-row">
+                <label for="fbComment" class="form-label">Your Comment <span class="required-star">*</span></label>
+                <span class="char-counter" id="charCounter">0 / 400</span>
+              </div>
+              <textarea id="fbComment" name="comment" class="form-textarea" rows="4" placeholder="Share your experience working with Dikshit, feedback on video pacing, thumbnails, or design quality..." maxlength="400" required></textarea>
+              <span class="field-error" id="commentError"></span>
+            </div>
+
+            <!-- Form Status / Alerts -->
+            <div id="formStatus" class="form-status" role="alert" aria-live="polite"></div>
+
+            <!-- Submit Button -->
+            <div class="form-submit-row">
+              <button type="submit" id="submitFeedbackBtn" class="btn-pill btn-orange btn-submit">
+                <span id="btnText">Submit Feedback</span>
+                <span class="btn-arrow-circle white">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </span>
+              </button>
+              <span class="form-note">🔒 Genuine feedback is stored securely and updated in real time.</span>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 5: Contact (At the very bottom before the footer) -->
     <section class="section-contact" id="contact">
       <div class="content-container">
         
-        <div class="contact-box" id="about">
+        <div class="contact-box">
           <div class="contact-box-left">
             <span class="section-tag">Let's Connect</span>
             <h2 class="contact-headline">Have a project in mind?</h2>
@@ -243,88 +506,7 @@
       </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="section-testimonials" id="testimonials">
-      <div class="content-container">
-        
-        <div class="testimonials-header">
-          <div class="testimonials-header-left">
-            <span class="section-tag">Client Feedback</span>
-            <h2 class="section-title">What Creators Say</h2>
-          </div>
-          <p class="testimonials-intro">
-            Real outcomes from YouTube creators and digital brands scaling their reach and audience retention.
-          </p>
-        </div>
-
-        <div class="testimonials-grid">
-          
-          <!-- Testimonial 1 -->
-          <article class="testimonial-card">
-            <div class="testimonial-top">
-              <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-              </div>
-              <span class="result-badge">+160% CTR Boost</span>
-            </div>
-            <p class="testimonial-quote">
-              &ldquo;Dikshit completely transformed our YouTube packaging. Our CTR jumped from 4.2% to over 11% in the first two weeks, and average view duration spiked immediately.&rdquo;
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar">AR</div>
-              <div class="author-details">
-                <span class="author-name">Alex Reed</span>
-                <span class="author-role">YouTube Creator &bull; 450K Subs</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Testimonial 2 -->
-          <article class="testimonial-card">
-            <div class="testimonial-top">
-              <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-              </div>
-              <span class="result-badge">Retention +45%</span>
-            </div>
-            <p class="testimonial-quote">
-              &ldquo;The narrative cuts, audio pacing, and subtle sound design brought our videos to documentary standard. Audience drop-off in the first 30 seconds virtually disappeared.&rdquo;
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar">MV</div>
-              <div class="author-details">
-                <span class="author-name">Marcus Vance</span>
-                <span class="author-role">Founder &bull; Pulse Media Agency</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Testimonial 3 -->
-          <article class="testimonial-card">
-            <div class="testimonial-top">
-              <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-              </div>
-              <span class="result-badge">2.4M+ Views</span>
-            </div>
-            <p class="testimonial-quote">
-              &ldquo;Fast turnaround, zero handholding, and incredible creative instincts. He doesn&rsquo;t just edit videos—he crafts visual experiences that viewers can&rsquo;t click away from.&rdquo;
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar">SC</div>
-              <div class="author-details">
-                <span class="author-name">Sarah Chen</span>
-                <span class="author-role">Tech &amp; Productivity Creator</span>
-              </div>
-            </div>
-          </article>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Minimal Clean Footer -->
+    <!-- SECTION 6: Minimal Clean Footer -->
     <footer class="footer">
       <div class="content-container footer-content">
         <p class="copyright">&copy; 2026 Dikshit Solanki. Content Creator &amp; Visual Designer.</p>
