@@ -59,7 +59,7 @@
       renderWidth = canvasWidth;
       renderHeight = canvasWidth / imgRatio;
       offsetX = 0;
-      offsetY = (canvasHeight - renderHeight) / 2;
+      offsetY = 0; // Pin to top so head and hair are never cropped off
     } else {
       renderHeight = canvasHeight;
       renderWidth = canvasHeight * imgRatio;
