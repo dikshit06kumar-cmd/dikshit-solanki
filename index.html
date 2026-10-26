@@ -28,6 +28,19 @@
       <div class="loader-text"><span id="load-progress">0</span>%</div>
     </div>
   </div>
+  <script>
+    // Fail-safe: Ensure preloader never traps users on slow mobile networks
+    (function() {
+      function dismissLoader() {
+        var el = document.getElementById("loader");
+        if (el && !el.classList.contains("loaded")) {
+          el.classList.add("loaded");
+        }
+      }
+      setTimeout(dismissLoader, 1500);
+      window.addEventListener("load", function() { setTimeout(dismissLoader, 200); });
+    })();
+  </script>
 
   <!-- Fixed Canvas Animation Background (Continuous Across Entire Site) -->
   <div class="canvas-wrapper">

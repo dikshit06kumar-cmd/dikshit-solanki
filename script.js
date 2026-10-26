@@ -104,11 +104,41 @@
     }
   }
 
-  // Preload all frames progressively
+  // Dismiss preloader safely and smoothly
+  function dismissLoader() {
+    if (loader && !loader.classList.contains("loaded")) {
+      if (progressText) progressText.textContent = "100";
+      loader.classList.add("loaded");
+    }
+  }
+
+  // Preload frames progressively with mobile-friendly batching and guaranteed timeout
   function preloadImages(onInitialReady) {
     let initialTriggered = false;
 
-    // Load Frame 1 first so it displays immediately without delay
+    // Safety timeout: Never leave user stuck, dismiss within 1200ms under any network condition
+    const fallbackTimer = setTimeout(() => {
+      if (!initialTriggered) {
+        initialTriggered = true;
+        onInitialReady();
+      }
+      dismissLoader();
+    }, 1200);
+
+    function notifyInitialReady() {
+      if (!initialTriggered) {
+        initialTriggered = true;
+        clearTimeout(fallbackTimer);
+        onInitialReady();
+        setTimeout(dismissLoader, 150);
+      }
+    }
+
+    // Check if user prefers reduced motion or is on data-saver mode
+    const isReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isSaveData = navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === "2g");
+
+    // Load Frame 1 first so hero renders immediately
     const firstImg = new Image();
     firstImg.src = getFrameUrl(1);
     images[0] = firstImg;
@@ -118,50 +148,59 @@
       loadedCount++;
       resizeCanvas();
       renderFrame(0, true);
-
-      if (!initialTriggered) {
-        initialTriggered = true;
-        onInitialReady();
-        // Quickly dismiss loader once initial hero frame is painted
-        setTimeout(() => {
-          if (loader) loader.classList.add("loaded");
-        }, 200);
+      notifyInitialReady();
+      if (!isReducedMotion && !isSaveData) {
+        startProgressivePreload();
       }
     };
 
     firstImg.onerror = () => {
-      console.warn("Failed to load initial frame:", getFrameUrl(1));
-      if (!initialTriggered) {
-        initialTriggered = true;
-        onInitialReady();
+      console.warn("Hero frame failed to load:", getFrameUrl(1));
+      notifyInitialReady();
+      if (!isReducedMotion && !isSaveData) {
+        startProgressivePreload();
       }
     };
 
-    // Preload remaining frames
-    for (let i = 1; i < FRAME_COUNT; i++) {
-      const img = new Image();
-      img.src = getFrameUrl(i + 1);
-      images[i] = img;
+    // Load remaining frames in small gentle batches during browser idle time
+    function startProgressivePreload() {
+      let currentIndex = 1;
+      const BATCH_SIZE = 4; // Gentle batching to prevent network congestion on mobile
 
-      img.onload = () => {
-        loadedStatus[i] = true;
-        loadedCount++;
-        const pct = Math.round((loadedCount / FRAME_COUNT) * 100);
-        if (progressText) {
-          progressText.textContent = pct;
+      function loadNextBatch() {
+        if (currentIndex >= FRAME_COUNT) return;
+
+        const end = Math.min(FRAME_COUNT, currentIndex + BATCH_SIZE);
+        for (let i = currentIndex; i < end; i++) {
+          const img = new Image();
+          img.src = getFrameUrl(i + 1);
+          images[i] = img;
+
+          img.onload = () => {
+            loadedStatus[i] = true;
+            loadedCount++;
+            const pct = Math.round((loadedCount / FRAME_COUNT) * 100);
+            if (progressText && loader && !loader.classList.contains("loaded")) {
+              progressText.textContent = pct;
+            }
+          };
+
+          img.onerror = () => {
+            loadedCount++;
+          };
         }
 
-        if (loadedCount >= FRAME_COUNT) {
-          if (loader) loader.classList.add("loaded");
+        currentIndex = end;
+        if (currentIndex < FRAME_COUNT) {
+          if ("requestIdleCallback" in window) {
+            requestIdleCallback(loadNextBatch, { timeout: 100 });
+          } else {
+            setTimeout(loadNextBatch, 35);
+          }
         }
-      };
+      }
 
-      img.onerror = () => {
-        loadedCount++;
-        if (loadedCount >= FRAME_COUNT) {
-          if (loader) loader.classList.add("loaded");
-        }
-      };
+      loadNextBatch();
     }
   }
 
@@ -693,16 +732,6 @@
   // Handle window resize & orientation change
   window.addEventListener("resize", resizeCanvas);
 
-  // Initialize once DOM is ready
-  window.addEventListener("DOMContentLoaded", () => {
-    resizeCanvas();
-    preloadImages(() => {
-      initScrollAnimation();
-    });
-    initStarRatingWidget();
-    initFeedbackForm();
-    loadFeedback();
-
   // Support ?scroll= query parameter for direct section linking
   function handleDirectScroll() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -717,8 +746,18 @@
     }
   }
 
-  handleDirectScroll();
-  window.addEventListener("DOMContentLoaded", handleDirectScroll);
+  // Initialize once DOM is ready
+  window.addEventListener("DOMContentLoaded", () => {
+    resizeCanvas();
+    preloadImages(() => {
+      initScrollAnimation();
+    });
+    initStarRatingWidget();
+    initFeedbackForm();
+    loadFeedback();
+    handleDirectScroll();
+  });
+
   window.addEventListener("load", () => {
     handleDirectScroll();
     setTimeout(handleDirectScroll, 100);
