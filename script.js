@@ -1,7 +1,12 @@
 (() => {
+  "use strict";
+
+  // ==========================================================================
+  // CONFIGURATION & CONSTANTS
+  // ==========================================================================
   const FRAME_COUNT = 240;
   const canvas = document.getElementById("animation-canvas");
-  const ctx = canvas.getContext("2d", { alpha: false });
+  const ctx = canvas ? canvas.getContext("2d", { alpha: false }) : null;
   const loader = document.getElementById("loader");
   const progressText = document.getElementById("load-progress");
 
@@ -21,8 +26,19 @@
     frame: 0
   };
 
-  // Adjust canvas resolution for crisp display on high-DPI screens
+  // Check user motion preferences & connection speeds
+  const isReducedMotion = () =>
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const isSaveData = () =>
+    navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === "2g");
+
+  // ==========================================================================
+  // CANVAS SIZING & RENDERING PIPELINE
+  // ==========================================================================
   function resizeCanvas() {
+    if (!canvas || !ctx) return;
+
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -32,7 +48,7 @@
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
 
-    ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform matrix
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
@@ -40,8 +56,10 @@
     renderFrame(Math.round(animationState.frame), true);
   }
 
-  // Draw image to fill canvas (cover aspect ratio, centered horizontally, pinned top)
+  // Draw image to fill canvas (cover aspect ratio, centered horizontally, pinned to top)
   function drawImageCover(img) {
+    if (!ctx || !img) return;
+
     const canvasWidth = window.innerWidth;
     const canvasHeight = window.innerHeight;
 
@@ -59,7 +77,7 @@
       renderWidth = canvasWidth;
       renderHeight = canvasWidth / imgRatio;
       offsetX = 0;
-      offsetY = 0; // Pin to top so head and hair are never cropped off
+      offsetY = 0; // Pinned to top so subject's head and portrait are never cropped off
     } else {
       renderHeight = canvasHeight;
       renderWidth = canvasHeight * imgRatio;
@@ -71,7 +89,7 @@
     ctx.drawImage(img, offsetX, offsetY, renderWidth, renderHeight);
   }
 
-  // Find closest available loaded frame to prevent blank flicker
+  // Return the nearest loaded frame to guarantee continuous playback without blanks
   function getBestAvailableFrame(index) {
     if (loadedStatus[index] && images[index]) {
       return images[index];
@@ -89,7 +107,7 @@
     return null;
   }
 
-  // Render a specific frame index (0 to FRAME_COUNT - 1)
+  // Render a specific frame index
   function renderFrame(index, force = false) {
     const clampedIndex = Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(index)));
 
@@ -109,21 +127,26 @@
     if (loader && !loader.classList.contains("loaded")) {
       if (progressText) progressText.textContent = "100";
       loader.classList.add("loaded");
+      setTimeout(() => {
+        loader.style.display = "none";
+      }, 500);
     }
   }
 
-  // Preload frames progressively: load Frame 1 first, keyframes next, then idle batches
+  // ==========================================================================
+  // PROGRESSIVE ASSET LOADING
+  // ==========================================================================
   function preloadImages(onInitialReady) {
     let initialTriggered = false;
 
-    // Safety timeout: Never leave user stuck, dismiss within 1200ms under any network condition
+    // Safety timeout: Never leave user stuck; dismiss within 800ms under any network condition
     const fallbackTimer = setTimeout(() => {
       if (!initialTriggered) {
         initialTriggered = true;
         onInitialReady();
       }
       dismissLoader();
-    }, 1200);
+    }, 800);
 
     function notifyInitialReady() {
       if (!initialTriggered) {
@@ -134,11 +157,7 @@
       }
     }
 
-    // Check if user prefers reduced motion or is on data-saver mode
-    const isReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isSaveData = navigator.connection && (navigator.connection.saveData || navigator.connection.effectiveType === "2g");
-
-    // Load Frame 1 first so hero renders immediately
+    // 1. Load Frame 1 with high priority so the hero background renders immediately
     const firstImg = new Image();
     firstImg.src = getFrameUrl(1);
     images[0] = firstImg;
@@ -149,24 +168,23 @@
       resizeCanvas();
       renderFrame(0, true);
       notifyInitialReady();
-      if (!isReducedMotion && !isSaveData) {
+      if (!isReducedMotion() && !isSaveData()) {
         preloadKeyframesAndProgressive();
       }
     };
 
     firstImg.onerror = () => {
-      console.warn("Hero frame failed to load:", getFrameUrl(1));
+      console.info("Hero frame fallback active.");
       notifyInitialReady();
-      if (!isReducedMotion && !isSaveData) {
+      if (!isReducedMotion() && !isSaveData()) {
         preloadKeyframesAndProgressive();
       }
     };
 
-    // Preload keyframes first for fast desktop scrubbing, then fill remaining in idle batches
+    // 2. Preload distributed keyframes for instant scrubbing, then load idle batches
     function preloadKeyframesAndProgressive() {
-      // 1. Keyframes distributed evenly across entire video (every 12 frames)
       const keyframes = [];
-      for (let k = 12; k < FRAME_COUNT; k += 12) {
+      for (let k = 10; k < FRAME_COUNT; k += 10) {
         keyframes.push(k);
       }
 
@@ -194,7 +212,6 @@
         if (keyframeIndex < keyframes.length) {
           setTimeout(loadNextKeyframeBatch, 40);
         } else {
-          // Keyframes complete, load remaining intermediate frames
           loadSequentialBatches(1);
         }
       }
@@ -211,7 +228,7 @@
       function loadSequentialBatches(startIndex) {
         let currentIndex = startIndex;
         const isDesktop = window.innerWidth >= 1024;
-        const BATCH_SIZE = isDesktop ? 8 : 4;
+        const BATCH_SIZE = isDesktop ? 6 : 3;
 
         function loadNextBatch() {
           if (currentIndex >= FRAME_COUNT) return;
@@ -239,9 +256,9 @@
           currentIndex = end;
           if (currentIndex < FRAME_COUNT) {
             if ("requestIdleCallback" in window) {
-              requestIdleCallback(loadNextBatch, { timeout: 80 });
+              requestIdleCallback(loadNextBatch, { timeout: 100 });
             } else {
-              setTimeout(loadNextBatch, 25);
+              setTimeout(loadNextBatch, 30);
             }
           }
         }
@@ -251,80 +268,65 @@
     }
   }
 
-  // Hero section entrance animation timeline (runs smoothly on both Desktop and Mobile)
+  // ==========================================================================
+  // HERO SECTION ENTRANCE ANIMATION
+  // ==========================================================================
   function playHeroEntrance() {
-    const isReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (isReducedMotion) {
-      document.querySelectorAll(".hero-greeting, .hero-title, .hero-statement, .hero-intro, .hero-cta-buttons, .hero-services .service-item, .navbar").forEach(el => {
-        el.style.opacity = "1";
-        el.style.transform = "none";
+    if (isReducedMotion()) return;
+
+    if (typeof gsap !== "undefined") {
+      const heroTl = gsap.timeline({
+        defaults: { ease: "power3.out" }
       });
-      return;
+
+      // Canvas background subtle zoom & fade in
+      heroTl.fromTo(".canvas-wrapper",
+        { opacity: 0, scale: 1.04 },
+        { opacity: 1, scale: 1, duration: 1.1, ease: "power2.out" }
+      );
+
+      // Navbar entrance
+      heroTl.fromTo(".navbar",
+        { y: -24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7 },
+        "-=0.8"
+      );
+
+      // Hero eyebrow & title
+      heroTl.fromTo([".hero-eyebrow", ".hero-title"],
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.12 },
+        "-=0.6"
+      );
+
+      // Hero statement, intro copy, CTA buttons
+      heroTl.fromTo([".hero-statement", ".hero-intro", ".hero-cta-buttons"],
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.7, stagger: 0.12 },
+        "-=0.6"
+      );
+
+      // 4-Pillars service strip items
+      heroTl.fromTo(".hero-services .service-item",
+        { y: 22, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, stagger: 0.08 },
+        "-=0.4"
+      );
     }
-
-    if (typeof gsap === "undefined") return;
-
-    const heroTl = gsap.timeline({
-      defaults: { ease: "power3.out" }
-    });
-
-    // 1. Profile Canvas Background subtle zoom & fade in
-    heroTl.fromTo(".canvas-wrapper",
-      { opacity: 0, scale: 1.05 },
-      { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
-    );
-
-    // 2. Navbar entrance
-    heroTl.fromTo(".navbar",
-      { y: -28, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8 },
-      "-=0.9"
-    );
-
-    // 3. Hero greeting
-    heroTl.fromTo(".hero-greeting",
-      { y: 22, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.65 },
-      "-=0.6"
-    );
-
-    // 4. Hero main headline
-    heroTl.fromTo(".hero-title",
-      { y: 35, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.85 },
-      "-=0.55"
-    );
-
-    // 5. Hero right column (statement, intro description, CTA buttons)
-    heroTl.fromTo([".hero-statement", ".hero-intro"],
-      { y: 25, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.7, stagger: 0.12 },
-      "-=0.65"
-    );
-
-    heroTl.fromTo(".hero-cta-buttons",
-      { y: 22, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.65 },
-      "-=0.5"
-    );
-
-    // 6. 4 Pillars Services strip items
-    heroTl.fromTo(".hero-services .service-item",
-      { y: 20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, stagger: 0.08 },
-      "-=0.45"
-    );
   }
 
-  // Initialize Scroll Animation & Section Navigation
+  // ==========================================================================
+  // DESKTOP & MOBILE SCROLL ANIMATION PIPELINE
+  // ==========================================================================
   function initScrollAnimation() {
-    // Play Hero Entrance timeline on initialization
     playHeroEntrance();
 
-    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+    const hasGSAP = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+
+    if (hasGSAP && !isReducedMotion()) {
       gsap.registerPlugin(ScrollTrigger);
 
-      // Scrub background frame animation continuously through the whole page scroll
+      // 1. Scrub background canvas frames smoothly along the page scroll
       gsap.to(animationState, {
         frame: FRAME_COUNT - 1,
         ease: "none",
@@ -332,21 +334,21 @@
           trigger: ".page-wrapper",
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.8,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
           onUpdate: () => {
             renderFrame(animationState.frame);
           }
         }
       });
 
-      // 1. Work Section Header reveal
-      gsap.fromTo([".work-header-left", ".work-header-right"],
+      // 2. Work Section Header reveal
+      gsap.fromTo(".work-header",
         { y: 36, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.75,
-          stagger: 0.12,
+          duration: 0.8,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".work-header",
@@ -356,14 +358,30 @@
         }
       );
 
-      // 2. Showcase Cards reveal in a staggered sweep
-      gsap.fromTo(".showcase-card",
-        { y: 45, opacity: 0 },
+      // 3. Filter Pills reveal
+      gsap.fromTo(".work-filters",
+        { y: 20, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.85,
-          stagger: 0.15,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".work-filters",
+            start: "top 90%",
+            once: true
+          }
+        }
+      );
+
+      // 4. Showcase Cards reveal in a staggered sweep
+      gsap.fromTo(".showcase-card",
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.12,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".cards-grid",
@@ -373,7 +391,7 @@
         }
       );
 
-      // 3. About Section Left column reveal
+      // 5. About Section Left column & narrative reveal
       gsap.fromTo(".about-left",
         { y: 36, opacity: 0 },
         {
@@ -389,14 +407,14 @@
         }
       );
 
-      // 4. About Section Right Glass Cards reveal
+      // 6. About Section Right Glass Cards
       gsap.fromTo(".about-right .about-glass-card",
-        { y: 40, opacity: 0 },
+        { y: 36, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.18,
+          stagger: 0.16,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".about-grid",
@@ -406,7 +424,7 @@
         }
       );
 
-      // 5. Testimonials Header reveal
+      // 7. Testimonials Header
       gsap.fromTo(".testimonials-header",
         { y: 32, opacity: 0 },
         {
@@ -422,14 +440,14 @@
         }
       );
 
-      // 6. Featured Testimonials Cards reveal
+      // 8. Featured Testimonial Cards
       gsap.fromTo(".testimonial-card.featured",
-        { y: 40, opacity: 0 },
+        { y: 36, opacity: 0 },
         {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: 0.15,
+          stagger: 0.14,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".testimonials-grid",
@@ -439,13 +457,13 @@
         }
       );
 
-      // 7. Community Feedback Header & Count
+      // 9. Community Feedback Header
       gsap.fromTo(".community-header",
-        { y: 25, opacity: 0 },
+        { y: 24, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.7,
+          duration: 0.65,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ".community-feedback-section",
@@ -455,11 +473,11 @@
         }
       );
 
-      // 8. Feedback Form Card reveal
+      // 10. Feedback Form Card
       const formCard = document.querySelector(".feedback-form-card");
       if (formCard) {
         gsap.fromTo(formCard,
-          { y: 36, opacity: 0 },
+          { y: 34, opacity: 0 },
           {
             y: 0,
             opacity: 1,
@@ -474,9 +492,9 @@
         );
       }
 
-      // 9. Contact Box Left (headline, subtext)
+      // 11. Contact Section
       gsap.fromTo(".contact-box-left",
-        { y: 35, opacity: 0 },
+        { y: 32, opacity: 0 },
         {
           y: 0,
           opacity: 1,
@@ -490,14 +508,13 @@
         }
       );
 
-      // 10. Contact Action Cards (Email, WhatsApp)
       gsap.fromTo(".contact-box-right .action-card",
-        { y: 30, opacity: 0 },
+        { y: 28, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.75,
-          stagger: 0.14,
+          duration: 0.7,
+          stagger: 0.12,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".contact-box",
@@ -509,64 +526,14 @@
 
       ScrollTrigger.refresh();
 
-      // Recalculate ScrollTrigger on window load and after web fonts finish loading
-      window.addEventListener("load", () => {
-        ScrollTrigger.refresh();
-      });
+      // Recalculate ScrollTrigger on window load and web font ready
+      window.addEventListener("load", () => ScrollTrigger.refresh());
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(() => {
-          ScrollTrigger.refresh();
-        });
+        document.fonts.ready.then(() => ScrollTrigger.refresh());
       }
-
-      // Active state updater for navigation links across all sections
-      const sections = document.querySelectorAll("section[id]");
-      const navLinks = document.querySelectorAll(".nav-links a");
-
-      function updateActiveNav() {
-        const scrollPosition = window.pageYOffset + 200;
-        let currentSectionId = "home";
-
-        sections.forEach((section) => {
-          const top = section.offsetTop;
-          const height = section.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            currentSectionId = section.getAttribute("id");
-          }
-        });
-
-        navLinks.forEach((link) => {
-          link.classList.remove("active");
-          if (link.getAttribute("href") === `#${currentSectionId}`) {
-            link.classList.add("active");
-          }
-        });
-      }
-
-      window.addEventListener("scroll", updateActiveNav, { passive: true });
-
-      // Smooth scroll navigation with navbar offset compensation
-      document.querySelectorAll(".nav-links a, .hero-cta-buttons a, .nav-brand, .back-to-top").forEach((anchor) => {
-        anchor.addEventListener("click", (e) => {
-          const href = anchor.getAttribute("href");
-          if (href && href.startsWith("#")) {
-            e.preventDefault();
-            const targetId = href.substring(1);
-            const targetEl = document.getElementById(targetId);
-            if (targetEl) {
-              const navbarOffset = targetId === "home" ? 0 : 70;
-              const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - navbarOffset;
-              window.scrollTo({
-                top: Math.max(0, targetPosition),
-                behavior: "smooth"
-              });
-            }
-          }
-        });
-      });
 
     } else {
-      // Pure Vanilla Lerp Fallback (works 100% offline without CDN)
+      // Pure Vanilla Lerp Fallback (works offline without any external library)
       let currentFrame = 0;
       let targetFrame = 0;
 
@@ -580,7 +547,7 @@
       window.addEventListener("scroll", onScroll, { passive: true });
 
       function lerpLoop() {
-        currentFrame += (targetFrame - currentFrame) * 0.08;
+        currentFrame += (targetFrame - currentFrame) * 0.1;
         animationState.frame = currentFrame;
         renderFrame(currentFrame);
         requestAnimationFrame(lerpLoop);
@@ -588,13 +555,160 @@
 
       requestAnimationFrame(lerpLoop);
     }
+  }
 
-    // Safeguard: Ensure preloader fades out after brief delay
-    setTimeout(() => {
-      if (loader && !loader.classList.contains("loaded")) {
-        loader.classList.add("loaded");
+  // ==========================================================================
+  // PORTFOLIO CATEGORY FILTERING SYSTEM
+  // ==========================================================================
+  function initPortfolioFilters() {
+    const filterButtons = document.querySelectorAll(".filter-pill");
+    const cards = document.querySelectorAll(".showcase-card");
+    if (!filterButtons.length || !cards.length) return;
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach((b) => {
+          b.classList.remove("active");
+          b.setAttribute("aria-selected", "false");
+        });
+        btn.classList.add("active");
+        btn.setAttribute("aria-selected", "true");
+
+        const filter = btn.getAttribute("data-filter");
+
+        cards.forEach((card) => {
+          const category = card.getAttribute("data-category");
+          if (filter === "all" || category === filter) {
+            card.classList.remove("filtered-out");
+            card.style.opacity = "1";
+            card.style.transform = "none";
+          } else {
+            card.classList.add("filtered-out");
+          }
+        });
+
+        if (typeof ScrollTrigger !== "undefined") {
+          ScrollTrigger.refresh();
+        }
+      });
+    });
+  }
+
+  // ==========================================================================
+  // MOBILE NAVIGATION DRAWER
+  // ==========================================================================
+  function initMobileNav() {
+    const toggleBtn = document.getElementById("mobileMenuToggle");
+    const drawer = document.getElementById("mobileNavDrawer");
+    const mobileLinks = document.querySelectorAll(".mobile-link, .mobile-cta");
+    if (!toggleBtn || !drawer) return;
+
+    function openDrawer() {
+      drawer.classList.add("open");
+      toggleBtn.setAttribute("aria-expanded", "true");
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+      drawer.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      const isOpen = drawer.classList.contains("open");
+      if (isOpen) {
+        closeDrawer();
+      } else {
+        openDrawer();
       }
-    }, 1200);
+    });
+
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        closeDrawer();
+      });
+    });
+
+    // Close on Escape key
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) {
+        closeDrawer();
+      }
+    });
+  }
+
+  // ==========================================================================
+  // NAVBAR SCROLL BEHAVIOR & ACTIVE LINK HIGHLIGHTER
+  // ==========================================================================
+  function initNavbarScroll() {
+    const navbar = document.getElementById("siteNavbar");
+    const sections = document.querySelectorAll("section[id]");
+    const navLinks = document.querySelectorAll(".nav-links a");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+
+    function updateNavState() {
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+
+      // Add background blur on scroll
+      if (navbar) {
+        if (scrollPos > 40) {
+          navbar.classList.add("scrolled");
+        } else {
+          navbar.classList.remove("scrolled");
+        }
+      }
+
+      // Highlight active section
+      let currentId = "home";
+      sections.forEach((sec) => {
+        const top = sec.offsetTop - 120;
+        const height = sec.offsetHeight;
+        if (scrollPos >= top && scrollPos < top + height) {
+          currentId = sec.getAttribute("id");
+        }
+      });
+
+      navLinks.forEach((link) => {
+        if (link.getAttribute("href") === `#${currentId}`) {
+          link.classList.add("active");
+        } else {
+          link.classList.remove("active");
+        }
+      });
+
+      mobileLinks.forEach((link) => {
+        if (link.getAttribute("href") === `#${currentId}`) {
+          link.classList.add("active");
+        } else {
+          link.classList.remove("active");
+        }
+      });
+    }
+
+    window.addEventListener("scroll", updateNavState, { passive: true });
+    updateNavState();
+
+    // Smooth Anchor Navigation without breaking GSAP desktop scrub
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", (e) => {
+        const href = anchor.getAttribute("href");
+        if (href && href.length > 1) {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            const navbarOffset = href === "#home" ? 0 : 70;
+            const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navbarOffset;
+            window.scrollTo({
+              top: Math.max(0, targetPos),
+              behavior: "smooth"
+            });
+          }
+        }
+      });
+    });
   }
 
   // ==========================================================================
@@ -602,7 +716,6 @@
   // ==========================================================================
   const LOCAL_STORAGE_KEY = "ds_portfolio_community_feedback";
 
-  // HTML entity sanitizer to safely prevent any XSS attacks
   function escapeHtml(str) {
     if (!str) return "";
     return String(str)
@@ -613,7 +726,6 @@
       .replace(/'/g, "&#039;");
   }
 
-  // Extract initials for author avatar (e.g. "David Miller" -> "DM")
   function getInitials(name) {
     if (!name) return "DS";
     const parts = name.trim().split(/\s+/);
@@ -623,7 +735,6 @@
     return name.substring(0, 2).toUpperCase();
   }
 
-  // Render a single community feedback card HTML
   function createCommunityCardElement(item) {
     const card = document.createElement("article");
     card.className = "testimonial-card community";
@@ -644,7 +755,7 @@
         <div class="testimonial-stars" aria-label="${ratingVal} out of 5 stars">
           ${starsHtml}
         </div>
-        <span class="result-badge community-badge">Community Review</span>
+        <span class="result-badge community-badge">Verified Review</span>
       </div>
       <p class="testimonial-quote">
         &ldquo;${safeComment}&rdquo;
@@ -653,7 +764,7 @@
         <div class="author-avatar community-avatar">${initials}</div>
         <div class="author-details">
           <span class="author-name">${safeName}</span>
-          <span class="author-role">Verified Visitor Review</span>
+          <span class="author-role">Community Feedback</span>
         </div>
       </div>
     `;
@@ -661,7 +772,6 @@
     return card;
   }
 
-  // Load and display persistent feedback from API & localStorage
   async function loadFeedback() {
     const grid = document.getElementById("communityReviewsGrid");
     const countPill = document.getElementById("communityCount");
@@ -669,23 +779,22 @@
 
     let reviews = [];
 
-    // 1. Attempt to fetch from persistent server API
+    // Fetch from server API
     try {
       const response = await fetch("/api/feedback", { cache: "no-store" });
       if (response.ok) {
         reviews = await response.json();
       }
     } catch (e) {
-      console.info("Server API unavailable, falling back to local storage.", e);
+      console.info("Server feedback endpoint offline, loading local store.");
     }
 
-    // 2. Fallback / Merge with localStorage for resilience
+    // Merge with localStorage
     try {
       const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (localData) {
         const localReviews = JSON.parse(localData);
         if (Array.isArray(localReviews)) {
-          // Merge unique by ID
           const existingIds = new Set(reviews.map((r) => r.id));
           localReviews.forEach((item) => {
             if (!existingIds.has(item.id)) {
@@ -695,10 +804,9 @@
         }
       }
     } catch (e) {
-      console.warn("Could not read local storage:", e);
+      console.warn("localStorage inaccessible", e);
     }
 
-    // Clear and render
     grid.innerHTML = "";
 
     if (reviews.length === 0) {
@@ -722,7 +830,6 @@
     }
   }
 
-  // Save new review to local storage as fallback
   function saveToLocalStorage(item) {
     try {
       const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -734,7 +841,6 @@
     }
   }
 
-  // Initialize Interactive Star Rating Widget
   function initStarRatingWidget() {
     const widget = document.getElementById("starRatingWidget");
     const ratingInput = document.getElementById("fbRating");
@@ -775,24 +881,8 @@
     widget.addEventListener("mouseleave", () => {
       updateStars(currentRating);
     });
-
-    // Keyboard support (ArrowLeft / ArrowRight)
-    widget.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight" || e.key === "ArrowUp") {
-        e.preventDefault();
-        currentRating = Math.min(5, currentRating + 1);
-        ratingInput.value = currentRating;
-        updateStars(currentRating);
-      } else if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
-        e.preventDefault();
-        currentRating = Math.max(1, currentRating - 1);
-        ratingInput.value = currentRating;
-        updateStars(currentRating);
-      }
-    });
   }
 
-  // Initialize Feedback Form
   function initFeedbackForm() {
     const form = document.getElementById("feedbackForm");
     const nameInput = document.getElementById("fbName");
@@ -808,15 +898,10 @@
 
     if (!form || !nameInput || !commentInput) return;
 
-    // Live character counter
     commentInput.addEventListener("input", () => {
       const len = commentInput.value.length;
       charCounter.textContent = `${len} / 400`;
-      if (len > 400) {
-        charCounter.style.color = "var(--color-error)";
-      } else {
-        charCounter.style.color = "var(--color-text-muted)";
-      }
+      charCounter.style.color = len > 400 ? "var(--color-error)" : "var(--color-text-muted)";
       if (commentError) commentError.textContent = "";
     });
 
@@ -824,18 +909,16 @@
       if (nameError) nameError.textContent = "";
     });
 
-    // Form submission
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Clear previous alerts
-      nameError.textContent = "";
-      commentError.textContent = "";
+      if (nameError) nameError.textContent = "";
+      if (commentError) commentError.textContent = "";
       formStatus.className = "form-status";
       formStatus.style.display = "none";
       formStatus.textContent = "";
 
-      // Anti-spam honeypot verification
+      // Anti-spam honeypot
       if (botCheckInput && botCheckInput.value.trim() !== "") {
         console.warn("Spam honeypot triggered");
         formStatus.textContent = "Submission rejected.";
@@ -847,7 +930,6 @@
       const commentVal = commentInput.value.trim();
       const ratingVal = parseInt(ratingInput.value, 10) || 5;
 
-      // Validation
       let hasError = false;
       if (nameVal.length < 2) {
         nameError.textContent = "Please enter your name (at least 2 characters).";
@@ -867,7 +949,6 @@
 
       if (hasError) return;
 
-      // Submit state
       submitBtn.disabled = true;
       if (btnText) btnText.textContent = "Submitting...";
 
@@ -882,7 +963,6 @@
         let savedItem = null;
         let viaServer = false;
 
-        // Try server API first
         try {
           const res = await fetch("/api/feedback", {
             method: "POST",
@@ -896,10 +976,9 @@
             viaServer = true;
           }
         } catch (netErr) {
-          console.info("Direct API not responding, using offline localStorage fallback.", netErr);
+          console.info("Direct API unavailable, using localStorage fallback.");
         }
 
-        // If server failed or wasn't available, save to localStorage
         if (!savedItem) {
           savedItem = {
             id: "fb_local_" + Date.now(),
@@ -911,21 +990,18 @@
           };
           saveToLocalStorage(savedItem);
         } else {
-          // Keep local storage in sync
           saveToLocalStorage(savedItem);
         }
 
-        // Append to UI live
+        // Add to UI
         const grid = document.getElementById("communityReviewsGrid");
         if (grid) {
-          // Remove placeholder if present
           if (grid.children.length === 1 && grid.children[0].tagName === "DIV") {
             grid.innerHTML = "";
           }
           const cardEl = createCommunityCardElement(savedItem);
           grid.prepend(cardEl);
 
-          // Update count
           const countPill = document.getElementById("communityCount");
           const totalCards = grid.querySelectorAll(".testimonial-card").length;
           if (countPill) {
@@ -933,7 +1009,7 @@
           }
         }
 
-        // Reset form
+        // Reset Form
         form.reset();
         ratingInput.value = "5";
         document.querySelectorAll("#starRatingWidget .star-btn").forEach((s) => s.classList.add("active"));
@@ -941,7 +1017,6 @@
         if (starLabel) starLabel.textContent = "5 / 5 Stars";
         charCounter.textContent = "0 / 400";
 
-        // Display success confirmation
         formStatus.textContent = viaServer
           ? `✓ Thank you, ${nameVal}! Your feedback has been published securely.`
           : `✓ Thank you, ${nameVal}! Your review has been saved successfully.`;
@@ -963,28 +1038,37 @@
   }
 
   // Handle window resize & orientation change
-  window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    if (typeof ScrollTrigger !== "undefined") {
+      ScrollTrigger.refresh();
+    }
+  });
 
-  // Support ?scroll= query parameter for direct section linking
+  // Direct section anchor query parameter support (?scroll=work)
   function handleDirectScroll() {
     const urlParams = new URLSearchParams(window.location.search);
     const scrollTarget = urlParams.get("scroll");
     if (scrollTarget) {
       const targetElem = document.getElementById(scrollTarget);
       if (targetElem) {
-        document.documentElement.style.scrollBehavior = "auto";
-        window.scrollTo(0, targetElem.offsetTop);
-        window.dispatchEvent(new Event("scroll"));
+        const offset = scrollTarget === "home" ? 0 : 70;
+        window.scrollTo(0, Math.max(0, targetElem.offsetTop - offset));
       }
     }
   }
 
-  // Initialize once DOM is ready
+  // ==========================================================================
+  // INITIALIZATION LIFECYCLE
+  // ==========================================================================
   window.addEventListener("DOMContentLoaded", () => {
     resizeCanvas();
     preloadImages(() => {
       initScrollAnimation();
     });
+    initPortfolioFilters();
+    initMobileNav();
+    initNavbarScroll();
     initStarRatingWidget();
     initFeedbackForm();
     loadFeedback();
@@ -993,6 +1077,5 @@
 
   window.addEventListener("load", () => {
     handleDirectScroll();
-    setTimeout(handleDirectScroll, 100);
   });
 })();
