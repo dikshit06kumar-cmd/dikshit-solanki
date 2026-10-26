@@ -185,100 +185,87 @@
         }
       });
 
-      // Smooth reveal for showcase cards
+      // Subtle reveal for showcase cards
       gsap.utils.toArray(".showcase-card").forEach((card, i) => {
-        gsap.fromTo(card,
-          { y: 35, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            delay: i * 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              once: true
-            }
+        gsap.from(card, {
+          y: 30,
+          opacity: 0.3,
+          duration: 0.7,
+          delay: i * 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 95%",
+            once: true
           }
-        );
+        });
       });
 
-      // Smooth reveal for about section cards
+      // Subtle reveal for about section cards
       gsap.utils.toArray(".about-glass-card, .about-focus-card").forEach((card, i) => {
-        gsap.fromTo(card,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.75,
-            delay: i * 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              once: true
-            }
+        gsap.from(card, {
+          y: 25,
+          opacity: 0.3,
+          duration: 0.7,
+          delay: i * 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 95%",
+            once: true
           }
-        );
+        });
       });
 
-      // Smooth reveal for featured testimonial cards
+      // Subtle reveal for featured testimonial cards
       gsap.utils.toArray(".testimonial-card.featured").forEach((card, i) => {
-        gsap.fromTo(card,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.75,
-            delay: i * 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 92%",
-              once: true
-            }
+        gsap.from(card, {
+          y: 25,
+          opacity: 0.3,
+          duration: 0.7,
+          delay: i * 0.1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 95%",
+            once: true
           }
-        );
+        });
       });
 
-      // Smooth reveal for feedback form card
+      // Subtle reveal for feedback form card
       const formCard = document.querySelector(".feedback-form-card");
       if (formCard) {
-        gsap.fromTo(formCard,
-          { y: 30, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: formCard,
-              start: "top 92%",
-              once: true
-            }
+        gsap.from(formCard, {
+          y: 25,
+          opacity: 0.3,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: formCard,
+            start: "top 95%",
+            once: true
           }
-        );
+        });
       }
 
-      // Smooth reveal for contact action cards
+      // Subtle reveal for contact action cards
       gsap.utils.toArray(".action-card").forEach((card, i) => {
-        gsap.fromTo(card,
-          { y: 25, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            delay: i * 0.15,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 95%",
-              once: true
-            }
+        gsap.from(card, {
+          y: 20,
+          opacity: 0.3,
+          duration: 0.6,
+          delay: i * 0.12,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 95%",
+            once: true
           }
-        );
+        });
       });
+
+      ScrollTrigger.refresh();
 
       // Active state updater for navigation links across all sections
       const sections = document.querySelectorAll("section[id]");
@@ -444,7 +431,7 @@
 
     if (reviews.length === 0) {
       grid.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 32px 20px; color: var(--color-text-muted); font-size: 14.5px; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.08);">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 32px 20px; color: var(--color-text-muted); font-size: 14.5px; background: var(--color-card-bg); border-radius: 20px; border: 1px dashed var(--color-border);">
           No community reviews yet. Be the first to share your experience below!
         </div>
       `;
@@ -554,7 +541,7 @@
       const len = commentInput.value.length;
       charCounter.textContent = `${len} / 400`;
       if (len > 400) {
-        charCounter.style.color = "#f87171";
+        charCounter.style.color = "var(--color-error)";
       } else {
         charCounter.style.color = "var(--color-text-muted)";
       }
@@ -715,5 +702,25 @@
     initStarRatingWidget();
     initFeedbackForm();
     loadFeedback();
+
+  // Support ?scroll= query parameter for direct section linking
+  function handleDirectScroll() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const scrollTarget = urlParams.get("scroll");
+    if (scrollTarget) {
+      const targetElem = document.getElementById(scrollTarget);
+      if (targetElem) {
+        document.documentElement.style.scrollBehavior = "auto";
+        window.scrollTo(0, targetElem.offsetTop);
+        window.dispatchEvent(new Event("scroll"));
+      }
+    }
+  }
+
+  handleDirectScroll();
+  window.addEventListener("DOMContentLoaded", handleDirectScroll);
+  window.addEventListener("load", () => {
+    handleDirectScroll();
+    setTimeout(handleDirectScroll, 100);
   });
 })();
