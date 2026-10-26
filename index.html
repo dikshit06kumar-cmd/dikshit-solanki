@@ -5,84 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO & Page Metadata -->
-  <title>Dikshit Solanki | Content Creator &amp; Visual Designer</title>
-  <meta name="description" content="Portfolio of Dikshit Solanki — Video editing, high-CTR YouTube thumbnails, visual storytelling, and AI creative production.">
+  <title>Dikshit Solanki · Content Creator · Video Editor · Graphic Designer</title>
+  <meta name="description" content="Portfolio of Dikshit Solanki — Video editing, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.">
   <meta name="author" content="Dikshit Solanki">
-  <meta name="theme-color" content="#0B0D12">
+  <meta name="theme-color" content="#121212">
 
   <!-- Typography: Plus Jakarta Sans & Inter from Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
-
-  <!-- GSAP & ScrollTrigger for Cinematic Web Motion -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
-  <!-- Performance-Guaranteed Preloader (Never Traps Users or Stalls) -->
-  <div id="loader" class="loader" aria-hidden="true">
-    <div class="loader-content">
-      <div class="loader-monogram">DS</div>
-      <div class="loader-spinner"></div>
-      <div class="loader-text"><span id="load-progress">0</span>%</div>
-    </div>
-  </div>
-  <script>
-    // Bulletproof Fail-Safe: Dismiss preloader safely within 800ms under any network condition
-    (function() {
-      function safeDismiss() {
-        var el = document.getElementById("loader");
-        if (el && !el.classList.contains("loaded")) {
-          var prog = document.getElementById("load-progress");
-          if (prog) prog.textContent = "100";
-          el.classList.add("loaded");
-        }
-      }
-      setTimeout(safeDismiss, 800);
-      window.addEventListener("load", function() { setTimeout(safeDismiss, 100); });
-    })();
-  </script>
 
-  <!-- Continuous Canvas Animation Background -->
-  <div class="canvas-wrapper" aria-hidden="true">
-    <canvas id="animation-canvas"></canvas>
-    <div class="canvas-gradient-overlay"></div>
-  </div>
-
-  <!-- Page Content Structure -->
-  <div class="page-wrapper">
-
-    <!-- Top Navigation Bar -->
-    <header class="navbar" id="siteNavbar">
-      <a href="#home" class="nav-brand" aria-label="Dikshit Solanki Portfolio Home">
+  <!-- Navigation Header -->
+  <header class="navbar" id="siteNavbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-brand" aria-label="Dikshit Solanki Portfolio">
         <span class="brand-monogram">DS</span>
         <span class="brand-name">Dikshit Solanki</span>
       </a>
       
       <nav class="nav-center" aria-label="Main Navigation">
         <ul class="nav-links">
-          <li><a href="#home" class="active">Home</a></li>
-          <li><a href="#work">Work</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#reviews">Reviews</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#work" class="nav-link">Work</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
       <div class="nav-right">
-        <a href="#contact" class="btn-pill btn-primary nav-cta">
-          <span>Get in touch</span>
-          <span class="btn-arrow-circle accent" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="7 7 17 7 17 17"></polyline>
-            </svg>
-          </span>
-        </a>
-
+        <a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="btn-nav-outline" aria-label="View Resume (PDF)">Resume</a>
+        <a href="#contact" class="btn-nav-primary">Contact</a>
+        
         <!-- Mobile Menu Toggle Button -->
         <button type="button" class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer">
           <span class="mobile-bar"></span>
@@ -90,548 +46,308 @@
           <span class="mobile-bar"></span>
         </button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- Mobile Navigation Drawer -->
-    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
-      <div class="mobile-nav-inner">
-        <ul class="mobile-nav-links">
-          <li><a href="#home" class="mobile-link active">Home</a></li>
-          <li><a href="#work" class="mobile-link">Work</a></li>
-          <li><a href="#about" class="mobile-link">About</a></li>
-          <li><a href="#reviews" class="mobile-link">Reviews</a></li>
-          <li><a href="#contact" class="mobile-link">Contact</a></li>
-        </ul>
-        <div class="mobile-nav-footer">
-          <a href="#contact" class="btn-pill btn-primary mobile-cta">
-            <span>Get in touch</span>
-            <span class="btn-arrow-circle accent">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+    <div class="mobile-nav-inner">
+      <ul class="mobile-nav-links">
+        <li><a href="#work" class="mobile-link">Work</a></li>
+        <li><a href="#skills" class="mobile-link">Skills</a></li>
+        <li><a href="#contact" class="mobile-link">Contact</a></li>
+        <li><a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="mobile-link">Resume (PDF)</a></li>
+      </ul>
+      <div class="mobile-nav-footer">
+        <a href="#contact" class="btn-pill btn-primary mobile-cta">Contact Me</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="page-wrapper">
+    <!-- 1. Compact Header and Hero (Typography-based, No Face or Human Image) -->
+    <section class="hero-section" id="home">
+      <div class="content-container hero-container">
+        <div class="hero-content">
+          <span class="hero-badge">Portfolio</span>
+          <h1 class="hero-name">Dikshit Solanki</h1>
+          <p class="hero-title">Content Creator · Video Editor · Graphic Designer</p>
+          <p class="hero-description">
+            I create videos, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#work" class="btn-pill btn-primary" id="heroViewWorkBtn">
+              <span>View My Work</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
-            </span>
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION 1: Home / Hero -->
-    <section class="hero-section" id="home">
-      <div class="hero-container">
-        
-        <!-- Main Hero Grid -->
-        <div class="hero-grid">
-          <div class="hero-left">
-            <div class="hero-eyebrow">
-              <span class="pulse-dot" aria-hidden="true"></span>
-              <span class="hero-greeting">Content Creator &bull; Visual Specialist</span>
-            </div>
-            <h1 class="hero-title">Content Creator<br>&amp; Visual Designer</h1>
-          </div>
-          
-          <div class="hero-right">
-            <h2 class="hero-statement">I Create Content That Gets Noticed.</h2>
-            <p class="hero-intro">
-              I turn ideas into engaging videos, high-CTR YouTube thumbnails, and cinematic visuals for digital platforms, creators, and modern businesses.
-            </p>
-            <div class="hero-cta-buttons">
-              <a href="#work" class="btn-pill btn-primary" id="heroViewWorkBtn">
-                <span>View Selected Work</span>
-                <span class="btn-arrow-circle white" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </span>
-              </a>
-              <a href="#contact" class="btn-pill btn-outline" id="heroContactBtn">
-                <span>Let's Connect</span>
-              </a>
-            </div>
+            </a>
+            <a href="#contact" class="btn-pill btn-secondary" id="heroContactBtn">
+              <span>Contact Me</span>
+            </a>
           </div>
         </div>
-
-        <!-- 4-Pillar Services Strip -->
-        <div class="hero-services">
-          <div class="service-item">
-            <span class="service-num">#01</span>
-            <span class="service-name">Video Editing</span>
-            <span class="service-meta">Retention cuts &amp; sound pacing</span>
-          </div>
-          <div class="service-item">
-            <span class="service-num">#02</span>
-            <span class="service-name">Thumbnail Design</span>
-            <span class="service-meta">High-CTR psychological framing</span>
-          </div>
-          <div class="service-item">
-            <span class="service-num">#03</span>
-            <span class="service-name">Graphic Design</span>
-            <span class="service-meta">Digital assets &amp; brand visuals</span>
-          </div>
-          <div class="service-item">
-            <span class="service-num">#04</span>
-            <span class="service-name">AI Creative Production</span>
-            <span class="service-meta">Commercial video &amp; concept art</span>
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <!-- SECTION 2: Work / Portfolio -->
+    <!-- 2. Selected Work (Real projects, slate cards #1F1F1F, subtle cyan hover borders) -->
     <section class="section-work" id="work">
       <div class="content-container">
-
-        <!-- Work Header -->
-        <div class="work-header">
-          <div class="work-header-left">
-            <span class="section-tag">Selected Portfolio</span>
-            <h2 class="section-title">Shaping Content That Gets Noticed</h2>
-          </div>
-          <div class="work-header-right">
-            <p class="work-intro">
-              High-retention YouTube edits, psychological thumbnails, and cinematic AI-driven visual concepts engineered for impact.
-            </p>
-            <div class="work-header-actions">
-              <a href="#contact" class="btn-pill btn-primary">
-                <span>Hire for a Project</span>
-                <span class="btn-arrow-circle white" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
+        <div class="section-header">
+          <h2 class="section-title">Selected Work</h2>
+          <p class="section-subtitle">Real projects across video editing, YouTube thumbnails, graphic design, and AI visuals.</p>
         </div>
 
-        <!-- Interactive Category Filters -->
+        <!-- Filter Tabs -->
         <div class="work-filters" role="tablist" aria-label="Portfolio Categories">
-          <button type="button" class="filter-pill active" data-filter="all" role="tab" aria-selected="true">All Work (6)</button>
-          <button type="button" class="filter-pill" data-filter="thumbnail" role="tab" aria-selected="false">Thumbnails</button>
-          <button type="button" class="filter-pill" data-filter="video" role="tab" aria-selected="false">Video Editing</button>
-          <button type="button" class="filter-pill" data-filter="ai" role="tab" aria-selected="false">AI Production</button>
+          <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All Work</button>
+          <button type="button" class="filter-btn" data-filter="video" role="tab" aria-selected="false">Video Editing</button>
+          <button type="button" class="filter-btn" data-filter="thumbnails" role="tab" aria-selected="false">YouTube Thumbnails</button>
+          <button type="button" class="filter-btn" data-filter="design" role="tab" aria-selected="false">Graphic Design</button>
+          <button type="button" class="filter-btn" data-filter="ai-ads" role="tab" aria-selected="false">AI Video Ads</button>
         </div>
 
-        <!-- 6-Card Showcase Grid -->
-        <div class="cards-grid" id="portfolioCardsGrid">
+        <!-- Projects Grid -->
+        <div class="projects-grid" id="projectsGrid">
           
-          <!-- Card 1: Work Harder, Stay Stuck (Thumbnail) -->
-          <article class="showcase-card" data-category="thumbnail">
-            <div class="showcase-card-inner">
-              <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail Design" class="showcase-img" loading="lazy">
-              <div class="showcase-overlay">
-                <span class="card-badge">Thumbnail Design</span>
-                <div class="card-text">
-                  <h3 class="card-title">Work Harder, Stay Stuck</h3>
-                  <p class="card-subtitle">High-CTR Concept &amp; Lighting Psychology</p>
-                </div>
-              </div>
+          <!-- Project 1: Work Harder, Stay Stuck (YouTube Thumbnails) -->
+          <article class="project-card" data-category="thumbnails">
+            <div class="card-media">
+              <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="card-img" loading="lazy">
+              <span class="card-tag">YouTube Thumbnails</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Work Harder, Stay Stuck</h3>
+              <p class="card-category">YouTube Thumbnail Design</p>
             </div>
           </article>
 
-          <!-- Card 2: Narrative Video Editing -->
-          <article class="showcase-card" data-category="video">
-            <div class="showcase-card-inner">
-              <img src="images/late_night_office.png" alt="Atmospheric Storytelling Video Edit" class="showcase-img" loading="lazy">
-              <div class="showcase-overlay">
-                <span class="card-badge">Video Editing</span>
-                <div class="card-text">
-                  <h3 class="card-title">Storytelling &amp; Pacing Edit</h3>
-                  <p class="card-subtitle">Retention Cuts, Sound FX &amp; Audio Pacing</p>
-                </div>
-              </div>
+          <!-- Project 2: Atmospheric Storytelling (Video Editing) -->
+          <article class="project-card" data-category="video">
+            <div class="card-media">
+              <img src="images/late_night_office.png" alt="Narrative Video Editing Project Preview" class="card-img" loading="lazy">
+              <span class="card-tag">Video Editing</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Atmospheric Storytelling Edit</h3>
+              <p class="card-category">Video Editing &amp; Audio Pacing</p>
             </div>
           </article>
 
-          <!-- Card 3: Climbing Corporate Ladders (AI Concept) -->
-          <article class="showcase-card" data-category="ai">
-            <div class="showcase-card-inner">
-              <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept Art" class="showcase-img" loading="lazy">
-              <div class="showcase-overlay">
-                <span class="card-badge">AI Production</span>
-                <div class="card-text">
-                  <h3 class="card-title">Climbing Corporate Ladders</h3>
-                  <p class="card-subtitle">Cinematic Narrative Concept Art</p>
-                </div>
-              </div>
+          <!-- Project 3: Trapped by Success (YouTube Thumbnails) -->
+          <article class="project-card" data-category="thumbnails">
+            <div class="card-media">
+              <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="card-img" loading="lazy">
+              <span class="card-tag">YouTube Thumbnails</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Trapped by Success</h3>
+              <p class="card-category">YouTube Thumbnail Design</p>
             </div>
           </article>
 
-          <!-- Card 4: Medical Health Thumbnail -->
-          <article class="showcase-card" data-category="thumbnail">
-            <div class="showcase-card-inner">
-              <img src="images/medical_thumbnail.png" alt="High-CTR Medical and Science Thumbnail" class="showcase-img" loading="lazy">
-              <div class="showcase-overlay">
-                <span class="card-badge">Thumbnail Design</span>
-                <div class="card-text">
-                  <h3 class="card-title">Medical Health Psychology</h3>
-                  <p class="card-subtitle">High-Contrast Curiosity Packaging</p>
-                </div>
-              </div>
+          <!-- Project 4: Climbing Corporate Ladders (AI Video Ads) -->
+          <article class="project-card" data-category="ai-ads">
+            <div class="card-media">
+              <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept" class="card-img" loading="lazy">
+              <span class="card-tag">AI Video Ads</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Climbing Corporate Ladders</h3>
+              <p class="card-category">AI Video Ad &amp; Visual Concept</p>
             </div>
           </article>
 
-          <!-- Card 5: Trapped by Success (YouTube Strategy) -->
-          <article class="showcase-card" data-category="thumbnail">
-            <div class="showcase-card-inner">
-              <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="showcase-img" loading="lazy">
-              <div class="showcase-overlay">
-                <span class="card-badge">Thumbnail &amp; Packaging</span>
-                <div class="card-text">
-                  <h3 class="card-title">Trapped by Success</h3>
-                  <p class="card-subtitle">Attention Architecture &amp; Topic Framing</p>
-                </div>
-              </div>
+          <!-- Project 5: Medical & Health Presentation (YouTube Thumbnails) -->
+          <article class="project-card" data-category="thumbnails">
+            <div class="card-media">
+              <img src="images/medical_thumbnail.png" alt="Medical and Educational Presentation Thumbnail" class="card-img" loading="lazy">
+              <span class="card-tag">YouTube Thumbnails</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Medical Health Presentation</h3>
+              <p class="card-category">YouTube Thumbnail Design</p>
             </div>
           </article>
 
-          <!-- Card 6: AI Rooftop Cyberpunk Visual -->
-          <article class="showcase-card" data-category="ai">
-            <div class="showcase-card-inner">
-              <img src="images/rooftop1.png" alt="Cinematic Neon Rooftop AI Visual Concept" class="showcase-img" loading="lazy">
-              <div class="showcase-overlay">
-                <span class="card-badge">AI Visual Production</span>
-                <div class="card-text">
-                  <h3 class="card-title">Cinematic Cyberpunk Media</h3>
-                  <p class="card-subtitle">AI Video Commercial Concept Art</p>
-                </div>
-              </div>
+          <!-- Project 6: Cyberpunk Atmosphere Concept (AI Video Ads) -->
+          <article class="project-card" data-category="ai-ads">
+            <div class="card-media">
+              <img src="images/rooftop1.png" alt="Cyberpunk Atmosphere Visual Concept" class="card-img" loading="lazy">
+              <span class="card-tag">AI Video Ads</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Cyberpunk Atmosphere Concept</h3>
+              <p class="card-category">AI Video Ad Production</p>
+            </div>
+          </article>
+
+          <!-- Project 7: Urban Mood & Atmosphere (Graphic Design) -->
+          <article class="project-card" data-category="design">
+            <div class="card-media">
+              <img src="images/rooftop2.png" alt="Urban Mood and Visual Atmosphere Graphic Study" class="card-img" loading="lazy">
+              <span class="card-tag">Graphic Design</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-title">Urban Mood &amp; Atmosphere</h3>
+              <p class="card-category">Promotional Graphic Art</p>
             </div>
           </article>
 
         </div>
-
       </div>
     </section>
 
-    <!-- SECTION 3: About (Introduction, Skills & Services) -->
-    <section class="section-about" id="about">
+    <!-- 3. Skills & Tools (One compact section with the exact 3 groups) -->
+    <section class="section-skills" id="skills">
       <div class="content-container">
-
-        <div class="about-grid">
-          
-          <!-- Left: About Narrative & Background -->
-          <div class="about-left">
-            <span class="section-tag">About Me</span>
-            <h2 class="section-title">Creative Execution Rooted in Real Practice</h2>
-            
-            <p class="about-paragraph primary-text">
-              I’m a creative professional with hands-on experience in YouTube content creation, video editing, thumbnail design, promotional graphics, research, writing, and AI-powered production tools.
-            </p>
-            
-            <p class="about-paragraph">
-              I enjoy handling the creative workflow end-to-end—from brainstorming angles and developing narrative hooks to producing polished visual content for creators, brands, and digital businesses. My priority is always tight pacing, visual psychology, and delivering concepts that truly resonate with the audience.
-            </p>
-
-            <div class="about-focus-card">
-              <span class="focus-label">Experience &amp; Focus</span>
-              <p class="focus-text">Self-managed YouTube channels, video pacing, sound design, and creative digital production.</p>
-            </div>
-
-            <div class="about-actions">
-              <a href="#contact" class="btn-pill btn-primary">
-                <span>Let's Talk</span>
-                <span class="btn-arrow-circle white" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </span>
-              </a>
-              <a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="btn-pill btn-outline" id="downloadResumeBtn">
-                <span>Download Resume (PDF)</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Right: Core Services & Capabilities -->
-          <div class="about-right">
-            
-            <!-- Services Card -->
-            <div class="about-glass-card">
-              <h3 class="card-heading">What I Do</h3>
-              
-              <div class="about-service-row">
-                <span class="service-tag-num">#01</span>
-                <div>
-                  <h4 class="service-row-title">Video Editing</h4>
-                  <p class="service-row-desc">Long-form narrative pacing, Shorts/Reels formatting, and sound design.</p>
-                </div>
-              </div>
-
-              <div class="about-service-row">
-                <span class="service-tag-num">#02</span>
-                <div>
-                  <h4 class="service-row-title">Thumbnail Design</h4>
-                  <p class="service-row-desc">High-CTR visual psychology, lighting design, and Photoshop compositing.</p>
-                </div>
-              </div>
-
-              <div class="about-service-row">
-                <span class="service-tag-num">#03</span>
-                <div>
-                  <h4 class="service-row-title">Graphic Design</h4>
-                  <p class="service-row-desc">Promotional branding assets, custom digital graphics, and key art.</p>
-                </div>
-              </div>
-
-              <div class="about-service-row">
-                <span class="service-tag-num">#04</span>
-                <div>
-                  <h4 class="service-row-title">AI Creative Production</h4>
-                  <p class="service-row-desc">Prompt engineering, concept art, and audience-retention script research.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Skills & Tools Card -->
-            <div class="about-glass-card">
-              <h3 class="card-heading">Tools &amp; Capabilities</h3>
-              <div class="skills-pill-wrap">
-                <span class="skill-chip">Premiere Pro</span>
-                <span class="skill-chip">CapCut</span>
-                <span class="skill-chip">Photoshop</span>
-                <span class="skill-chip">Audio Pacing</span>
-                <span class="skill-chip">Sound FX</span>
-                <span class="skill-chip">Color Grading</span>
-                <span class="skill-chip">Thumbnail Composition</span>
-                <span class="skill-chip">Midjourney</span>
-                <span class="skill-chip">Prompt Engineering</span>
-                <span class="skill-chip">Hook Formulation</span>
-                <span class="skill-chip">Topic Research</span>
-                <span class="skill-chip">Audience Psychology</span>
-              </div>
-            </div>
-
-          </div>
-
+        <div class="section-header">
+          <h2 class="section-title">Skills &amp; Tools</h2>
+          <p class="section-subtitle">Core capabilities and creative production tools.</p>
         </div>
 
+        <div class="skills-grid">
+          <!-- Group 1: Video -->
+          <div class="skill-group-card">
+            <div class="skill-group-header">
+              <span class="skill-group-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+              </span>
+              <h3 class="skill-group-title">Video</h3>
+            </div>
+            <ul class="skill-badge-list">
+              <li class="skill-badge">YouTube Video Editing</li>
+              <li class="skill-badge">Short-form Content</li>
+            </ul>
+          </div>
+
+          <!-- Group 2: Design -->
+          <div class="skill-group-card">
+            <div class="skill-group-header">
+              <span class="skill-group-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"></path>
+                </svg>
+              </span>
+              <h3 class="skill-group-title">Design</h3>
+            </div>
+            <ul class="skill-badge-list">
+              <li class="skill-badge">YouTube Thumbnail Design</li>
+              <li class="skill-badge">Canva</li>
+              <li class="skill-badge">Promotional Graphics</li>
+            </ul>
+          </div>
+
+          <!-- Group 3: AI & Creative Production -->
+          <div class="skill-group-card">
+            <div class="skill-group-header">
+              <span class="skill-group-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                </svg>
+              </span>
+              <h3 class="skill-group-title">AI &amp; Creative Production</h3>
+            </div>
+            <ul class="skill-badge-list">
+              <li class="skill-badge">AI Image and Video Generation</li>
+              <li class="skill-badge">Research</li>
+              <li class="skill-badge">Content Ideas</li>
+              <li class="skill-badge">Prompt Writing</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- SECTION 4: Client Feedback / Reviews (Commentable with Interactive Form) -->
-    <section class="section-testimonials" id="reviews">
-      <div class="content-container">
-        
-        <div class="testimonials-header">
-          <div class="testimonials-header-left">
-            <span class="section-tag">Client Feedback</span>
-            <h2 class="section-title">What Creators Say</h2>
-          </div>
-          <p class="testimonials-intro">
-            Real outcomes from YouTube creators and digital brands scaling their reach and audience retention.
-          </p>
-        </div>
-
-        <!-- Featured Genuine Testimonials -->
-        <div class="testimonials-grid" id="featuredReviewsGrid">
-          
-          <!-- Testimonial 1 -->
-          <article class="testimonial-card featured">
-            <div class="testimonial-top">
-              <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-              </div>
-              <span class="result-badge featured-badge">+160% CTR Boost</span>
-            </div>
-            <p class="testimonial-quote">
-              &ldquo;Dikshit completely transformed our YouTube packaging. Our CTR jumped from 4.2% to over 11% in the first two weeks, and average view duration spiked immediately.&rdquo;
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar">AR</div>
-              <div class="author-details">
-                <span class="author-name">Alex Reed</span>
-                <span class="author-role">YouTube Creator &bull; 450K Subs</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Testimonial 2 -->
-          <article class="testimonial-card featured">
-            <div class="testimonial-top">
-              <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-              </div>
-              <span class="result-badge featured-badge">Retention +45%</span>
-            </div>
-            <p class="testimonial-quote">
-              &ldquo;The narrative cuts, audio pacing, and subtle sound design brought our videos to documentary standard. Audience drop-off in the first 30 seconds virtually disappeared.&rdquo;
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar">MV</div>
-              <div class="author-details">
-                <span class="author-name">Marcus Vance</span>
-                <span class="author-role">Founder &bull; Pulse Media Agency</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Testimonial 3 -->
-          <article class="testimonial-card featured">
-            <div class="testimonial-top">
-              <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-              </div>
-              <span class="result-badge featured-badge">2.4M+ Views</span>
-            </div>
-            <p class="testimonial-quote">
-              &ldquo;Fast turnaround, zero handholding, and incredible creative instincts. He doesn&rsquo;t just edit videos—he crafts visual experiences that viewers can&rsquo;t click away from.&rdquo;
-            </p>
-            <div class="testimonial-author">
-              <div class="author-avatar">SC</div>
-              <div class="author-details">
-                <span class="author-name">Sarah Chen</span>
-                <span class="author-role">Tech &amp; Productivity Creator</span>
-              </div>
-            </div>
-          </article>
-
-        </div>
-
-        <!-- Dynamic Community Feedback Stream -->
-        <div class="community-feedback-section">
-          <div class="community-header">
-            <h3 class="community-title">Community &amp; Client Reviews</h3>
-            <span class="community-count-pill" id="communityCount">Loading...</span>
-          </div>
-
-          <div class="testimonials-grid" id="communityReviewsGrid">
-            <!-- Dynamically populated from /api/feedback & localStorage -->
-          </div>
-        </div>
-
-        <!-- Interactive Feedback Form Card -->
-        <div class="feedback-form-card">
-          <div class="form-header">
-            <span class="form-tag">Leave a Review</span>
-            <h3 class="form-title">Share Your Feedback</h3>
-            <p class="form-desc">Worked together or have feedback on my visual projects? Submit your comment below to be featured on this page.</p>
-          </div>
-
-          <form id="feedbackForm" class="feedback-form" novalidate>
-            <!-- Anti-spam Honeypot Field (invisible to users) -->
-            <input type="text" name="bot_check" id="botCheck" tabindex="-1" autocomplete="off" style="display:none !important;" aria-hidden="true">
-
-            <div class="form-grid">
-              <!-- Name Input -->
-              <div class="form-group">
-                <label for="fbName" class="form-label">Your Name <span class="required-star">*</span></label>
-                <input type="text" id="fbName" name="name" class="form-input" placeholder="e.g. David Miller" maxlength="60" required>
-                <span class="field-error" id="nameError"></span>
-              </div>
-
-              <!-- Rating Selection -->
-              <div class="form-group">
-                <label class="form-label">Rating (Optional)</label>
-                <div class="star-rating-widget" id="starRatingWidget" role="radiogroup" aria-label="Rating out of 5 stars">
-                  <button type="button" class="star-btn active" data-rating="1" aria-label="1 star">★</button>
-                  <button type="button" class="star-btn active" data-rating="2" aria-label="2 stars">★</button>
-                  <button type="button" class="star-btn active" data-rating="3" aria-label="3 stars">★</button>
-                  <button type="button" class="star-btn active" data-rating="4" aria-label="4 stars">★</button>
-                  <button type="button" class="star-btn active" data-rating="5" aria-label="5 stars">★</button>
-                  <span class="star-value-label" id="starValueLabel">5 / 5 Stars</span>
-                </div>
-                <input type="hidden" id="fbRating" name="rating" value="5">
-              </div>
-            </div>
-
-            <!-- Comment Input -->
-            <div class="form-group">
-              <div class="comment-label-row">
-                <label for="fbComment" class="form-label">Your Comment <span class="required-star">*</span></label>
-                <span class="char-counter" id="charCounter">0 / 400</span>
-              </div>
-              <textarea id="fbComment" name="comment" class="form-textarea" rows="4" placeholder="Share your experience working with Dikshit, feedback on video pacing, thumbnails, or design quality..." maxlength="400" required></textarea>
-              <span class="field-error" id="commentError"></span>
-            </div>
-
-            <!-- Form Status / Alerts -->
-            <div id="formStatus" class="form-status" role="alert" aria-live="polite"></div>
-
-            <!-- Submit Button -->
-            <div class="form-submit-row">
-              <button type="submit" id="submitFeedbackBtn" class="btn-pill btn-primary btn-submit">
-                <span id="btnText">Submit Feedback</span>
-                <span class="btn-arrow-circle white" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                  </svg>
-                </span>
-              </button>
-              <span class="form-note">🔒 Genuine feedback is stored securely and updated in real time.</span>
-            </div>
-          </form>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SECTION 5: Contact -->
+    <!-- 4. Contact (Compact, genuine contact details, cyan button) -->
     <section class="section-contact" id="contact">
       <div class="content-container">
-        
-        <div class="contact-box">
-          <div class="contact-box-left">
-            <span class="section-tag">Let's Connect</span>
-            <h2 class="contact-headline">Have a project in mind?</h2>
-            <p class="contact-subtext">
-              I’m open to YouTube video editing, thumbnail design, and visual production projects. Let’s collaborate and build content that makes a lasting impression.
+        <div class="contact-card">
+          <div class="contact-header">
+            <h2 class="contact-heading">Have a project in mind? Get in touch.</h2>
+            <p class="contact-desc">
+              Open for video editing, YouTube thumbnail design, and visual production collaborations. Let's create something impactful together.
             </p>
           </div>
 
-          <div class="contact-box-right">
-            <a href="mailto:dikshitsolanki90@gmail.com" class="action-card" id="contactEmailCard">
-              <div class="action-icon" aria-hidden="true">
+          <div class="contact-cta-wrap">
+            <a href="mailto:dikshitsolanki90@gmail.com" class="btn-pill btn-primary btn-contact-main" id="contactEmailBtn">
+              <span>Contact Me</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
+
+          <div class="contact-methods-grid">
+            <!-- Email -->
+            <a href="mailto:dikshitsolanki90@gmail.com" class="contact-method-card" id="contactEmailCard">
+              <div class="method-icon-wrap" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
               </div>
-              <div class="action-info">
-                <span class="action-label">Email Me Directly</span>
-                <span class="action-value">dikshitsolanki90@gmail.com</span>
+              <div class="method-content">
+                <span class="method-label">Email</span>
+                <span class="method-value">dikshitsolanki90@gmail.com</span>
               </div>
-              <span class="action-arrow" aria-hidden="true">→</span>
             </a>
 
-            <a href="https://wa.me/?text=Hi%20Dikshit,%20I%20would%20like%20to%20discuss%20a%20creative%20project" target="_blank" rel="noopener noreferrer" class="action-card" id="contactWhatsAppCard">
-              <div class="action-icon" aria-hidden="true">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/?text=Hi%20Dikshit,%20I%20would%20like%20to%20discuss%20a%20creative%20project" target="_blank" rel="noopener noreferrer" class="contact-method-card" id="contactWhatsAppCard">
+              <div class="method-icon-wrap" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                 </svg>
               </div>
-              <div class="action-info">
-                <span class="action-label">WhatsApp Direct</span>
-                <span class="action-value">Send a Quick Message</span>
+              <div class="method-content">
+                <span class="method-label">WhatsApp</span>
+                <span class="method-value">Send a Direct Message</span>
               </div>
-              <span class="action-arrow" aria-hidden="true">→</span>
+            </a>
+
+            <!-- Resume PDF -->
+            <a href="resume.pdf" target="_blank" rel="noopener noreferrer" class="contact-method-card" id="contactResumeCard">
+              <div class="method-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="method-content">
+                <span class="method-label">Resume</span>
+                <span class="method-value">View Resume (PDF)</span>
+              </div>
             </a>
           </div>
         </div>
-
       </div>
     </section>
+  </main>
 
-    <!-- SECTION 6: Minimal Clean Footer -->
-    <footer class="footer">
-      <div class="content-container footer-content">
-        <p class="copyright">&copy; 2026 Dikshit Solanki. Content Creator &amp; Visual Designer.</p>
-        <a href="#home" class="back-to-top" id="backToTopBtn" aria-label="Back to top of page">
-          <span>Back to top</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="12" y1="19" x2="12" y2="5"></line>
-            <polyline points="5 12 12 5 19 12"></polyline>
-          </svg>
-        </a>
-      </div>
-    </footer>
-
-  </div>
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="content-container footer-container">
+      <p class="copyright">&copy; 2026 Dikshit Solanki. Content Creator · Video Editor · Graphic Designer.</p>
+      <a href="#home" class="back-to-top" id="backToTopBtn" aria-label="Back to top">
+        <span>Back to top</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </a>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
