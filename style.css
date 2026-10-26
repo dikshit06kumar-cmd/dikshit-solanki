@@ -209,11 +209,26 @@ textarea:focus-visible {
 }
 
 .nav-links a {
+  position: relative;
   color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 13.5px;
   font-weight: 500;
   transition: color 0.2s ease;
+  padding: 4px 2px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 2px;
+  transition: width 0.25s ease;
+  box-shadow: 0 0 8px var(--color-accent-glow);
 }
 
 .nav-links a:hover {
@@ -223,6 +238,10 @@ textarea:focus-visible {
 .nav-links a.active {
   color: var(--color-accent);
   font-weight: 600;
+}
+
+.nav-links a.active::after {
+  width: 100%;
 }
 
 /* ==========================================================================
@@ -237,14 +256,15 @@ textarea:focus-visible {
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  will-change: transform, box-shadow;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
   user-select: none;
   cursor: pointer;
   border: none;
 }
 
 .btn-pill:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 }
 
 /* Primary Electric Blue Button */
@@ -260,7 +280,7 @@ textarea:focus-visible {
 .btn-orange:hover,
 .btn-white:hover {
   background-color: var(--color-accent-hover);
-  box-shadow: 0 6px 26px rgba(77, 141, 255, 0.32);
+  box-shadow: 0 8px 28px rgba(77, 141, 255, 0.38);
 }
 
 /* Secondary Transparent Button */
@@ -435,7 +455,9 @@ textarea:focus-visible {
   position: relative;
   width: 100%;
   padding: 95px 0 100px;
-  background-color: var(--color-bg-secondary); /* #11151D */
+  background-color: rgba(17, 21, 29, 0.85); /* Translucent cinematic overlay */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
@@ -497,13 +519,14 @@ textarea:focus-visible {
   aspect-ratio: 4 / 5;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
   cursor: pointer;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform, box-shadow;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.35s ease;
 }
 
 .showcase-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-8px);
   border-color: var(--color-accent);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 24px var(--color-accent-glow);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.65), 0 0 26px var(--color-accent-glow);
 }
 
 .showcase-card-inner {
@@ -518,11 +541,11 @@ textarea:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .showcase-card:hover .showcase-img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 .showcase-overlay {
@@ -581,7 +604,9 @@ textarea:focus-visible {
   position: relative;
   width: 100%;
   padding: 95px 0 100px;
-  background-color: var(--color-bg); /* #0B0D12 */
+  background-color: rgba(11, 13, 18, 0.86); /* Translucent cinematic overlay */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .about-grid {
@@ -731,7 +756,9 @@ textarea:focus-visible {
   position: relative;
   width: 100%;
   padding: 95px 0 100px;
-  background-color: var(--color-bg-secondary); /* #11151D */
+  background-color: rgba(17, 21, 29, 0.85); /* Translucent cinematic overlay */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 }
@@ -768,13 +795,14 @@ textarea:focus-visible {
   justify-content: space-between;
   gap: 22px;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform, box-shadow;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.35s ease;
 }
 
 .testimonial-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   border-color: var(--color-accent);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 22px var(--color-accent-glow);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.55), 0 0 24px var(--color-accent-glow);
 }
 
 .testimonial-top {
@@ -1103,7 +1131,9 @@ textarea:focus-visible {
   position: relative;
   width: 100%;
   padding: 85px 0 100px;
-  background-color: var(--color-bg); /* #0B0D12 */
+  background-color: rgba(11, 13, 18, 0.88); /* Translucent cinematic overlay */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .contact-box {
@@ -1155,13 +1185,15 @@ textarea:focus-visible {
   border-radius: 20px;
   text-decoration: none;
   min-width: 0;
-  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+  will-change: transform, border-color, background-color;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .action-card:hover {
-  transform: translateX(6px);
+  transform: translateX(8px);
   border-color: var(--color-accent);
-  background-color: rgba(77, 141, 255, 0.08);
+  background-color: rgba(77, 141, 255, 0.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--color-accent-glow);
 }
 
 .action-icon {
@@ -1221,7 +1253,9 @@ textarea:focus-visible {
 .footer {
   width: 100%;
   padding: 34px 0;
-  background-color: var(--color-bg); /* #0B0D12 (darkest background) */
+  background-color: rgba(11, 13, 18, 0.95); /* Translucent cinematic overlay */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-top: 1px solid var(--color-border);
 }
 

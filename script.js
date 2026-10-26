@@ -112,7 +112,7 @@
     }
   }
 
-  // Preload frames progressively with mobile-friendly batching and guaranteed timeout
+  // Preload frames progressively: load Frame 1 first, keyframes next, then idle batches
   function preloadImages(onInitialReady) {
     let initialTriggered = false;
 
@@ -150,7 +150,7 @@
       renderFrame(0, true);
       notifyInitialReady();
       if (!isReducedMotion && !isSaveData) {
-        startProgressivePreload();
+        preloadKeyframesAndProgressive();
       }
     };
 
@@ -158,58 +158,173 @@
       console.warn("Hero frame failed to load:", getFrameUrl(1));
       notifyInitialReady();
       if (!isReducedMotion && !isSaveData) {
-        startProgressivePreload();
+        preloadKeyframesAndProgressive();
       }
     };
 
-    // Load remaining frames in small gentle batches during browser idle time
-    function startProgressivePreload() {
-      let currentIndex = 1;
-      const BATCH_SIZE = 4; // Gentle batching to prevent network congestion on mobile
+    // Preload keyframes first for fast desktop scrubbing, then fill remaining in idle batches
+    function preloadKeyframesAndProgressive() {
+      // 1. Keyframes distributed evenly across entire video (every 12 frames)
+      const keyframes = [];
+      for (let k = 12; k < FRAME_COUNT; k += 12) {
+        keyframes.push(k);
+      }
 
-      function loadNextBatch() {
-        if (currentIndex >= FRAME_COUNT) return;
-
-        const end = Math.min(FRAME_COUNT, currentIndex + BATCH_SIZE);
-        for (let i = currentIndex; i < end; i++) {
-          const img = new Image();
-          img.src = getFrameUrl(i + 1);
-          images[i] = img;
-
-          img.onload = () => {
-            loadedStatus[i] = true;
-            loadedCount++;
-            const pct = Math.round((loadedCount / FRAME_COUNT) * 100);
-            if (progressText && loader && !loader.classList.contains("loaded")) {
-              progressText.textContent = pct;
-            }
-          };
-
-          img.onerror = () => {
-            loadedCount++;
-          };
-        }
-
-        currentIndex = end;
-        if (currentIndex < FRAME_COUNT) {
-          if ("requestIdleCallback" in window) {
-            requestIdleCallback(loadNextBatch, { timeout: 100 });
-          } else {
-            setTimeout(loadNextBatch, 35);
+      let keyframeIndex = 0;
+      function loadNextKeyframeBatch() {
+        const batchEnd = Math.min(keyframes.length, keyframeIndex + 6);
+        for (let i = keyframeIndex; i < batchEnd; i++) {
+          const frameNum = keyframes[i];
+          if (!images[frameNum]) {
+            const kImg = new Image();
+            kImg.src = getFrameUrl(frameNum + 1);
+            images[frameNum] = kImg;
+            kImg.onload = () => {
+              loadedStatus[frameNum] = true;
+              loadedCount++;
+              updateProgress();
+            };
+            kImg.onerror = () => {
+              loadedCount++;
+              updateProgress();
+            };
           }
+        }
+        keyframeIndex = batchEnd;
+        if (keyframeIndex < keyframes.length) {
+          setTimeout(loadNextKeyframeBatch, 40);
+        } else {
+          // Keyframes complete, load remaining intermediate frames
+          loadSequentialBatches(1);
         }
       }
 
-      loadNextBatch();
+      loadNextKeyframeBatch();
+
+      function updateProgress() {
+        const pct = Math.min(100, Math.round((loadedCount / FRAME_COUNT) * 100));
+        if (progressText && loader && !loader.classList.contains("loaded")) {
+          progressText.textContent = pct;
+        }
+      }
+
+      function loadSequentialBatches(startIndex) {
+        let currentIndex = startIndex;
+        const isDesktop = window.innerWidth >= 1024;
+        const BATCH_SIZE = isDesktop ? 8 : 4;
+
+        function loadNextBatch() {
+          if (currentIndex >= FRAME_COUNT) return;
+
+          const end = Math.min(FRAME_COUNT, currentIndex + BATCH_SIZE);
+          for (let i = currentIndex; i < end; i++) {
+            if (!images[i]) {
+              const img = new Image();
+              img.src = getFrameUrl(i + 1);
+              images[i] = img;
+
+              img.onload = () => {
+                loadedStatus[i] = true;
+                loadedCount++;
+                updateProgress();
+              };
+
+              img.onerror = () => {
+                loadedCount++;
+                updateProgress();
+              };
+            }
+          }
+
+          currentIndex = end;
+          if (currentIndex < FRAME_COUNT) {
+            if ("requestIdleCallback" in window) {
+              requestIdleCallback(loadNextBatch, { timeout: 80 });
+            } else {
+              setTimeout(loadNextBatch, 25);
+            }
+          }
+        }
+
+        loadNextBatch();
+      }
     }
+  }
+
+  // Hero section entrance animation timeline (runs smoothly on both Desktop and Mobile)
+  function playHeroEntrance() {
+    const isReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isReducedMotion) {
+      document.querySelectorAll(".hero-greeting, .hero-title, .hero-statement, .hero-intro, .hero-cta-buttons, .hero-services .service-item, .navbar").forEach(el => {
+        el.style.opacity = "1";
+        el.style.transform = "none";
+      });
+      return;
+    }
+
+    if (typeof gsap === "undefined") return;
+
+    const heroTl = gsap.timeline({
+      defaults: { ease: "power3.out" }
+    });
+
+    // 1. Profile Canvas Background subtle zoom & fade in
+    heroTl.fromTo(".canvas-wrapper",
+      { opacity: 0, scale: 1.05 },
+      { opacity: 1, scale: 1, duration: 1.2, ease: "power2.out" }
+    );
+
+    // 2. Navbar entrance
+    heroTl.fromTo(".navbar",
+      { y: -28, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8 },
+      "-=0.9"
+    );
+
+    // 3. Hero greeting
+    heroTl.fromTo(".hero-greeting",
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.65 },
+      "-=0.6"
+    );
+
+    // 4. Hero main headline
+    heroTl.fromTo(".hero-title",
+      { y: 35, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.85 },
+      "-=0.55"
+    );
+
+    // 5. Hero right column (statement, intro description, CTA buttons)
+    heroTl.fromTo([".hero-statement", ".hero-intro"],
+      { y: 25, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, stagger: 0.12 },
+      "-=0.65"
+    );
+
+    heroTl.fromTo(".hero-cta-buttons",
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.65 },
+      "-=0.5"
+    );
+
+    // 6. 4 Pillars Services strip items
+    heroTl.fromTo(".hero-services .service-item",
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.6, stagger: 0.08 },
+      "-=0.45"
+    );
   }
 
   // Initialize Scroll Animation & Section Navigation
   function initScrollAnimation() {
+    // Play Hero Entrance timeline on initialization
+    playHeroEntrance();
+
     if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
       gsap.registerPlugin(ScrollTrigger);
 
-      // Scrub background frame animation continuously through the entire page scroll
+      // Scrub background frame animation continuously through the whole page scroll
       gsap.to(animationState, {
         frame: FRAME_COUNT - 1,
         ease: "none",
@@ -217,120 +332,238 @@
           trigger: ".page-wrapper",
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.9,
+          scrub: 0.8,
           onUpdate: () => {
             renderFrame(animationState.frame);
           }
         }
       });
 
-      // Subtle reveal for showcase cards
-      gsap.utils.toArray(".showcase-card").forEach((card, i) => {
-        gsap.from(card, {
-          y: 30,
-          opacity: 0.3,
-          duration: 0.7,
-          delay: i * 0.1,
+      // 1. Work Section Header reveal
+      gsap.fromTo([".work-header-left", ".work-header-right"],
+        { y: 36, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          stagger: 0.12,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: card,
-            start: "top 95%",
+            trigger: ".work-header",
+            start: "top 88%",
             once: true
           }
-        });
-      });
+        }
+      );
 
-      // Subtle reveal for about section cards
-      gsap.utils.toArray(".about-glass-card, .about-focus-card").forEach((card, i) => {
-        gsap.from(card, {
-          y: 25,
-          opacity: 0.3,
-          duration: 0.7,
-          delay: i * 0.1,
+      // 2. Showcase Cards reveal in a staggered sweep
+      gsap.fromTo(".showcase-card",
+        { y: 45, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.85,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".cards-grid",
+            start: "top 86%",
+            once: true
+          }
+        }
+      );
+
+      // 3. About Section Left column reveal
+      gsap.fromTo(".about-left",
+        { y: 36, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: card,
-            start: "top 95%",
+            trigger: ".about-grid",
+            start: "top 86%",
             once: true
           }
-        });
-      });
+        }
+      );
 
-      // Subtle reveal for featured testimonial cards
-      gsap.utils.toArray(".testimonial-card.featured").forEach((card, i) => {
-        gsap.from(card, {
-          y: 25,
-          opacity: 0.3,
-          duration: 0.7,
-          delay: i * 0.1,
+      // 4. About Section Right Glass Cards reveal
+      gsap.fromTo(".about-right .about-glass-card",
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.18,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".about-grid",
+            start: "top 84%",
+            once: true
+          }
+        }
+      );
+
+      // 5. Testimonials Header reveal
+      gsap.fromTo(".testimonials-header",
+        { y: 32, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: card,
-            start: "top 95%",
+            trigger: ".testimonials-header",
+            start: "top 88%",
             once: true
           }
-        });
-      });
+        }
+      );
 
-      // Subtle reveal for feedback form card
+      // 6. Featured Testimonials Cards reveal
+      gsap.fromTo(".testimonial-card.featured",
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".testimonials-grid",
+            start: "top 86%",
+            once: true
+          }
+        }
+      );
+
+      // 7. Community Feedback Header & Count
+      gsap.fromTo(".community-header",
+        { y: 25, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".community-feedback-section",
+            start: "top 88%",
+            once: true
+          }
+        }
+      );
+
+      // 8. Feedback Form Card reveal
       const formCard = document.querySelector(".feedback-form-card");
       if (formCard) {
-        gsap.from(formCard, {
-          y: 25,
-          opacity: 0.3,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: formCard,
-            start: "top 95%",
-            once: true
+        gsap.fromTo(formCard,
+          { y: 36, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: formCard,
+              start: "top 88%",
+              once: true
+            }
           }
-        });
+        );
       }
 
-      // Subtle reveal for contact action cards
-      gsap.utils.toArray(".action-card").forEach((card, i) => {
-        gsap.from(card, {
-          y: 20,
-          opacity: 0.3,
-          duration: 0.6,
-          delay: i * 0.12,
+      // 9. Contact Box Left (headline, subtext)
+      gsap.fromTo(".contact-box-left",
+        { y: 35, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
           ease: "power2.out",
           scrollTrigger: {
-            trigger: card,
-            start: "top 95%",
+            trigger: ".contact-box",
+            start: "top 86%",
             once: true
           }
-        });
-      });
+        }
+      );
+
+      // 10. Contact Action Cards (Email, WhatsApp)
+      gsap.fromTo(".contact-box-right .action-card",
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          stagger: 0.14,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ".contact-box",
+            start: "top 86%",
+            once: true
+          }
+        }
+      );
 
       ScrollTrigger.refresh();
+
+      // Recalculate ScrollTrigger on window load and after web fonts finish loading
+      window.addEventListener("load", () => {
+        ScrollTrigger.refresh();
+      });
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          ScrollTrigger.refresh();
+        });
+      }
 
       // Active state updater for navigation links across all sections
       const sections = document.querySelectorAll("section[id]");
       const navLinks = document.querySelectorAll(".nav-links a");
 
-      window.addEventListener("scroll", () => {
-        let current = "home";
-        const scrollY = window.pageYOffset + 240;
+      function updateActiveNav() {
+        const scrollPosition = window.pageYOffset + 200;
+        let currentSectionId = "home";
 
         sections.forEach((section) => {
-          const sectionTop = section.offsetTop;
-          const sectionHeight = section.offsetHeight;
-          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-            current = section.getAttribute("id");
+          const top = section.offsetTop;
+          const height = section.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            currentSectionId = section.getAttribute("id");
           }
         });
 
         navLinks.forEach((link) => {
           link.classList.remove("active");
-          if (link.getAttribute("href") === `#${current}`) {
+          if (link.getAttribute("href") === `#${currentSectionId}`) {
             link.classList.add("active");
           }
         });
-      }, { passive: true });
+      }
 
-      ScrollTrigger.refresh();
+      window.addEventListener("scroll", updateActiveNav, { passive: true });
+
+      // Smooth scroll navigation with navbar offset compensation
+      document.querySelectorAll(".nav-links a, .hero-cta-buttons a, .nav-brand, .back-to-top").forEach((anchor) => {
+        anchor.addEventListener("click", (e) => {
+          const href = anchor.getAttribute("href");
+          if (href && href.startsWith("#")) {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+              const navbarOffset = targetId === "home" ? 0 : 70;
+              const targetPosition = targetEl.getBoundingClientRect().top + window.pageYOffset - navbarOffset;
+              window.scrollTo({
+                top: Math.max(0, targetPosition),
+                behavior: "smooth"
+              });
+            }
+          }
+        });
+      });
 
     } else {
       // Pure Vanilla Lerp Fallback (works 100% offline without CDN)
