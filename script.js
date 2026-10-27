@@ -15,6 +15,8 @@
 
     filterButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
+        if (btn.classList.contains("active")) return;
+
         filterButtons.forEach((b) => {
           b.classList.remove("active");
           b.setAttribute("aria-selected", "false");
@@ -24,12 +26,35 @@
 
         const filter = btn.getAttribute("data-filter");
 
+        if (prefersReducedMotion()) {
+          cards.forEach((card) => {
+            const category = card.getAttribute("data-category");
+            if (filter === "all" || category === filter) {
+              card.classList.remove("filtered-out");
+              card.classList.remove("filtering-out");
+            } else {
+              card.classList.add("filtered-out");
+            }
+          });
+          return;
+        }
+
         cards.forEach((card) => {
           const category = card.getAttribute("data-category");
-          if (filter === "all" || category === filter) {
+          const matches = filter === "all" || category === filter;
+
+          if (matches) {
             card.classList.remove("filtered-out");
+            requestAnimationFrame(() => {
+              card.classList.remove("filtering-out");
+            });
           } else {
-            card.classList.add("filtered-out");
+            card.classList.add("filtering-out");
+            setTimeout(() => {
+              if (card.classList.contains("filtering-out")) {
+                card.classList.add("filtered-out");
+              }
+            }, 200);
           }
         });
       });
@@ -141,7 +166,7 @@
     window.addEventListener("scroll", updateNavState, { passive: true });
     updateNavState();
 
-    // Smooth Anchor Navigation with header offset
+    // Smooth Anchor Navigation honoring CSS scroll-margin-top
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", (e) => {
         const href = anchor.getAttribute("href");
@@ -149,12 +174,17 @@
           const target = document.querySelector(href);
           if (target) {
             e.preventDefault();
-            const navbarOffset = href === "#home" ? 0 : 70;
-            const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navbarOffset;
-            window.scrollTo({
-              top: Math.max(0, targetPos),
-              behavior: prefersReducedMotion() ? "auto" : "smooth"
-            });
+            if (href === "#home") {
+              window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion() ? "auto" : "smooth"
+              });
+            } else {
+              target.scrollIntoView({
+                behavior: prefersReducedMotion() ? "auto" : "smooth",
+                block: "start"
+              });
+            }
           }
         }
       });
