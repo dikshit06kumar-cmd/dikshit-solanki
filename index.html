@@ -25,7 +25,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="style.css">
+  <!-- Cache Invalidation -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link rel="stylesheet" href="style.css?v=3.1">
 </head>
 <body>
 
@@ -76,26 +81,44 @@
   </div>
 
   <main class="page-wrapper">
-    <!-- 1. Compact Header and Hero (Typography-based, No Face or Human Image) -->
+    <!-- 1. Hero Section with Scroll-Driven Portrait Animation -->
     <section class="hero-section" id="home">
-      <div class="content-container hero-container">
-        <div class="hero-content">
-          <h1 class="hero-name">Dikshit Solanki</h1>
-          <p class="hero-title">Content Creator · Video Editor · Graphic Designer</p>
-          <p class="hero-description">
-            I create videos, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.
-          </p>
-          <div class="hero-cta-group">
-            <a href="#work" class="btn-pill btn-primary" id="heroViewWorkBtn">
-              <span>View My Work</span>
-              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="7" y1="17" x2="17" y2="7"></line>
-                <polyline points="7 7 17 7 17 17"></polyline>
-              </svg>
-            </a>
-            <a href="#contact" class="btn-pill btn-secondary" id="heroContactBtn">
-              <span>Contact Me</span>
-            </a>
+      <div class="hero-scroll-track" id="heroScrollTrack">
+        <div class="hero-sticky-stage" id="heroStickyStage">
+          <!-- Persistent Canvas, Static Poster Fallback & Vignette Overlays -->
+          <div class="hero-canvas-wrap">
+            <img id="portraitPoster" src="frames/frame_000001.jpg" alt="Dikshit Solanki" class="hero-canvas-poster" loading="eager" fetchpriority="high">
+            <canvas id="portraitCanvas" class="hero-canvas" width="1920" height="1080" aria-label="Interactive portrait animation of Dikshit Solanki"></canvas>
+            <div class="hero-canvas-vignette" aria-hidden="true"></div>
+          </div>
+
+          <!-- Hero Content (Preserved typography, identity, and CTA actions) -->
+          <div class="content-container hero-container">
+            <div class="hero-content">
+              <h1 class="hero-name">Dikshit Solanki</h1>
+              <p class="hero-title">Content Creator · Video Editor · Graphic Designer</p>
+              <p class="hero-description">
+                I create videos, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.
+              </p>
+              <div class="hero-cta-group">
+                <a href="#work" class="btn-pill btn-primary" id="heroViewWorkBtn">
+                  <span>View My Work</span>
+                  <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+                <a href="#contact" class="btn-pill btn-secondary" id="heroContactBtn">
+                  <span>Contact Me</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Scroll-to-animate interactive cue -->
+          <div class="hero-scroll-indicator" id="heroScrollIndicator" aria-hidden="true">
+            <span class="scroll-mouse"><span class="scroll-wheel"></span></span>
+            <span class="scroll-label">Scroll to animate</span>
           </div>
         </div>
       </div>
@@ -111,20 +134,20 @@
 
         <!-- Filter Tabs -->
         <div class="work-filters" role="tablist" aria-label="Portfolio Categories">
-          <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All Work</button>
-          <button type="button" class="filter-btn" data-filter="video" role="tab" aria-selected="false">Video Editing</button>
-          <button type="button" class="filter-btn" data-filter="thumbnails" role="tab" aria-selected="false">YouTube Thumbnails</button>
-          <button type="button" class="filter-btn" data-filter="design" role="tab" aria-selected="false">Graphic Design</button>
-          <button type="button" class="filter-btn" data-filter="ai-ads" role="tab" aria-selected="false">AI Video Ads</button>
+          <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true" tabindex="0">All Work</button>
+          <button type="button" class="filter-btn" data-filter="video" role="tab" aria-selected="false" tabindex="-1">Video Editing</button>
+          <button type="button" class="filter-btn" data-filter="thumbnails" role="tab" aria-selected="false" tabindex="-1">YouTube Thumbnails</button>
+          <button type="button" class="filter-btn" data-filter="design" role="tab" aria-selected="false" tabindex="-1">Graphic Design</button>
+          <button type="button" class="filter-btn" data-filter="ai-ads" role="tab" aria-selected="false" tabindex="-1">AI Video Ads</button>
         </div>
 
         <!-- Projects Grid -->
         <div class="projects-grid" id="projectsGrid">
           
           <!-- Project 1: Work Harder, Stay Stuck (YouTube Thumbnails) -->
-          <article class="project-card" data-category="thumbnails">
+          <article class="project-card" data-category="thumbnails" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Work Harder, Stay Stuck project preview">
             <div class="card-media">
-              <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="card-img" loading="lazy">
+              <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">YouTube Thumbnails</span>
@@ -134,9 +157,9 @@
           </article>
 
           <!-- Project 2: Atmospheric Storytelling (Video Editing) -->
-          <article class="project-card" data-category="video">
+          <article class="project-card" data-category="video" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Atmospheric Storytelling Edit project preview">
             <div class="card-media">
-              <img src="images/late_night_office.png" alt="Narrative Video Editing Project Preview" class="card-img" loading="lazy">
+              <img src="images/late_night_office.png" alt="Narrative Video Editing Project Preview" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">Video Editing</span>
@@ -146,9 +169,9 @@
           </article>
 
           <!-- Project 3: Trapped by Success (YouTube Thumbnails) -->
-          <article class="project-card" data-category="thumbnails">
+          <article class="project-card" data-category="thumbnails" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Trapped by Success project preview">
             <div class="card-media">
-              <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="card-img" loading="lazy">
+              <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">YouTube Thumbnails</span>
@@ -158,9 +181,9 @@
           </article>
 
           <!-- Project 4: Climbing Corporate Ladders (AI Video Ads) -->
-          <article class="project-card" data-category="ai-ads">
+          <article class="project-card" data-category="ai-ads" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Climbing Corporate Ladders project preview">
             <div class="card-media">
-              <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept" class="card-img" loading="lazy">
+              <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">AI Video Ads</span>
@@ -170,9 +193,9 @@
           </article>
 
           <!-- Project 5: Medical & Health Presentation (YouTube Thumbnails) -->
-          <article class="project-card" data-category="thumbnails">
+          <article class="project-card" data-category="thumbnails" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Medical Health Presentation project preview">
             <div class="card-media">
-              <img src="images/medical_thumbnail.png" alt="Medical and Educational Presentation Thumbnail" class="card-img" loading="lazy">
+              <img src="images/medical_thumbnail.png" alt="Medical and Educational Presentation Thumbnail" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">YouTube Thumbnails</span>
@@ -182,9 +205,9 @@
           </article>
 
           <!-- Project 6: Cyberpunk Atmosphere Concept (AI Video Ads) -->
-          <article class="project-card" data-category="ai-ads">
+          <article class="project-card" data-category="ai-ads" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Cyberpunk Atmosphere Concept project preview">
             <div class="card-media">
-              <img src="images/rooftop1.png" alt="Cyberpunk Atmosphere Visual Concept" class="card-img" loading="lazy">
+              <img src="images/rooftop1.png" alt="Cyberpunk Atmosphere Visual Concept" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">AI Video Ads</span>
@@ -194,9 +217,9 @@
           </article>
 
           <!-- Project 7: Urban Mood & Atmosphere (Graphic Design) -->
-          <article class="project-card" data-category="design">
+          <article class="project-card" data-category="design" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Urban Mood & Atmosphere project preview">
             <div class="card-media">
-              <img src="images/rooftop2.png" alt="Urban Mood and Visual Atmosphere Graphic Study" class="card-img" loading="lazy">
+              <img src="images/rooftop2.png" alt="Urban Mood and Visual Atmosphere Graphic Study" class="card-img" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <span class="card-tag">Graphic Design</span>
@@ -480,6 +503,31 @@
     </section>
   </main>
 
+  <!-- Accessible Project Media Lightbox -->
+  <div class="project-lightbox" id="projectLightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle" aria-describedby="lightboxCategory" aria-hidden="true" hidden>
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-dialog" id="lightboxDialog" tabindex="-1">
+      <div class="lightbox-header">
+        <span class="lightbox-tag" id="lightboxTag"></span>
+        <button type="button" class="lightbox-close" id="lightboxCloseBtn" aria-label="Close project preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="lightbox-media-wrap">
+        <img src="" alt="" id="lightboxImg" class="lightbox-img">
+      </div>
+      <div class="lightbox-footer">
+        <div class="lightbox-info">
+          <h3 class="lightbox-title" id="lightboxTitle"></h3>
+          <p class="lightbox-category" id="lightboxCategory"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Minimal Footer -->
   <footer class="footer">
     <div class="content-container footer-container">
@@ -494,6 +542,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=3.1"></script>
 </body>
 </html>
