@@ -7,5 +7,6 @@ Thumbs.db
 .idea/
 .agents/
 .agent/
+skills-lock.json
 .impeccable/critique/
 scratch/

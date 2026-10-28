@@ -35,12 +35,14 @@
     if (previewImg && cardImg) {
       const newSrc = cardImg.getAttribute("src") || "";
       if (previewImg.getAttribute("src") !== newSrc) {
-        previewImg.style.opacity = "0.4";
+        previewImg.style.opacity = "0.3";
+        previewImg.style.filter = "blur(3px)";
         previewImg.src = newSrc;
         previewImg.alt = cardImg.getAttribute("alt") || (cardTitle ? cardTitle.textContent.trim() : "Project preview");
         setTimeout(() => {
           previewImg.style.opacity = "1";
-        }, 80);
+          previewImg.style.filter = "blur(0px)";
+        }, 90);
       }
     }
 
@@ -350,57 +352,128 @@
   }
 
   // ==========================================================================
-  // 6. NAVBAR SCROLL EFFECT & ACTIVE LINK HIGHLIGHTER
+  // 6. NAVBAR SCROLL EFFECT & ACTIVE LINK HIGHLIGHTER (Optimized)
   // ==========================================================================
   function initNavbarScroll() {
     const navbar = document.getElementById("siteNavbar");
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll(".nav-link");
-    const mobileLinks = document.querySelectorAll(".mobile-link");
+    const sections = Array.from(document.querySelectorAll("section[id]"));
+    const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+    const mobileLinks = Array.from(document.querySelectorAll(".mobile-link"));
+
+    let navRafId = null;
+    let lastScrolled = null;
+    let lastActiveSectionId = null;
+    let isMetricsDirty = true;
+    let sectionMetrics = [];
+
+    // Cache section boundaries outside the scroll loop
+    function updateSectionMetrics() {
+      sectionMetrics = sections.map((sec) => ({
+        id: sec.getAttribute("id"),
+        top: sec.offsetTop - 140,
+        height: sec.offsetHeight
+      }));
+      isMetricsDirty = false;
+    }
 
     function updateNavState() {
+      if (isMetricsDirty || sectionMetrics.length === 0) {
+        updateSectionMetrics();
+      }
+
       const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
 
-      // Add background border on scroll
-      if (navbar) {
-        if (scrollPos > 24) {
-          navbar.classList.add("scrolled");
-        } else {
-          navbar.classList.remove("scrolled");
+      // 1. Guarded navbar background border toggle
+      const isScrolled = scrollPos > 24;
+      if (isScrolled !== lastScrolled) {
+        lastScrolled = isScrolled;
+        if (navbar) {
+          navbar.classList.toggle("scrolled", isScrolled);
         }
       }
 
-      // Highlight active section
+      // 2. Active section lookup using pure cached numbers (zero layout reads)
       let currentSectionId = "";
-      sections.forEach((sec) => {
-        const top = sec.offsetTop - 140;
-        const height = sec.offsetHeight;
-        if (scrollPos >= top && scrollPos < top + height) {
-          currentSectionId = sec.getAttribute("id");
+      for (let i = 0; i < sectionMetrics.length; i++) {
+        const sm = sectionMetrics[i];
+        if (scrollPos >= sm.top && scrollPos < sm.top + sm.height) {
+          currentSectionId = sm.id;
+          break;
         }
-      });
+      }
 
-      navLinks.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (href === `#${currentSectionId}`) {
-          link.classList.add("active");
-        } else {
-          link.classList.remove("active");
-        }
-      });
+      // 3. Guarded link highlighting (only mutates DOM if active section changed)
+      if (currentSectionId !== lastActiveSectionId) {
+        lastActiveSectionId = currentSectionId;
 
-      mobileLinks.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (href === `#${currentSectionId}`) {
-          link.classList.add("active");
-        } else {
-          link.classList.remove("active");
-        }
+        navLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${currentSectionId}`);
+        });
+
+        mobileLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${currentSectionId}`);
+        });
+      }
+    }
+
+    // Coalesce high-frequency scroll events to native refresh rate
+    function onNavScroll() {
+      if (navRafId) return;
+      navRafId = requestAnimationFrame(() => {
+        navRafId = null;
+        updateNavState();
       });
     }
 
-    window.addEventListener("scroll", updateNavState, { passive: true });
+    // Invalidation Strategy: Detect size changes, position shifts, and dynamic DOM shifts
+    function markMetricsDirty() {
+      isMetricsDirty = true;
+      if (!navRafId) {
+        navRafId = requestAnimationFrame(() => {
+          navRafId = null;
+          updateNavState();
+        });
+      }
+    }
+
+    // 1. Global document body ResizeObserver detects any layout shift across the page
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(() => {
+        markMetricsDirty();
+      });
+      if (document.body) {
+        ro.observe(document.body);
+      }
+    }
+
+    // 2. Interaction delegation: clicks on accordion toggles, FAQ triggers, or filters
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.closest && e.target.closest(".service-toggle-btn, .service-card-top, .faq-trigger, .filter-btn")) {
+        markMetricsDirty();
+      }
+    }, { passive: true });
+
+    // 3. Detect completion of CSS transitions that change section heights
+    document.addEventListener("transitionend", (e) => {
+      if (e.target && e.target.closest && e.target.closest(".service-expand-card, .faq-item, .project-card")) {
+        markMetricsDirty();
+      }
+    }, { passive: true });
+
+    // 4. Viewport resize & orientation changes
+    window.addEventListener("resize", markMetricsDirty, { passive: true });
+    window.addEventListener("orientationchange", markMetricsDirty, { passive: true });
+
+    // 5. Asynchronous web font loading
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(markMetricsDirty);
+    }
+
+    // Initial measurement and sync
+    updateSectionMetrics();
     updateNavState();
+
+    window.addEventListener("scroll", onNavScroll, { passive: true });
 
     // Smooth Anchor Navigation honoring CSS scroll-margin-top
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -438,9 +511,11 @@
     const poster = document.getElementById("portraitPoster");
     if (!canvas || !scrollTrack) return;
 
-    // Use default alpha so underlying poster remains visible as hardware backing layer
-    const ctx = canvas.getContext("2d");
+    // Use alpha: false for direct GPU swapchain compositing
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
+    canvas.style.opacity = "0";
+    canvas.style.transition = "opacity 0.22s ease";
 
     const FRAME_COUNT = 240;
     const frames = new Array(FRAME_COUNT);
@@ -465,39 +540,57 @@
       return img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
     }
 
+    // Pin state cache to prevent redundant inline style rewrites on every frame
+    let lastPinMode = "";
+    let lastStageTop = "";
+    let lastStageHeight = -1;
+
     // Universal JS Pin Controller: Guarantees 100% viewport locking
     // across all browsers, mobile screens, and flex containers regardless of CSS sticky quirks
-    function updatePin() {
+    function updatePin(rect, vh, scrollDistance) {
       if (!scrollTrack || !stickyStage) return;
-      const rect = scrollTrack.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const scrollDistance = scrollTrack.offsetHeight - vh;
-      const stageHeight = `${vh}px`;
+
+      // Safe fallback if invoked directly without arguments
+      if (!rect) rect = scrollTrack.getBoundingClientRect();
+      if (vh === undefined) vh = window.innerHeight;
+      if (scrollDistance === undefined) scrollDistance = scrollTrack.offsetHeight - vh;
+
+      let targetMode = "";
+      let targetTop = "0px";
 
       if (rect.top <= 0 && rect.bottom >= vh) {
         // Active scrubbing zone inside hero track: lock firmly in viewport
-        stickyStage.style.position = "fixed";
-        stickyStage.style.top = "0px";
-        stickyStage.style.left = "0px";
-        stickyStage.style.width = "100%";
-        stickyStage.style.height = stageHeight;
-        stickyStage.style.zIndex = "2";
+        targetMode = "fixed";
+        targetTop = "0px";
       } else if (rect.bottom < vh) {
         // Scrolled past hero section: sit at bottom of track so Selected Work seamlessly overlays
-        stickyStage.style.position = "absolute";
-        stickyStage.style.top = Math.max(0, scrollDistance) + "px";
-        stickyStage.style.left = "0px";
-        stickyStage.style.width = "100%";
-        stickyStage.style.height = stageHeight;
-        stickyStage.style.zIndex = "2";
+        targetMode = "absolute";
+        targetTop = Math.max(0, scrollDistance) + "px";
       } else {
         // Top of page
-        stickyStage.style.position = "absolute";
-        stickyStage.style.top = "0px";
+        targetMode = "absolute";
+        targetTop = "0px";
+      }
+
+      // Guarded mode change: position, left, width, zIndex
+      if (targetMode !== lastPinMode) {
+        lastPinMode = targetMode;
+        stickyStage.style.position = targetMode;
         stickyStage.style.left = "0px";
         stickyStage.style.width = "100%";
-        stickyStage.style.height = stageHeight;
         stickyStage.style.zIndex = "2";
+      }
+
+      // Guarded top offset change
+      if (targetTop !== lastStageTop) {
+        lastStageTop = targetTop;
+        stickyStage.style.top = targetTop;
+      }
+
+      // Guarded viewport height change (handles mobile dynamic URL bar and resize)
+      if (vh !== lastStageHeight) {
+        lastStageHeight = vh;
+        stickyStage.style.height = `${vh}px`;
       }
     }
 
@@ -534,6 +627,9 @@
 
       try {
         ctx.drawImage(imageToDraw, dx, dy, dw, dh);
+        if (canvas.style.opacity !== "1") {
+          canvas.style.opacity = "1";
+        }
         return true;
       } catch (e) {
         return false;
@@ -607,14 +703,39 @@
 
       status[index] = 1;
       const img = new Image();
-      img.onload = () => {
+      let isHandled = false;
+
+      function onComplete() {
+        if (isHandled) return;
+        isHandled = true;
         status[index] = 2;
         frames[index] = img;
         if (callback) callback(img);
-      };
-      img.onerror = () => {
+      }
+
+      function onError() {
+        if (isHandled) return;
+        isHandled = true;
         status[index] = 3;
+      }
+
+      img.onload = () => {
+        if (typeof img.decode === "function") {
+          img.decode()
+            .then(onComplete)
+            .catch(() => {
+              if (isImageReady(img)) {
+                onComplete();
+              } else {
+                onError();
+              }
+            });
+        } else {
+          onComplete();
+        }
       };
+
+      img.onerror = onError;
       img.src = getFrameUrl(index);
     }
 
@@ -663,25 +784,33 @@
       }
     }
 
-    // Scroll scrubbing math
+    let scrollTicking = false;
+    let isIndicatorVisible = null;
+
+    // Scroll scrubbing math (Single-pass geometry measurement)
     function onScrollOrLayout() {
-      updatePin();
       if (!scrollTrack) return;
 
+      // Single geometry read pass: shared between pin controller and canvas scrubber
       const rect = scrollTrack.getBoundingClientRect();
-      const scrollableDist = scrollTrack.offsetHeight - window.innerHeight;
+      const vh = window.innerHeight;
+      const scrollableDist = scrollTrack.offsetHeight - vh;
+
+      // Update pin using single pre-measured geometry
+      updatePin(rect, vh, scrollableDist);
+
       if (scrollableDist <= 0) return;
 
       const progress = Math.max(0, Math.min(1, -rect.top / scrollableDist));
       targetFrame = progress * (FRAME_COUNT - 1);
 
-      // Fade out scroll indicator cue after user begins scrolling
+      // Fade out scroll indicator cue after user begins scrolling (guarded)
       if (scrollIndicator) {
-        if (progress > 0.05) {
-          scrollIndicator.style.opacity = "0";
-          scrollIndicator.style.pointerEvents = "none";
-        } else {
-          scrollIndicator.style.opacity = "0.85";
+        const shouldShow = progress <= 0.05;
+        if (shouldShow !== isIndicatorVisible) {
+          isIndicatorVisible = shouldShow;
+          scrollIndicator.style.opacity = shouldShow ? "0.85" : "0";
+          scrollIndicator.style.pointerEvents = shouldShow ? "auto" : "none";
         }
       }
 
@@ -689,6 +818,16 @@
         isLoopRunning = true;
         requestAnimationFrame(tick);
       }
+    }
+
+    // Coalesce high-frequency touch/wheel scroll events to display refresh rate
+    function onPortraitScroll() {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        scrollTicking = false;
+        onScrollOrLayout();
+      });
     }
 
     function tick() {
@@ -737,13 +876,13 @@
     startProgressiveLoading();
 
     // Event listeners
-    window.addEventListener("scroll", onScrollOrLayout, { passive: true });
+    window.addEventListener("scroll", onPortraitScroll, { passive: true });
 
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
+        lastStageHeight = -1; // Invalidate cached height on resize
         resizeCanvas();
-        updatePin();
         onScrollOrLayout();
       }, 50);
     }, { passive: true });
@@ -751,8 +890,8 @@
     window.addEventListener("orientationchange", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
+        lastStageHeight = -1;
         resizeCanvas();
-        updatePin();
         onScrollOrLayout();
       }, 100);
     }, { passive: true });
@@ -832,7 +971,7 @@
             lastActiveCard.focus();
           }
         }
-      }, 220);
+      }, 180);
     }
 
     // Expose open helper for split showcase preview trigger
