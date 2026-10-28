@@ -290,6 +290,7 @@
   function initMobileNav() {
     const toggleBtn = document.getElementById("mobileMenuToggle");
     const drawer = document.getElementById("mobileNavDrawer");
+    const closeBtn = document.getElementById("mobileDrawerCloseBtn");
     const mobileLinks = document.querySelectorAll(".mobile-link, .mobile-cta");
     if (!toggleBtn || !drawer) return;
 
@@ -297,12 +298,15 @@
       drawer.classList.add("open");
       toggleBtn.setAttribute("aria-expanded", "true");
       drawer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("mobile-nav-open");
+      if (closeBtn) closeBtn.focus();
     }
 
     function closeDrawer() {
       drawer.classList.remove("open");
       toggleBtn.setAttribute("aria-expanded", "false");
       drawer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("mobile-nav-open");
     }
 
     toggleBtn.addEventListener("click", (e) => {
@@ -315,15 +319,23 @@
       }
     });
 
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeDrawer();
+        toggleBtn.focus();
+      });
+    }
+
     mobileLinks.forEach((link) => {
       link.addEventListener("click", () => {
         closeDrawer();
       });
     });
 
-    // Close on click outside
-    document.addEventListener("click", (e) => {
-      if (drawer.classList.contains("open") && !drawer.contains(e.target) && !toggleBtn.contains(e.target)) {
+    // Close on click outside inner content
+    drawer.addEventListener("click", (e) => {
+      if (e.target === drawer) {
         closeDrawer();
       }
     });
@@ -458,23 +470,25 @@
     function updatePin() {
       if (!scrollTrack || !stickyStage) return;
       const rect = scrollTrack.getBoundingClientRect();
-      const scrollDistance = scrollTrack.offsetHeight - window.innerHeight;
+      const vh = window.innerHeight;
+      const scrollDistance = scrollTrack.offsetHeight - vh;
+      const stageHeight = `${vh}px`;
 
-      if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+      if (rect.top <= 0 && rect.bottom >= vh) {
         // Active scrubbing zone inside hero track: lock firmly in viewport
         stickyStage.style.position = "fixed";
         stickyStage.style.top = "0px";
         stickyStage.style.left = "0px";
         stickyStage.style.width = "100%";
-        stickyStage.style.height = "100vh";
+        stickyStage.style.height = stageHeight;
         stickyStage.style.zIndex = "2";
-      } else if (rect.bottom < window.innerHeight) {
+      } else if (rect.bottom < vh) {
         // Scrolled past hero section: sit at bottom of track so Selected Work seamlessly overlays
         stickyStage.style.position = "absolute";
         stickyStage.style.top = Math.max(0, scrollDistance) + "px";
         stickyStage.style.left = "0px";
         stickyStage.style.width = "100%";
-        stickyStage.style.height = "100vh";
+        stickyStage.style.height = stageHeight;
         stickyStage.style.zIndex = "2";
       } else {
         // Top of page
@@ -482,12 +496,12 @@
         stickyStage.style.top = "0px";
         stickyStage.style.left = "0px";
         stickyStage.style.width = "100%";
-        stickyStage.style.height = "100vh";
+        stickyStage.style.height = stageHeight;
         stickyStage.style.zIndex = "2";
       }
     }
 
-    // Proportional cover-style rendering preventing stretching or distortion
+    // Proportional cover-style rendering with responsive focal crop
     // Never clears canvas without immediately drawing a valid image over it
     function drawCoverImage(img) {
       if (!ctx) return false;
@@ -506,9 +520,17 @@
       const dw = iw * scale;
       const dh = ih * scale;
 
-      // Center the image within canvas
-      const dx = (cw - dw) * 0.5;
-      const dy = (ch - dh) * 0.5;
+      // Responsive focal crop:
+      // In source frames (1920x1080):
+      // Subject is centered horizontally at x=960 (focalX = 0.5)
+      // Subject's face and upper torso are vertically at y=160..520 (focalY ≈ 0.32-0.45)
+      // On narrow portrait screens, bias vertical framing towards upper-mid so face is never clipped
+      const isMobilePortrait = cw < 768 && ch > cw;
+      const focalX = 0.5;
+      const focalY = isMobilePortrait ? 0.32 : 0.45;
+
+      const dx = (cw - dw) * focalX;
+      const dy = (ch - dh) * focalY;
 
       try {
         ctx.drawImage(imageToDraw, dx, dy, dw, dh);
@@ -724,6 +746,15 @@
         updatePin();
         onScrollOrLayout();
       }, 50);
+    }, { passive: true });
+
+    window.addEventListener("orientationchange", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resizeCanvas();
+        updatePin();
+        onScrollOrLayout();
+      }, 100);
     }, { passive: true });
 
     document.addEventListener("visibilitychange", () => {
