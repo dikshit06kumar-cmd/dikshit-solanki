@@ -6,8 +6,51 @@
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ==========================================================================
-  // 1. PORTFOLIO CATEGORY FILTERING SYSTEM
+  // 1. PORTFOLIO CATEGORY FILTERING & SPLIT SHOWCASE PREVIEW
   // ==========================================================================
+  let activeShowcaseCard = null;
+
+  function updateSplitPreview(card) {
+    if (!card) return;
+    activeShowcaseCard = card;
+
+    const cards = document.querySelectorAll(".project-card");
+    cards.forEach((c) => c.classList.remove("active-preview"));
+    card.classList.add("active-preview");
+
+    const previewImg = document.getElementById("previewImg");
+    const previewTag = document.getElementById("previewTag");
+    const previewIndex = document.getElementById("previewIndex");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewCategory = document.getElementById("previewCategory");
+    const previewDesc = document.getElementById("previewDesc");
+
+    const cardImg = card.querySelector(".card-img");
+    const cardTag = card.querySelector(".card-tag");
+    const cardTitle = card.querySelector(".card-title");
+    const cardCategory = card.querySelector(".card-category");
+    const cardNum = card.querySelector(".card-num");
+    const descText = card.getAttribute("data-desc") || "";
+
+    if (previewImg && cardImg) {
+      const newSrc = cardImg.getAttribute("src") || "";
+      if (previewImg.getAttribute("src") !== newSrc) {
+        previewImg.style.opacity = "0.4";
+        previewImg.src = newSrc;
+        previewImg.alt = cardImg.getAttribute("alt") || (cardTitle ? cardTitle.textContent.trim() : "Project preview");
+        setTimeout(() => {
+          previewImg.style.opacity = "1";
+        }, 80);
+      }
+    }
+
+    if (previewTag && cardTag) previewTag.textContent = cardTag.textContent.trim();
+    if (previewIndex && cardNum) previewIndex.textContent = cardNum.textContent.trim();
+    if (previewTitle && cardTitle) previewTitle.textContent = cardTitle.textContent.trim();
+    if (previewCategory && cardCategory) previewCategory.textContent = cardCategory.textContent.trim();
+    if (previewDesc) previewDesc.textContent = descText;
+  }
+
   function initPortfolioFilters() {
     const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
     const cards = document.querySelectorAll(".project-card");
@@ -28,21 +71,25 @@
       if (shouldFocus) btn.focus();
 
       const filter = btn.getAttribute("data-filter");
+      let firstVisibleCard = null;
 
       if (prefersReducedMotion()) {
         cards.forEach((card) => {
           const category = card.getAttribute("data-category");
-          if (filter === "all" || category === filter) {
+          const matches = filter === "all" || category === filter;
+          if (matches) {
             card.classList.remove("filtered-out");
             card.classList.remove("filtering-out");
             card.setAttribute("tabindex", "0");
             card.removeAttribute("aria-hidden");
+            if (!firstVisibleCard) firstVisibleCard = card;
           } else {
             card.classList.add("filtered-out");
             card.setAttribute("tabindex", "-1");
             card.setAttribute("aria-hidden", "true");
           }
         });
+        if (firstVisibleCard) updateSplitPreview(firstVisibleCard);
         return;
       }
 
@@ -57,6 +104,7 @@
           requestAnimationFrame(() => {
             card.classList.remove("filtering-out");
           });
+          if (!firstVisibleCard) firstVisibleCard = card;
         } else {
           card.classList.add("filtering-out");
           card.setAttribute("tabindex", "-1");
@@ -68,6 +116,8 @@
           }, 200);
         }
       });
+
+      if (firstVisibleCard) updateSplitPreview(firstVisibleCard);
     }
 
     filterButtons.forEach((btn, index) => {
@@ -97,7 +147,145 @@
   }
 
   // ==========================================================================
-  // 2. MOBILE NAVIGATION DRAWER
+  // 2. SPLIT SHOWCASE INTERACTIONS (Hover for Desktop, Tap for Mobile)
+  // ==========================================================================
+  function initSplitShowcase() {
+    const cards = document.querySelectorAll(".project-card");
+    const previewStage = document.getElementById("showcasePreviewCard");
+    const previewLightboxBtn = document.getElementById("previewLightboxBtn");
+    const previewImg = document.getElementById("previewImg");
+
+    if (!cards.length) return;
+
+    // Set initial active card
+    activeShowcaseCard = cards[0];
+    updateSplitPreview(cards[0]);
+
+    cards.forEach((card) => {
+      // Desktop hover interaction
+      card.addEventListener("mouseenter", () => {
+        updateSplitPreview(card);
+      });
+
+      // Keyboard focus interaction
+      card.addEventListener("focus", () => {
+        updateSplitPreview(card);
+      });
+
+      // Touch / Click interaction
+      card.addEventListener("click", () => {
+        updateSplitPreview(card);
+      });
+    });
+
+    // Preview button opens lightbox for currently active card
+    if (previewLightboxBtn) {
+      previewLightboxBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (activeShowcaseCard && typeof window.__openProjectLightbox === "function") {
+          window.__openProjectLightbox(activeShowcaseCard);
+        }
+      });
+    }
+
+    // Clicking preview image directly also triggers lightbox
+    if (previewImg) {
+      previewImg.style.cursor = "pointer";
+      previewImg.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (activeShowcaseCard && typeof window.__openProjectLightbox === "function") {
+          window.__openProjectLightbox(activeShowcaseCard);
+        }
+      });
+    }
+  }
+
+  // ==========================================================================
+  // 3. EXPANDABLE SERVICE CARDS (Accessible Accordion)
+  // ==========================================================================
+  function initExpandableServices() {
+    const cards = document.querySelectorAll(".service-expand-card");
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      const toggleBtn = card.querySelector(".service-toggle-btn");
+      const wrapper = card.querySelector(".service-collapse-wrapper");
+      if (!toggleBtn || !wrapper) return;
+
+      function toggleCard(expand) {
+        const isCurrentlyExpanded = card.classList.contains("expanded");
+        const shouldExpand = expand !== undefined ? expand : !isCurrentlyExpanded;
+
+        if (shouldExpand) {
+          card.classList.add("expanded");
+          toggleBtn.setAttribute("aria-expanded", "true");
+          wrapper.hidden = false;
+        } else {
+          card.classList.remove("expanded");
+          toggleBtn.setAttribute("aria-expanded", "false");
+          wrapper.hidden = true;
+        }
+      }
+
+      toggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleCard();
+      });
+
+      // Clicking the card top bar also toggles
+      const topBar = card.querySelector(".service-card-top");
+      if (topBar) {
+        topBar.style.cursor = "pointer";
+        topBar.addEventListener("click", () => {
+          toggleCard();
+        });
+      }
+    });
+  }
+
+  // ==========================================================================
+  // 4. FAQ ACCORDION (Accessible, Keyboard Friendly)
+  // ==========================================================================
+  function initFaqAccordion() {
+    const faqItems = document.querySelectorAll(".faq-item");
+    if (!faqItems.length) return;
+
+    faqItems.forEach((item) => {
+      const trigger = item.querySelector(".faq-trigger");
+      const content = item.querySelector(".faq-content");
+      if (!trigger || !content) return;
+
+      function toggleFaq() {
+        const isActive = item.classList.contains("active");
+
+        // Optional: close other FAQ items for a clean single-open accordion
+        faqItems.forEach((other) => {
+          if (other !== item) {
+            other.classList.remove("active");
+            const otherTrigger = other.querySelector(".faq-trigger");
+            const otherContent = other.querySelector(".faq-content");
+            if (otherTrigger) otherTrigger.setAttribute("aria-expanded", "false");
+            if (otherContent) otherContent.hidden = true;
+          }
+        });
+
+        if (isActive) {
+          item.classList.remove("active");
+          trigger.setAttribute("aria-expanded", "false");
+          content.hidden = true;
+        } else {
+          item.classList.add("active");
+          trigger.setAttribute("aria-expanded", "true");
+          content.hidden = false;
+        }
+      }
+
+      trigger.addEventListener("click", toggleFaq);
+    });
+  }
+
+  // ==========================================================================
+  // 5. MOBILE NAVIGATION DRAWER
   // ==========================================================================
   function initMobileNav() {
     const toggleBtn = document.getElementById("mobileMenuToggle");
@@ -150,7 +338,7 @@
   }
 
   // ==========================================================================
-  // 3. NAVBAR SCROLL EFFECT & ACTIVE LINK HIGHLIGHTER
+  // 6. NAVBAR SCROLL EFFECT & ACTIVE LINK HIGHLIGHTER
   // ==========================================================================
   function initNavbarScroll() {
     const navbar = document.getElementById("siteNavbar");
@@ -228,7 +416,7 @@
   }
 
   // ==========================================================================
-  // 4. SCROLL-DRIVEN PORTRAIT CANVAS ANIMATION
+  // 7. SCROLL-DRIVEN PORTRAIT CANVAS ANIMATION
   // ==========================================================================
   function initPortraitAnimation() {
     const canvas = document.getElementById("portraitCanvas");
@@ -318,245 +506,179 @@
       const dw = iw * scale;
       const dh = ih * scale;
 
-      // Positioning: On wider screens, place subject at 60% horizontally
-      // to balance text on the left. On mobile portrait, center at 50%.
-      const isWide = cw > ch;
-      const focalX = isWide ? 0.60 : 0.50;
-      const focalY = isWide ? 0.35 : 0.26; // Head sits comfortably in upper-middle on desktop, elevated on mobile
-
-      let dx = (cw - dw) * focalX;
-      let dy = (ch - dh) * focalY;
-
-      // Clamp coordinates within canvas boundaries
-      if (dx > 0) dx = 0;
-      if (dx + dw < cw) dx = cw - dw;
-      if (dy > 0) dy = 0;
-      if (dy + dh < ch) dy = ch - dh;
+      // Center the image within canvas
+      const dx = (cw - dw) * 0.5;
+      const dy = (ch - dh) * 0.5;
 
       try {
-        ctx.drawImage(imageToDraw, Math.round(dx), Math.round(dy), Math.round(dw), Math.round(dh));
-        lastRenderedImg = imageToDraw;
+        ctx.drawImage(imageToDraw, dx, dy, dw, dh);
         return true;
-      } catch (err) {
+      } catch (e) {
         return false;
       }
     }
 
-    // Find nearest loaded valid frame to guarantee no blank flashes during fast scrub
-    function findNearestLoadedFrame(targetIdx) {
-      // 1. Direct hit
-      if (status[targetIdx] === 2 && isImageReady(frames[targetIdx])) {
-        return frames[targetIdx];
-      }
-
-      // 2. Search outwards for nearest loaded frame
-      for (let r = 1; r < FRAME_COUNT; r++) {
-        const prev = targetIdx - r;
-        if (prev >= 0 && status[prev] === 2 && isImageReady(frames[prev])) {
-          return frames[prev];
-        }
-        const next = targetIdx + r;
-        if (next < FRAME_COUNT && status[next] === 2 && isImageReady(frames[next])) {
-          return frames[next];
-        }
-      }
-
-      // 3. Fallback to last successfully rendered frame or poster
-      return isImageReady(lastRenderedImg) ? lastRenderedImg : (isImageReady(poster) ? poster : null);
-    }
-
-    // Render frame to canvas, keeping last frame if unavailable
     function renderFrame(index) {
-      const clamped = Math.max(0, Math.min(FRAME_COUNT - 1, index));
-      const frameImg = findNearestLoadedFrame(clamped);
-      if (frameImg) {
-        const ok = drawCoverImage(frameImg);
-        if (ok) {
-          lastDrawnFrame = clamped;
+      if (index === lastDrawnFrame && isImageReady(frames[index])) return;
+
+      const img = frames[index];
+      if (isImageReady(img)) {
+        if (drawCoverImage(img)) {
+          lastRenderedImg = img;
+          lastDrawnFrame = index;
+          if (poster && poster.style.opacity !== "0") {
+            poster.style.opacity = "0";
+          }
+        }
+        return;
+      }
+
+      // If target frame not loaded, find closest loaded frame
+      let nearestImg = null;
+      let nearestDist = Infinity;
+      for (let i = 0; i < FRAME_COUNT; i++) {
+        if (status[i] === 2 && isImageReady(frames[i])) {
+          const d = Math.abs(i - index);
+          if (d < nearestDist) {
+            nearestDist = d;
+            nearestImg = frames[i];
+          }
+        }
+      }
+
+      if (nearestImg) {
+        if (drawCoverImage(nearestImg)) {
+          lastRenderedImg = nearestImg;
         }
       } else if (lastRenderedImg) {
         drawCoverImage(lastRenderedImg);
+      } else if (poster && isImageReady(poster)) {
+        drawCoverImage(poster);
       }
+
+      // Trigger high-priority load for target frame
+      loadFrame(index);
     }
 
-    // Handle high-DPI scaling & resize
+    // High-DPI canvas resizing
     function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width || window.innerWidth;
-      const h = rect.height || window.innerHeight;
-      if (!w || !h) return;
-
+      const rect = stickyStage ? stickyStage.getBoundingClientRect() : canvas.getBoundingClientRect();
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const targetW = Math.round(w * dpr);
-      const targetH = Math.round(h * dpr);
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
 
-      if (canvas.width !== targetW || canvas.height !== targetH) {
-        canvas.width = targetW;
-        canvas.height = targetH;
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
         lastDrawnFrame = -1;
-        if (lastRenderedImg) {
-          drawCoverImage(lastRenderedImg);
-        } else {
-          renderFrame(Math.round(currentFrame));
-        }
+        renderFrame(Math.round(currentFrame));
       }
     }
 
-    // Load an individual frame with non-blocking error handler so pipeline never hangs
     function loadFrame(index, callback) {
-      if (index < 0 || index >= FRAME_COUNT) {
-        if (callback) callback(null, false);
-        return;
-      }
+      if (index < 0 || index >= FRAME_COUNT) return;
       if (status[index] === 2 && isImageReady(frames[index])) {
-        if (callback) callback(frames[index], true);
+        if (callback) callback(frames[index]);
         return;
       }
-      if (status[index] === 1) {
-        if (callback) callback(null, false);
-        return;
-      }
+      if (status[index] === 1) return;
 
       status[index] = 1;
       const img = new Image();
       img.onload = () => {
-        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-          frames[index] = img;
-          status[index] = 2;
-          if (callback) callback(img, true);
-
-          // If newly loaded frame matches current scrub position, re-render
-          const targetRounded = Math.round(currentFrame);
-          if (Math.abs(targetRounded - index) <= 2) {
-            renderFrame(targetRounded);
-          }
-        } else {
-          status[index] = 3;
-          if (callback) callback(null, false);
-        }
+        status[index] = 2;
+        frames[index] = img;
+        if (callback) callback(img);
       };
       img.onerror = () => {
         status[index] = 3;
-        if (callback) callback(null, false);
       };
       img.src = getFrameUrl(index);
     }
 
-    // Progressive loading pipeline: Keyframes stride -> Idle background loading
     function startProgressiveLoading() {
-      // 1. Keyframes with stride 4: 0, 4, 8, ... 236, 239
-      const keyframes = [];
-      for (let i = 0; i < FRAME_COUNT; i += 4) {
+      // 1. First frame
+      loadFrame(0, () => {
+        renderFrame(0);
+      });
+
+      // 2. Coarse keyframes every 15 frames
+      let keyframes = [];
+      for (let i = 0; i < FRAME_COUNT; i += 15) {
         keyframes.push(i);
       }
-      if (keyframes[keyframes.length - 1] !== FRAME_COUNT - 1) {
-        keyframes.push(FRAME_COUNT - 1);
-      }
 
-      let kfIdx = 0;
-      function loadNextKeyframeBatch() {
-        if (kfIdx >= keyframes.length) {
-          startIdleLoading();
+      let keyIdx = 0;
+      function loadNextKeyframe() {
+        if (keyIdx >= keyframes.length) {
+          startDenseLoading();
           return;
         }
-        const batch = keyframes.slice(kfIdx, kfIdx + 4);
-        kfIdx += 4;
-        let completed = 0;
-        batch.forEach((idx) => {
-          loadFrame(idx, () => {
-            completed++;
-            if (completed === batch.length) {
-              loadNextKeyframeBatch();
-            }
-          });
+        const idx = keyframes[keyIdx++];
+        loadFrame(idx, () => {
+          setTimeout(loadNextKeyframe, 10);
         });
       }
+      loadNextKeyframe();
 
-      // Start keyframes immediately
-      loadNextKeyframeBatch();
-
-      // 2. Continuous background pump for all remaining in-between frames
-      function startIdleLoading() {
-        const remaining = [];
-        for (let i = 0; i < FRAME_COUNT; i++) {
-          if (status[i] === 0) remaining.push(i);
+      // 3. Dense background loading
+      function startDenseLoading() {
+        let denseIdx = 0;
+        function loadDenseChunk() {
+          let count = 0;
+          while (denseIdx < FRAME_COUNT && count < 6) {
+            if (status[denseIdx] === 0) {
+              loadFrame(denseIdx);
+              count++;
+            }
+            denseIdx++;
+          }
+          if (denseIdx < FRAME_COUNT) {
+            setTimeout(loadDenseChunk, 40);
+          }
         }
-        if (!remaining.length) return;
-
-        let rIdx = 0;
-        function pumpNext() {
-          if (rIdx >= remaining.length) return;
-          const chunk = remaining.slice(rIdx, rIdx + 6);
-          rIdx += 6;
-          let chunkDone = 0;
-          chunk.forEach((idx) => {
-            loadFrame(idx, () => {
-              chunkDone++;
-              if (chunkDone === chunk.length) {
-                if ("requestIdleCallback" in window) {
-                  window.requestIdleCallback(pumpNext, { timeout: 300 });
-                } else {
-                  setTimeout(pumpNext, 20);
-                }
-              }
-            });
-          });
-        }
-
-        pumpNext();
+        loadDenseChunk();
       }
     }
 
-    // Map scroll distance to target frame (0 to FRAME_COUNT - 1)
-    function calculateTargetFrame() {
-      const rect = scrollTrack.getBoundingClientRect();
-      const scrollDistance = scrollTrack.offsetHeight - window.innerHeight;
-      if (scrollDistance <= 0) return 0;
-
-      const rawProgress = -rect.top / scrollDistance;
-      const progress = Math.min(Math.max(rawProgress, 0), 1);
-      return progress * (FRAME_COUNT - 1);
-    }
-
-    // Inertia damping tick loop (sleeps when idle)
-    function tick() {
-      if (!isLoopRunning) return;
-
-      const diff = targetFrame - currentFrame;
-      currentFrame += diff * 0.16;
-
-      if (Math.abs(diff) < 0.01) {
-        currentFrame = targetFrame;
-      }
-
-      const rounded = Math.round(currentFrame);
-      if (rounded !== lastDrawnFrame) {
-        renderFrame(rounded);
-      }
-
-      // Fade out scroll indicator once scrubbing begins
-      if (scrollIndicator) {
-        if (currentFrame > 2) {
-          scrollIndicator.classList.add("faded");
-        } else {
-          scrollIndicator.classList.remove("faded");
-        }
-      }
-
-      // Sleep loop when animation settles
-      if (currentFrame === targetFrame) {
-        isLoopRunning = false;
-        return;
-      }
-
-      requestAnimationFrame(tick);
-    }
-
+    // Scroll scrubbing math
     function onScrollOrLayout() {
       updatePin();
-      targetFrame = calculateTargetFrame();
+      if (!scrollTrack) return;
+
+      const rect = scrollTrack.getBoundingClientRect();
+      const scrollableDist = scrollTrack.offsetHeight - window.innerHeight;
+      if (scrollableDist <= 0) return;
+
+      const progress = Math.max(0, Math.min(1, -rect.top / scrollableDist));
+      targetFrame = progress * (FRAME_COUNT - 1);
+
+      // Fade out scroll indicator cue after user begins scrolling
+      if (scrollIndicator) {
+        if (progress > 0.05) {
+          scrollIndicator.style.opacity = "0";
+          scrollIndicator.style.pointerEvents = "none";
+        } else {
+          scrollIndicator.style.opacity = "0.85";
+        }
+      }
+
       if (!isLoopRunning) {
         isLoopRunning = true;
+        requestAnimationFrame(tick);
+      }
+    }
+
+    function tick() {
+      const diff = targetFrame - currentFrame;
+      if (Math.abs(diff) < 0.04) {
+        currentFrame = targetFrame;
+        renderFrame(Math.round(currentFrame));
+        isLoopRunning = false;
+      } else {
+        // Smooth lerp (0.16) for responsive scrubbing
+        currentFrame += diff * 0.16;
+        renderFrame(Math.round(currentFrame));
         requestAnimationFrame(tick);
       }
     }
@@ -617,7 +739,7 @@
   }
 
   // ==========================================================================
-  // 5. ACCESSIBLE PROJECT MEDIA LIGHTBOX
+  // 8. ACCESSIBLE PROJECT MEDIA LIGHTBOX
   // ==========================================================================
   function initProjectLightbox() {
     const lightbox = document.getElementById("projectLightbox");
@@ -630,7 +752,7 @@
     const category = document.getElementById("lightboxCategory");
     const cards = document.querySelectorAll(".project-card");
 
-    if (!lightbox || !backdrop || !closeBtn || !img || !cards.length) return;
+    if (!lightbox || !backdrop || !closeBtn || !img) return;
 
     let lastActiveCard = null;
 
@@ -682,7 +804,10 @@
       }, 220);
     }
 
-    // Card click and keyboard trigger (Enter / Space)
+    // Expose open helper for split showcase preview trigger
+    window.__openProjectLightbox = openLightbox;
+
+    // Direct card click and keyboard trigger (Enter / Space)
     cards.forEach((card) => {
       card.addEventListener("click", () => {
         openLightbox(card);
@@ -734,7 +859,7 @@
   }
 
   // ==========================================================================
-  // 6. REACT BITS-INSPIRED SPOTLIGHT CARD EFFECT
+  // 9. REACT BITS-INSPIRED SPOTLIGHT CARD EFFECT (Orange Accent)
   // ==========================================================================
   function initSpotlightCards() {
     // Only enable on devices supporting hover and fine pointer (mouse / precision trackpad)
@@ -795,6 +920,9 @@
   // ==========================================================================
   function init() {
     initPortfolioFilters();
+    initSplitShowcase();
+    initExpandableServices();
+    initFaqAccordion();
     initMobileNav();
     initNavbarScroll();
     initPortraitAnimation();

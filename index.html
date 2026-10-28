@@ -6,31 +6,31 @@
   
   <!-- SEO & Page Metadata -->
   <title>Dikshit Solanki · Content Creator · Video Editor · Graphic Designer</title>
-  <meta name="description" content="Portfolio of Dikshit Solanki — Video editing, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.">
+  <meta name="description" content="Portfolio of Dikshit Solanki — High-retention video editing, YouTube thumbnail packaging, motion graphics, and AI visual production for creators and brands.">
   <meta name="author" content="Dikshit Solanki">
-  <meta name="theme-color" content="#121212">
+  <meta name="theme-color" content="#0A0A0A">
 
   <!-- Open Graph & Social Sharing Metadata -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Dikshit Solanki · Content Creator · Video Editor · Graphic Designer">
-  <meta property="og:description" content="Portfolio of Dikshit Solanki — Video editing, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.">
+  <meta property="og:description" content="Portfolio of Dikshit Solanki — High-retention video editing, YouTube thumbnail packaging, motion graphics, and AI visual production for creators and brands.">
   <meta property="og:image" content="images/rooftop1.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Dikshit Solanki · Content Creator · Video Editor · Graphic Designer">
-  <meta name="twitter:description" content="Portfolio of Dikshit Solanki — Video editing, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.">
+  <meta name="twitter:description" content="Portfolio of Dikshit Solanki — High-retention video editing, YouTube thumbnail packaging, motion graphics, and AI visual production for creators and brands.">
   <meta name="twitter:image" content="images/rooftop1.png">
 
-  <!-- Typography: Plus Jakarta Sans & Inter from Google Fonts -->
+  <!-- Typography: Syne (Editorial Headings) & Inter (Clean Body) from Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   
   <!-- Cache Invalidation -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <link rel="stylesheet" href="style.css?v=3.1">
+  <link rel="stylesheet" href="style.css?v=4.0">
 </head>
 <body>
 
@@ -44,15 +44,16 @@
       <nav class="nav-center" aria-label="Main Navigation">
         <ul class="nav-links">
           <li><a href="#work" class="nav-link">Work</a></li>
+          <li><a href="#why-me" class="nav-link">Why Me</a></li>
           <li><a href="#services" class="nav-link">Services</a></li>
-          <li><a href="#skills" class="nav-link">Skills</a></li>
           <li><a href="#testimonials" class="nav-link">Feedback</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
           <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
       <div class="nav-right">
-        <a href="#contact" class="btn-nav-primary">Contact</a>
+        <a href="#contact" class="btn-nav-primary">Let's Talk</a>
         
         <!-- Mobile Menu Toggle Button -->
         <button type="button" class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer">
@@ -69,9 +70,10 @@
     <div class="mobile-nav-inner">
       <ul class="mobile-nav-links">
         <li><a href="#work" class="mobile-link">Work</a></li>
+        <li><a href="#why-me" class="mobile-link">Why Me</a></li>
         <li><a href="#services" class="mobile-link">Services</a></li>
-        <li><a href="#skills" class="mobile-link">Skills</a></li>
         <li><a href="#testimonials" class="mobile-link">Feedback</a></li>
+        <li><a href="#faq" class="mobile-link">FAQ</a></li>
         <li><a href="#contact" class="mobile-link">Contact</a></li>
       </ul>
       <div class="mobile-nav-footer">
@@ -81,24 +83,31 @@
   </div>
 
   <main class="page-wrapper">
-    <!-- 1. Hero Section with Scroll-Driven Portrait Animation -->
+    <!-- 1. Hero Section with Preserved Scroll-Driven Portrait Animation -->
     <section class="hero-section" id="home">
       <div class="hero-scroll-track" id="heroScrollTrack">
         <div class="hero-sticky-stage" id="heroStickyStage">
-          <!-- Persistent Canvas, Static Poster Fallback & Vignette Overlays -->
+          <!-- Persistent Canvas, Static Poster Fallback & Cinematic Vignette Overlays -->
           <div class="hero-canvas-wrap">
             <img id="portraitPoster" src="frames/frame_000001.jpg" alt="Dikshit Solanki" class="hero-canvas-poster" loading="eager" fetchpriority="high">
             <canvas id="portraitCanvas" class="hero-canvas" width="1920" height="1080" aria-label="Interactive portrait animation of Dikshit Solanki"></canvas>
             <div class="hero-canvas-vignette" aria-hidden="true"></div>
+            <div class="hero-ambient-glow" aria-hidden="true"></div>
           </div>
 
-          <!-- Hero Content (Preserved typography, identity, and CTA actions) -->
+          <!-- Hero Content (Cinematic Syne typography, positioning, and dual CTAs) -->
           <div class="content-container hero-container">
             <div class="hero-content">
+              <div class="hero-badge-wrap">
+                <span class="hero-status-pill">
+                  <span class="status-dot"></span>
+                  Available for Select Projects
+                </span>
+              </div>
               <h1 class="hero-name">Dikshit Solanki</h1>
               <p class="hero-title">Content Creator · Video Editor · Graphic Designer</p>
               <p class="hero-description">
-                I create videos, YouTube thumbnails, graphics, and AI-powered visuals for creators and businesses.
+                Crafting retention-focused video editing, high-CTR YouTube packaging, and AI visual assets engineered to captivate audiences and scale digital creators.
               </p>
               <div class="hero-cta-group">
                 <a href="#work" class="btn-pill btn-primary" id="heroViewWorkBtn">
@@ -124,10 +133,11 @@
       </div>
     </section>
 
-    <!-- 2. Selected Work (Real projects, slate cards #1F1F1F, subtle cyan hover borders) -->
+    <!-- 2. Selected Work (Split Showcase: Interactive Project List + Sticky Visual Preview) -->
     <section class="section-work" id="work">
       <div class="content-container">
         <div class="section-header">
+          <span class="section-kicker">Portfolio</span>
           <h2 class="section-title">Selected Work</h2>
           <p class="section-subtitle">Real projects across video editing, YouTube thumbnails, graphic design, and AI visuals.</p>
         </div>
@@ -141,269 +151,426 @@
           <button type="button" class="filter-btn" data-filter="ai-ads" role="tab" aria-selected="false" tabindex="-1">AI Video Ads</button>
         </div>
 
-        <!-- Projects Grid -->
-        <div class="projects-grid" id="projectsGrid">
-          
-          <!-- Project 1: Work Harder, Stay Stuck (YouTube Thumbnails) -->
-          <article class="project-card" data-category="thumbnails" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Work Harder, Stay Stuck project preview">
-            <div class="card-media">
-              <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="card-img" loading="lazy" decoding="async">
+        <!-- Split Showcase: List on Left, Large Live Preview on Right -->
+        <div class="split-showcase">
+          <!-- Left Column: Interactive Project Items -->
+          <div class="showcase-list" id="projectsGrid">
+            
+            <!-- Project 1: Work Harder, Stay Stuck (YouTube Thumbnails) -->
+            <article class="project-card" data-category="thumbnails" data-index="01" data-desc="High-contrast packaging engineered with clear focal separation, expressive lighting, and bold text hierarchy to maximize click-through rate." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Work Harder, Stay Stuck project preview">
+              <div class="card-media">
+                <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">01</span>
+                  <span class="card-tag">YouTube Thumbnails</span>
+                </div>
+                <h3 class="card-title">Work Harder, Stay Stuck</h3>
+                <p class="card-category">YouTube Thumbnail Design</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+            <!-- Project 2: Atmospheric Storytelling (Video Editing) -->
+            <article class="project-card" data-category="video" data-index="02" data-desc="Narrative video editing crafted with deliberate scene pacing, layered ambient sound design, dynamic punch-ins, and dramatic color grading." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Atmospheric Storytelling Edit project preview">
+              <div class="card-media">
+                <img src="images/late_night_office.png" alt="Narrative Video Editing Project Preview" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">02</span>
+                  <span class="card-tag">Video Editing</span>
+                </div>
+                <h3 class="card-title">Atmospheric Storytelling Edit</h3>
+                <p class="card-category">Video Editing &amp; Audio Pacing</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+            <!-- Project 3: Trapped by Success (YouTube Thumbnails) -->
+            <article class="project-card" data-category="thumbnails" data-index="03" data-desc="Conceptual YouTube packaging leveraging psychological intrigue, intense contrast, and clean readability at micro-feed scale." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Trapped by Success project preview">
+              <div class="card-media">
+                <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">03</span>
+                  <span class="card-tag">YouTube Thumbnails</span>
+                </div>
+                <h3 class="card-title">Trapped by Success</h3>
+                <p class="card-category">YouTube Thumbnail Design</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+            <!-- Project 4: Climbing Corporate Ladders (AI Video Ads) -->
+            <article class="project-card" data-category="ai-ads" data-index="04" data-desc="Surreal metaphorical visual created for commercial narrative advertising, blending AI visual generation with commercial motion design." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Climbing Corporate Ladders project preview">
+              <div class="card-media">
+                <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">04</span>
+                  <span class="card-tag">AI Video Ads</span>
+                </div>
+                <h3 class="card-title">Climbing Corporate Ladders</h3>
+                <p class="card-category">AI Video Ad &amp; Visual Concept</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+            <!-- Project 5: Medical & Health Presentation (YouTube Thumbnails) -->
+            <article class="project-card" data-category="thumbnails" data-index="05" data-desc="Educational thumbnail packaging engineered with authoritative color palettes, clear anatomical focal points, and crisp typography." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Medical Health Presentation project preview">
+              <div class="card-media">
+                <img src="images/medical_thumbnail.png" alt="Medical and Educational Presentation Thumbnail" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">05</span>
+                  <span class="card-tag">YouTube Thumbnails</span>
+                </div>
+                <h3 class="card-title">Medical Health Presentation</h3>
+                <p class="card-category">YouTube Thumbnail Design</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+            <!-- Project 6: Cyberpunk Atmosphere Concept (AI Video Ads) -->
+            <article class="project-card" data-category="ai-ads" data-index="06" data-desc="Cinematic world-building study combining atmospheric volumetric lighting, futuristic aesthetic, and prompt-engineered visual assets." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Cyberpunk Atmosphere Concept project preview">
+              <div class="card-media">
+                <img src="images/rooftop1.png" alt="Cyberpunk Atmosphere Visual Concept" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">06</span>
+                  <span class="card-tag">AI Video Ads</span>
+                </div>
+                <h3 class="card-title">Cyberpunk Atmosphere Concept</h3>
+                <p class="card-category">AI Video Ad Production</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+            <!-- Project 7: Urban Mood & Atmosphere (Graphic Design) -->
+            <article class="project-card" data-category="design" data-index="07" data-desc="Promotional digital artwork and branding asset exploring moody color grading, texture composition, and graphic balance." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Urban Mood & Atmosphere project preview">
+              <div class="card-media">
+                <img src="images/rooftop2.png" alt="Urban Mood and Visual Atmosphere Graphic Study" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-num">07</span>
+                  <span class="card-tag">Graphic Design</span>
+                </div>
+                <h3 class="card-title">Urban Mood &amp; Atmosphere</h3>
+                <p class="card-category">Promotional Graphic Art</p>
+              </div>
+              <div class="card-arrow-indicator" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Right Column: Sticky Showcase Visual Preview Stage -->
+          <div class="showcase-preview-stage" aria-live="polite">
+            <div class="showcase-preview-card" id="showcasePreviewCard">
+              <div class="preview-media-wrap">
+                <img id="previewImg" src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="preview-img">
+                <div class="preview-glow-backdrop" aria-hidden="true"></div>
+                <div class="preview-badge-layer">
+                  <span class="preview-tag" id="previewTag">YouTube Thumbnails</span>
+                </div>
+                <button type="button" class="btn-preview-lightbox" id="previewLightboxBtn" aria-label="Open full-screen project preview">
+                  <span>View Full Preview</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+              <div class="preview-content">
+                <div class="preview-header-meta">
+                  <span class="preview-index" id="previewIndex">01</span>
+                  <h3 class="preview-title" id="previewTitle">Work Harder, Stay Stuck</h3>
+                </div>
+                <p class="preview-category" id="previewCategory">YouTube Thumbnail Design</p>
+                <p class="preview-desc" id="previewDesc">
+                  High-contrast packaging engineered with clear focal separation, expressive lighting, and bold text hierarchy to maximize click-through rate.
+                </p>
+              </div>
             </div>
-            <div class="card-body">
-              <span class="card-tag">YouTube Thumbnails</span>
-              <h3 class="card-title">Work Harder, Stay Stuck</h3>
-              <p class="card-category">YouTube Thumbnail Design</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. Value Propositions: "Why Work With Me?" -->
+    <section class="section-why" id="why-me">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="section-kicker">Core Value</span>
+          <h2 class="section-title">Why Work With Me?</h2>
+          <p class="section-subtitle">Creative execution engineered around viewer psychology, audience retention, and dependable output.</p>
+        </div>
+
+        <div class="why-grid">
+          <!-- Card 1: Retention -->
+          <article class="why-card">
+            <div class="why-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+              </svg>
             </div>
+            <span class="why-badge">Retention Pacing</span>
+            <h3 class="why-title">Retention-Engineered Storytelling</h3>
+            <p class="why-desc">
+              Pacing, narrative arcs, and dynamic audio design engineered to hold viewer attention through every critical second and minimize drop-offs.
+            </p>
           </article>
 
-          <!-- Project 2: Atmospheric Storytelling (Video Editing) -->
-          <article class="project-card" data-category="video" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Atmospheric Storytelling Edit project preview">
-            <div class="card-media">
-              <img src="images/late_night_office.png" alt="Narrative Video Editing Project Preview" class="card-img" loading="lazy" decoding="async">
+          <!-- Card 2: CTR Packaging -->
+          <article class="why-card">
+            <div class="why-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
             </div>
-            <div class="card-body">
-              <span class="card-tag">Video Editing</span>
-              <h3 class="card-title">Atmospheric Storytelling Edit</h3>
-              <p class="card-category">Video Editing &amp; Audio Pacing</p>
-            </div>
+            <span class="why-badge">Click-Through Focus</span>
+            <h3 class="why-title">High-CTR Psychological Packaging</h3>
+            <p class="why-desc">
+              Thumbnails engineered with deliberate focal points, facial contrast, and expressive color grading to win impressions in crowded feeds.
+            </p>
           </article>
 
-          <!-- Project 3: Trapped by Success (YouTube Thumbnails) -->
-          <article class="project-card" data-category="thumbnails" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Trapped by Success project preview">
-            <div class="card-media">
-              <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="card-img" loading="lazy" decoding="async">
+          <!-- Card 3: Rapid Turnaround -->
+          <article class="why-card">
+            <div class="why-icon-wrap" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
             </div>
-            <div class="card-body">
-              <span class="card-tag">YouTube Thumbnails</span>
-              <h3 class="card-title">Trapped by Success</h3>
-              <p class="card-category">YouTube Thumbnail Design</p>
-            </div>
+            <span class="why-badge">48–72h Turnaround</span>
+            <h3 class="why-title">Fast Turnaround &amp; Rapid Ideation</h3>
+            <p class="why-desc">
+              Fast, disciplined production cycles, communicative revisions, and AI-assisted visual ideation to keep your content pipeline reliable.
+            </p>
           </article>
-
-          <!-- Project 4: Climbing Corporate Ladders (AI Video Ads) -->
-          <article class="project-card" data-category="ai-ads" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Climbing Corporate Ladders project preview">
-            <div class="card-media">
-              <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept" class="card-img" loading="lazy" decoding="async">
-            </div>
-            <div class="card-body">
-              <span class="card-tag">AI Video Ads</span>
-              <h3 class="card-title">Climbing Corporate Ladders</h3>
-              <p class="card-category">AI Video Ad &amp; Visual Concept</p>
-            </div>
-          </article>
-
-          <!-- Project 5: Medical & Health Presentation (YouTube Thumbnails) -->
-          <article class="project-card" data-category="thumbnails" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Medical Health Presentation project preview">
-            <div class="card-media">
-              <img src="images/medical_thumbnail.png" alt="Medical and Educational Presentation Thumbnail" class="card-img" loading="lazy" decoding="async">
-            </div>
-            <div class="card-body">
-              <span class="card-tag">YouTube Thumbnails</span>
-              <h3 class="card-title">Medical Health Presentation</h3>
-              <p class="card-category">YouTube Thumbnail Design</p>
-            </div>
-          </article>
-
-          <!-- Project 6: Cyberpunk Atmosphere Concept (AI Video Ads) -->
-          <article class="project-card" data-category="ai-ads" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Cyberpunk Atmosphere Concept project preview">
-            <div class="card-media">
-              <img src="images/rooftop1.png" alt="Cyberpunk Atmosphere Visual Concept" class="card-img" loading="lazy" decoding="async">
-            </div>
-            <div class="card-body">
-              <span class="card-tag">AI Video Ads</span>
-              <h3 class="card-title">Cyberpunk Atmosphere Concept</h3>
-              <p class="card-category">AI Video Ad Production</p>
-            </div>
-          </article>
-
-          <!-- Project 7: Urban Mood & Atmosphere (Graphic Design) -->
-          <article class="project-card" data-category="design" role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Urban Mood & Atmosphere project preview">
-            <div class="card-media">
-              <img src="images/rooftop2.png" alt="Urban Mood and Visual Atmosphere Graphic Study" class="card-img" loading="lazy" decoding="async">
-            </div>
-            <div class="card-body">
-              <span class="card-tag">Graphic Design</span>
-              <h3 class="card-title">Urban Mood &amp; Atmosphere</h3>
-              <p class="card-category">Promotional Graphic Art</p>
-            </div>
-          </article>
-
         </div>
       </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- 4. Services Section (Four Expandable Service Cards) -->
     <section class="section-services" id="services">
       <div class="content-container">
         <div class="section-header">
+          <span class="section-kicker">Capabilities</span>
           <h2 class="section-title">Services &amp; Solutions</h2>
           <p class="section-subtitle">Outcome-driven creative services engineered for viewer retention, CTR growth, and rapid turnaround.</p>
         </div>
 
-        <div class="services-grid">
+        <div class="services-expandable-grid">
+          
           <!-- Service 1: Video Editing -->
-          <article class="service-card">
-            <div class="service-header">
-              <span class="service-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          <article class="service-expand-card" id="serviceCard1">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <span class="service-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                  </svg>
+                </span>
+                <div class="service-title-wrap">
+                  <h3 class="service-title">High-Retention Video Editing</h3>
+                  <p class="service-short-desc">Documentary storytelling, retention hooks, and dynamic audio-visual pacing.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent1" aria-label="Toggle details for High-Retention Video Editing">
+                <span class="toggle-text">Details</span>
+                <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </span>
-              <h3 class="service-title">High-Retention Video Editing</h3>
+              </button>
             </div>
-            <p class="service-desc">
-              Pacing, visual narrative flow, sound design, and color grading tailored to maximize average view duration on YouTube and social platforms.
-            </p>
-            <ul class="service-points">
-              <li>YouTube long-form &amp; documentary storytelling</li>
-              <li>Retention-focused cuts, pacing &amp; soundscapes</li>
-              <li>Dynamic zooms, b-roll sync &amp; motion graphics</li>
-            </ul>
+            <div class="service-collapse-wrapper" id="serviceContent1" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Pacing, visual narrative flow, sound design, and color grading tailored to maximize average view duration on YouTube and social platforms.
+                </p>
+                <ul class="service-points-list">
+                  <li>YouTube long-form narrative editing &amp; documentary pacing</li>
+                  <li>Retention hooks, soundscapes &amp; atmospheric audio mixing</li>
+                  <li>Dynamic punch-ins, b-roll synchronization &amp; visual rhythm</li>
+                  <li>Short-form vertical cutdowns (Shorts, Reels, TikTok)</li>
+                </ul>
+              </div>
+            </div>
           </article>
 
-          <!-- Service 2: YouTube Thumbnail Packaging -->
-          <article class="service-card">
-            <div class="service-header">
-              <span class="service-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                  <polyline points="21 15 16 10 5 21"></polyline>
+          <!-- Service 2: Thumbnail Design -->
+          <article class="service-expand-card" id="serviceCard2">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <span class="service-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                </span>
+                <div class="service-title-wrap">
+                  <h3 class="service-title">YouTube Thumbnail Packaging</h3>
+                  <p class="service-short-desc">Visual engineering and psychological packaging to stand out and drive CTR.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent2" aria-label="Toggle details for YouTube Thumbnail Packaging">
+                <span class="toggle-text">Details</span>
+                <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </span>
-              <h3 class="service-title">YouTube Thumbnail Packaging</h3>
+              </button>
             </div>
-            <p class="service-desc">
-              Visual engineering and psychological packaging designed to stand out in crowded feeds and drive measurable click-through rates.
-            </p>
-            <ul class="service-points">
-              <li>High-contrast visual hierarchy &amp; focal points</li>
-              <li>Expressive color grading &amp; typography</li>
-              <li>A/B test ready thumbnail variations</li>
-            </ul>
+            <div class="service-collapse-wrapper" id="serviceContent2" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Visual engineering and psychological packaging designed to stand out in crowded feeds and drive measurable click-through rates.
+                </p>
+                <ul class="service-points-list">
+                  <li>High-contrast visual hierarchy &amp; intentional focal points</li>
+                  <li>Facial expression enhancement &amp; skin tone color grading</li>
+                  <li>Bold typographic styling &amp; 3D text treatments</li>
+                  <li>Multi-variant A/B testing packages for launch optimization</li>
+                </ul>
+              </div>
+            </div>
           </article>
 
-          <!-- Service 3: Graphic & Brand Design -->
-          <article class="service-card">
-            <div class="service-header">
-              <span class="service-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                  <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                  <path d="M2 2l7.586 7.586"></path>
-                  <circle cx="11" cy="11" r="2"></circle>
+          <!-- Service 3: Motion & Animation -->
+          <article class="service-expand-card" id="serviceCard3">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <span class="service-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                  </svg>
+                </span>
+                <div class="service-title-wrap">
+                  <h3 class="service-title">Motion Graphics &amp; Animation</h3>
+                  <p class="service-short-desc">Kinetic typography, animated lower thirds, and seamless channel transitions.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent3" aria-label="Toggle details for Motion Graphics and Animation">
+                <span class="toggle-text">Details</span>
+                <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </span>
-              <h3 class="service-title">Graphic Design &amp; Assets</h3>
+              </button>
             </div>
-            <p class="service-desc">
-              Consistent branding, YouTube channel artwork, promotional social banners, and digital graphics that establish immediate authority.
-            </p>
-            <ul class="service-points">
-              <li>Channel banners &amp; profile identity</li>
-              <li>Social media graphics &amp; announcement assets</li>
-              <li>Custom vector overlays &amp; presentation styling</li>
-            </ul>
+            <div class="service-collapse-wrapper" id="serviceContent3" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Dynamic visual assets and kinetic animations that elevate production value, reinforce key takeaways, and establish brand consistency.
+                </p>
+                <ul class="service-points-list">
+                  <li>Kinetic typography &amp; animated takeaway callouts</li>
+                  <li>Custom channel lower thirds &amp; identity graphics</li>
+                  <li>Seamless visual transitions &amp; logo animations</li>
+                  <li>Sound effects integration &amp; visual audio sync</li>
+                </ul>
+              </div>
+            </div>
           </article>
 
           <!-- Service 4: AI Creative Production -->
-          <article class="service-card">
-            <div class="service-header">
-              <span class="service-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          <article class="service-expand-card" id="serviceCard4">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <span class="service-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </span>
+                <div class="service-title-wrap">
+                  <h3 class="service-title">AI Creative Production</h3>
+                  <p class="service-short-desc">Generative visual prototypes, ad concept art, and custom imagery pipelines.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent4" aria-label="Toggle details for AI Creative Production">
+                <span class="toggle-text">Details</span>
+                <svg class="toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </span>
-              <h3 class="service-title">AI Creative Production</h3>
+              </button>
             </div>
-            <p class="service-desc">
-              Custom generative imagery, prompt engineering, and visual prototypes for fast creative ideation, YouTube B-roll, and commercial concept art.
-            </p>
-            <ul class="service-points">
-              <li>AI image &amp; video ad generation</li>
-              <li>Commercial visual concept prototypes</li>
-              <li>Creative ideation &amp; prompt engineering</li>
-            </ul>
+            <div class="service-collapse-wrapper" id="serviceContent4" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Custom generative imagery, prompt engineering, and visual prototypes for fast creative ideation, YouTube B-roll, and commercial concept art.
+                </p>
+                <ul class="service-points-list">
+                  <li>Custom generative imagery &amp; commercial visual concept prototypes</li>
+                  <li>Prompt engineering &amp; tailored creative ideation pipelines</li>
+                  <li>Synthetic visual B-roll &amp; ad asset generation</li>
+                  <li>High-resolution visual upscaling &amp; image cleanup</li>
+                </ul>
+              </div>
+            </div>
           </article>
+
         </div>
       </div>
     </section>
 
-    <!-- 3. Skills & Tools (One compact section with the exact 3 groups) -->
-    <section class="section-skills" id="skills">
-      <div class="content-container">
-        <div class="section-header">
-          <h2 class="section-title">Skills &amp; Tools</h2>
-          <p class="section-subtitle">Core capabilities and creative production tools.</p>
-        </div>
-
-        <div class="skills-grid">
-          <!-- Group 1: Video -->
-          <div class="skill-group-card">
-            <div class="skill-group-header">
-              <span class="skill-group-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
-                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-                </svg>
-              </span>
-              <h3 class="skill-group-title">Video</h3>
-            </div>
-            <ul class="skill-badge-list">
-              <li class="skill-badge">YouTube Video Editing</li>
-              <li class="skill-badge">Short-form Content</li>
-            </ul>
-          </div>
-
-          <!-- Group 2: Design -->
-          <div class="skill-group-card">
-            <div class="skill-group-header">
-              <span class="skill-group-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"></path>
-                </svg>
-              </span>
-              <h3 class="skill-group-title">Design</h3>
-            </div>
-            <ul class="skill-badge-list">
-              <li class="skill-badge">YouTube Thumbnail Design</li>
-              <li class="skill-badge">Canva</li>
-              <li class="skill-badge">Promotional Graphics</li>
-            </ul>
-          </div>
-
-          <!-- Group 3: AI & Creative Production -->
-          <div class="skill-group-card">
-            <div class="skill-group-header">
-              <span class="skill-group-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
-                </svg>
-              </span>
-              <h3 class="skill-group-title">AI &amp; Creative Production</h3>
-            </div>
-            <ul class="skill-badge-list">
-              <li class="skill-badge">AI Image and Video Generation</li>
-              <li class="skill-badge">Research</li>
-              <li class="skill-badge">Content Ideas</li>
-              <li class="skill-badge">Prompt Writing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Client Feedback / Testimonials Section -->
+    <!-- 5. Client Feedback / Social Proof Section -->
     <section class="section-testimonials" id="testimonials">
       <div class="content-container">
         <div class="section-header">
+          <span class="section-kicker">Endorsements</span>
           <h2 class="section-title">Client Feedback</h2>
           <p class="section-subtitle">Real feedback from creators and channel teams on delivery, communication, and performance results.</p>
         </div>
 
-        <div class="testimonials-grid">
+        <div class="testimonials-grid" id="testimonialsGrid">
           <!-- Testimonial 1: Elena Rostova -->
           <article class="testimonial-card">
             <div class="testimonial-rating" aria-label="5 out of 5 stars">
@@ -449,20 +616,121 @@
       </div>
     </section>
 
-    <!-- 4. Contact (Compact, genuine contact details, cyan button) -->
+    <!-- 6. Frequently Asked Questions (FAQ Accordion) -->
+    <section class="section-faq" id="faq">
+      <div class="content-container">
+        <div class="section-header">
+          <span class="section-kicker">Information</span>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+          <p class="section-subtitle">Common questions regarding workflows, turnaround timelines, software tools, and collaboration.</p>
+        </div>
+
+        <div class="faq-accordion-wrap">
+          
+          <!-- FAQ 1 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer1" id="faqQuestion1">
+              <span class="faq-question">What is your typical turnaround time for a project?</span>
+              <span class="faq-chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="faq-content" id="faqAnswer1" role="region" aria-labelledby="faqQuestion1" hidden>
+              <p class="faq-answer">
+                Most YouTube video edits and thumbnail packaging are completed within 48 to 72 hours, depending on footage length and project complexity. Rush delivery options can also be arranged for time-sensitive launches upon advance request.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer2" id="faqQuestion2">
+              <span class="faq-question">Which software and tools do you use in your workflow?</span>
+              <span class="faq-chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="faq-content" id="faqAnswer2" role="region" aria-labelledby="faqQuestion2" hidden>
+              <p class="faq-answer">
+                I work primarily with industry-standard creative tools including Adobe Premiere Pro, After Effects, and Photoshop, supplemented by cutting-edge generative AI models for rapid visual prototyping and texture exploration.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer3" id="faqQuestion3">
+              <span class="faq-question">How does the revision process work?</span>
+              <span class="faq-chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="faq-content" id="faqAnswer3" role="region" aria-labelledby="faqQuestion3" hidden>
+              <p class="faq-answer">
+                Every project includes collaborative revision rounds to fine-tune pacing, audio mixing, color balance, and thumbnail typography until the final deliverables match your exact standards and vision.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer4" id="faqQuestion4">
+              <span class="faq-question">Can you handle both long-form edits and short-form cutdowns?</span>
+              <span class="faq-chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="faq-content" id="faqAnswer4" role="region" aria-labelledby="faqQuestion4" hidden>
+              <p class="faq-answer">
+                Yes. I produce full-length YouTube documentary and talking-head videos, alongside high-energy vertical cutdowns optimized for YouTube Shorts, Instagram Reels, and TikTok to maximize organic reach across all surfaces.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer5" id="faqQuestion5">
+              <span class="faq-question">How do we get started on a project?</span>
+              <span class="faq-chevron" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div class="faq-content" id="faqAnswer5" role="region" aria-labelledby="faqQuestion5" hidden>
+              <p class="faq-answer">
+                Simply reach out via WhatsApp or email dikshitsolanki90@gmail.com with your project brief, raw footage links, or reference videos. We will review scope, turnaround expectations, and kick off immediately.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Contact Section (Direct Email & WhatsApp Outreach) -->
     <section class="section-contact" id="contact">
       <div class="content-container">
         <div class="contact-card">
           <div class="contact-header">
-            <h2 class="contact-heading">Have a project in mind? Get in touch.</h2>
+            <span class="section-kicker">Get In Touch</span>
+            <h2 class="contact-heading">Have a project in mind? Let's build something exceptional.</h2>
             <p class="contact-desc">
-              Open for video editing, YouTube thumbnail design, and visual production collaborations. Let's create something impactful together.
+              Open for video editing, YouTube thumbnail packaging, and creative visual production collaborations. Reach out directly to discuss your timeline and vision.
             </p>
           </div>
 
           <div class="contact-cta-wrap">
             <a href="mailto:dikshitsolanki90@gmail.com" class="btn-pill btn-primary btn-contact-main" id="contactEmailBtn">
-              <span>Contact Me</span>
+              <span>Send an Email</span>
               <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
@@ -471,7 +739,7 @@
           </div>
 
           <div class="contact-methods-grid">
-            <!-- Email -->
+            <!-- Email Method -->
             <a href="mailto:dikshitsolanki90@gmail.com" class="contact-method-card" id="contactEmailCard">
               <div class="method-icon-wrap" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -480,12 +748,12 @@
                 </svg>
               </div>
               <div class="method-content">
-                <span class="method-label">Email</span>
+                <span class="method-label">Direct Email</span>
                 <span class="method-value">dikshitsolanki90@gmail.com</span>
               </div>
             </a>
 
-            <!-- WhatsApp -->
+            <!-- WhatsApp Method -->
             <a href="https://wa.me/?text=Hi%20Dikshit,%20I%20would%20like%20to%20discuss%20a%20creative%20project" target="_blank" rel="noopener noreferrer" class="contact-method-card" id="contactWhatsAppCard">
               <div class="method-icon-wrap" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -493,7 +761,7 @@
                 </svg>
               </div>
               <div class="method-content">
-                <span class="method-label">WhatsApp</span>
+                <span class="method-label">WhatsApp Direct</span>
                 <span class="method-value">Send a Direct Message</span>
               </div>
             </a>
@@ -531,7 +799,7 @@
   <!-- Minimal Footer -->
   <footer class="footer">
     <div class="content-container footer-container">
-      <p class="copyright">&copy; 2026 · Content Creator · Video Editor · Graphic Designer.</p>
+      <p class="copyright">&copy; 2026 Dikshit Solanki · Content Creator · Video Editor · Graphic Designer.</p>
       <a href="#home" class="back-to-top" id="backToTopBtn" aria-label="Back to top">
         <span>Back to top</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -542,6 +810,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=3.1"></script>
+  <script src="script.js?v=4.0"></script>
 </body>
 </html>
