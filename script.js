@@ -509,6 +509,7 @@
     const stickyStage = document.getElementById("heroStickyStage");
     const scrollIndicator = document.getElementById("heroScrollIndicator");
     const poster = document.getElementById("portraitPoster");
+    const heroContainer = document.querySelector(".hero-container");
     if (!canvas || !scrollTrack) return;
 
     // Use alpha: false for direct GPU swapchain compositing
@@ -804,6 +805,14 @@
       const progress = Math.max(0, Math.min(1, -rect.top / scrollableDist));
       targetFrame = progress * (FRAME_COUNT - 1);
 
+      // Fade out hero content smoothly as user scrubs so portrait can be viewed and text is never covered
+      if (heroContainer) {
+        const textFade = Math.max(0, Math.min(1, (progress - 0.12) / 0.35));
+        const textOpacity = 1 - textFade;
+        heroContainer.style.opacity = textOpacity.toFixed(2);
+        heroContainer.style.visibility = textOpacity <= 0.02 ? "hidden" : "visible";
+      }
+
       // Fade out scroll indicator cue after user begins scrolling (guarded)
       if (scrollIndicator) {
         const shouldShow = progress <= 0.05;
@@ -1085,6 +1094,31 @@
     });
   }
 
+  // 10. SCROLL ENTRANCE MOTION LAYER (Taste Skill Motion Gate)
+  function initScrollReveals() {
+    if (prefersReducedMotion()) return;
+    const elements = document.querySelectorAll(
+      ".section-title, .section-subtitle, .project-card, .why-card, .service-expand-card, .testimonial-card, .faq-item, .contact-card"
+    );
+    if (!elements.length) return;
+
+    elements.forEach((el) => el.classList.add("reveal-init"));
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-in");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -40px 0px", threshold: 0.1 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+  }
+
   // ==========================================================================
   // INITIALIZATION
   // ==========================================================================
@@ -1098,6 +1132,7 @@
     initPortraitAnimation();
     initProjectLightbox();
     initSpotlightCards();
+    initScrollReveals();
   }
 
   if (document.readyState === "loading") {
