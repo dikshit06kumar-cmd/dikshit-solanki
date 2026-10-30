@@ -782,22 +782,26 @@ body.is-locked {
 }
 
 .services-container {
-  max-width: 1360px;
+  max-width: 1240px;
   margin: 0 auto;
 }
 
 .services-header {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 60px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 72px;
+  gap: 12px;
 }
 
 .services-big-heading {
-  font-size: clamp(2.5rem, 8vw, 6.5rem);
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
   font-weight: 900;
   letter-spacing: -0.04em;
-  line-height: 0.95;
-  text-align: right;
+  line-height: 1;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -809,68 +813,75 @@ body.is-locked {
 
 .service-item-row {
   border-bottom: 1px solid var(--border-subtle);
-  padding: 36px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  padding: 36px 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
   transition: background-color 0.3s ease;
+  border-radius: 12px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   .service-item-row {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 44px 20px;
+    grid-template-columns: 460px 1fr;
+    column-gap: 56px;
+    align-items: start;
+    padding: 44px 28px;
   }
 }
 
 .service-item-row:hover {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(255, 255, 255, 0.025);
 }
 
 .service-row-left {
   display: flex;
-  align-items: baseline;
-  gap: 24px;
-  min-width: 320px;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .service-num {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--accent);
   font-family: var(--font-mono);
+  width: 40px;
+  flex-shrink: 0;
+  line-height: 1.25;
 }
 
 .service-title {
-  font-size: clamp(1.25rem, 2vw, 1.85rem);
+  font-size: clamp(1.2rem, 1.8vw, 1.65rem);
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: #FFFFFF;
+  line-height: 1.25;
+  margin: 0;
 }
 
 .service-row-right {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 680px;
+  gap: 14px;
 }
 
 .service-bullet {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 0.98rem;
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  align-items: start;
+  column-gap: 12px;
+  font-size: 0.96rem;
   line-height: 1.6;
   color: #A1A1AA;
+  margin: 0;
 }
 
 .bullet-square {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: var(--accent);
-  margin-top: 4px;
+  margin-top: 6px;
+  line-height: 1;
 }
 
 /* ==========================================================================
