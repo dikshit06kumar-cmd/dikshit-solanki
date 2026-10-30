@@ -607,14 +607,14 @@ body.is-locked {
    ========================================================================== */
 .section-about {
   background-color: var(--bg-color);
-  padding: 100px 24px 60px;
+  padding: 80px 24px 36px;
   position: relative;
   overflow: hidden;
 }
 
 @media (min-width: 768px) {
   .section-about {
-    padding: 140px 48px 80px;
+    padding: 100px 48px 48px;
   }
 }
 
@@ -771,13 +771,13 @@ body.is-locked {
    ========================================================================== */
 .section-services {
   background-color: var(--bg-color);
-  padding: 100px 24px;
+  padding: 40px 24px 80px;
   position: relative;
 }
 
 @media (min-width: 768px) {
   .section-services {
-    padding: 140px 48px;
+    padding: 48px 48px 100px;
   }
 }
 
@@ -792,8 +792,7 @@ body.is-locked {
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 72px;
-  gap: 12px;
+  margin-bottom: 36px;
 }
 
 .services-big-heading {
