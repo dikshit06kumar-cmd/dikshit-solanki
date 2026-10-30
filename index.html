@@ -2,716 +2,742 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#050505">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO & Page Metadata -->
+  <title>Dikshit Solanki · Content Creator · Video Editor · Graphic Designer</title>
+  <meta name="description" content="Portfolio of Dikshit Solanki — High-retention video editing, YouTube thumbnail packaging, motion graphics, and AI visual production for creators and brands.">
+  <meta name="author" content="Dikshit Solanki">
+  <meta name="theme-color" content="#0A0A0A">
 
-  <title>Dikshit Solanki — Content Creator &amp; Video Editor</title>
-  <meta name="description" content="Portfolio of Dikshit Solanki — Content Creator, Video Editor &amp; Visual Designer specializing in retention-engineered video editing, high-CTR YouTube packaging, and AI visual assets.">
-  <link rel="canonical" href="https://dikshit.site/">
-
-  <!-- Open Graph -->
+  <!-- Open Graph & Social Sharing Metadata -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Dikshit Solanki — Content Creator &amp; Video Editor">
-  <meta property="og:description" content="Retention-engineered video editing, YouTube packaging, and visual assets designed to scale digital creators.">
-  <meta property="og:image" content="images/trapped_success.png">
+  <meta property="og:title" content="Dikshit Solanki · Content Creator · Video Editor · Graphic Designer">
+  <meta property="og:description" content="Portfolio of Dikshit Solanki — High-retention video editing, YouTube thumbnail packaging, motion graphics, and AI visual production for creators and brands.">
+  <meta property="og:image" content="images/rooftop1.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dikshit Solanki · Content Creator · Video Editor · Graphic Designer">
+  <meta name="twitter:description" content="Portfolio of Dikshit Solanki — High-retention video editing, YouTube thumbnail packaging, motion graphics, and AI visual production for creators and brands.">
+  <meta name="twitter:image" content="images/rooftop1.png">
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=6.0">
+  <!-- Typography: Hanken Grotesk (Dealt by Taste Skill) & Syne (Editorial Headings) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  
+  <!-- Cache Invalidation -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link rel="stylesheet" href="style.css?v=5.0">
 </head>
 <body>
 
-  <!-- Ambient Vignette & Grain (Signature Cinematic Atmosphere) -->
-  <div class="ambient-vignette" aria-hidden="true"></div>
-  <div class="ambient-grain" aria-hidden="true"></div>
-
-  <!-- 1. Fixed Floating Navigation -->
-  <nav class="site-nav" id="siteNav" aria-label="Main navigation">
-    <div class="nav-inner">
-      <a href="#home" class="nav-brand" aria-label="Dikshit Solanki Home">
-        <span class="nav-brand-dot" aria-hidden="true"></span>
-        <span>DIKSHIT SOLANKI</span>
+  <!-- Navigation Header -->
+  <header class="navbar" id="siteNavbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-brand" aria-label="Dikshit Solanki Portfolio">
+        <img src="images/logo.png" alt="Dikshit Solanki Logo" class="brand-logo" width="44" height="44">
       </a>
+      
+      <nav class="nav-center" aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#work" class="nav-link">Work</a></li>
+          <li><a href="#why-me" class="nav-link">Why Me</a></li>
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#testimonials" class="nav-link">Feedback</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
 
-      <ul class="nav-links">
-        <li><a href="#home" class="nav-link active">HOME</a></li>
-        <li><a href="#about" class="nav-link">ABOUT</a></li>
-        <li><a href="#services" class="nav-link">SERVICE</a></li>
-        <li><a href="#work" class="nav-link">PROJECT</a></li>
-        <li><a href="#testimonials" class="nav-link">FEEDBACK</a></li>
-        <li><a href="#faq" class="nav-link">FAQ</a></li>
-        <li><a href="#play" class="nav-link">PLAY</a></li>
-        <li><a href="#contact" class="nav-link">CONTACT</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <a href="#contact" class="nav-cta-btn">
-          <span>Let's Talk</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="7" y1="17" x2="17" y2="7"></line>
-            <polyline points="7 7 17 7 17 17"></polyline>
-          </svg>
-        </a>
-
-        <button type="button" class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileDrawer">
-          <span></span>
-          <span></span>
+      <div class="nav-right">
+        <a href="#contact" class="btn-nav-primary">Let's Talk</a>
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="mobile-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer">
+          <span class="mobile-bar"></span>
+          <span class="mobile-bar"></span>
+          <span class="mobile-bar"></span>
         </button>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <!-- Mobile Drawer -->
-  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
-    <div class="mobile-drawer-inner">
-      <a href="#home" class="mobile-nav-link">Home</a>
-      <a href="#about" class="mobile-nav-link">About</a>
-      <a href="#services" class="mobile-nav-link">Service</a>
-      <a href="#work" class="mobile-nav-link">Project</a>
-      <a href="#testimonials" class="mobile-nav-link">Feedback</a>
-      <a href="#faq" class="mobile-nav-link">FAQ</a>
-      <a href="#play" class="mobile-nav-link">Play</a>
-      <a href="#contact" class="mobile-nav-link">Contact</a>
-      <a href="#contact" class="mobile-drawer-cta">Let's Talk ↗</a>
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+    <div class="mobile-nav-header">
+      <span class="mobile-nav-brand">Menu</span>
+      <button type="button" class="mobile-drawer-close" id="mobileDrawerCloseBtn" aria-label="Close navigation menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div class="mobile-nav-inner">
+      <ul class="mobile-nav-links">
+        <li><a href="#work" class="mobile-link">Work</a></li>
+        <li><a href="#why-me" class="mobile-link">Why Me</a></li>
+        <li><a href="#services" class="mobile-link">Services</a></li>
+        <li><a href="#testimonials" class="mobile-link">Feedback</a></li>
+        <li><a href="#faq" class="mobile-link">FAQ</a></li>
+        <li><a href="#contact" class="mobile-link">Contact</a></li>
+      </ul>
+      <div class="mobile-nav-footer">
+        <a href="#contact" class="btn-pill btn-primary mobile-cta">Contact Me</a>
+      </div>
     </div>
   </div>
 
-  <main>
-    <!-- 2. Hero Section with Scroll-Driven 240-Frame Portrait Animation & Oversized Typography -->
-    <section class="hero-stage" id="home">
+  <main class="page-wrapper">
+    <!-- 1. Hero Section with Preserved Scroll-Driven Portrait Animation -->
+    <section class="hero-section" id="home">
       <div class="hero-scroll-track" id="heroScrollTrack">
         <div class="hero-sticky-stage" id="heroStickyStage">
-          
-          <!-- Background Ambient Glow -->
-          <div class="hero-radial-glow" aria-hidden="true"></div>
-
-          <!-- Oversized Split Headline: "PORTFOLIO" behind Portrait -->
-          <div class="hero-headline-wrap" id="heroHeadlineWrap">
-            <h1 class="hero-split-title metallic-text" id="heroSplitTitle">
-              <span class="title-part" id="titlePartLeft">PORT</span>
-              <span class="title-part" id="titlePartRight">FOLIO</span>
-            </h1>
+          <!-- Persistent Canvas, Static Poster Fallback & Cinematic Vignette Overlays -->
+          <div class="hero-canvas-wrap">
+            <img id="portraitPoster" src="frames/frame_000001.jpg" alt="Dikshit Solanki" class="hero-canvas-poster" loading="eager" fetchpriority="high">
+            <canvas id="portraitCanvas" class="hero-canvas" width="1920" height="1080" aria-label="Interactive portrait animation of Dikshit Solanki"></canvas>
+            <div class="hero-canvas-vignette" aria-hidden="true"></div>
+            <div class="hero-ambient-glow" aria-hidden="true"></div>
           </div>
 
-          <!-- Foreground Portrait Stage: Canvas Scrubbing + Cutout Poster Fallback -->
-          <div class="hero-canvas-wrap" id="heroCanvasWrap">
-            <!-- Canvas renders 240-frame sequence on scroll -->
-            <canvas id="portraitCanvas" class="hero-canvas" width="1920" height="1080" aria-label="Interactive scroll-driven portrait animation of Dikshit Solanki"></canvas>
-            <!-- Cutout poster for instant crystal-clear rendering -->
-            <img id="portraitPoster" src="images/dikshit_cutout.png" alt="Dikshit Solanki" class="hero-portrait-cutout" loading="eager" fetchpriority="high">
-          </div>
-
-          <!-- Floating Metadata Bar & CTAs -->
-          <div class="hero-meta-bar" id="heroMetaBar">
-            <p class="hero-role-text">
-              <span class="role-bold">Content Creator</span>
-              <span class="role-italic">Video Editor &amp; Visual Designer</span>
-            </p>
-
-            <div class="hero-cta-wrap">
-              <a href="#work" class="hero-pill-btn hero-pill-primary">
-                <span>Explore Work</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="7" y1="17" x2="17" y2="7"></line>
-                  <polyline points="7 7 17 7 17 17"></polyline>
-                </svg>
-              </a>
-              <a href="#contact" class="hero-pill-btn hero-pill-secondary">
-                <span>Contact</span>
-              </a>
+          <!-- Hero Content -->
+          <div class="content-container hero-container">
+            <div class="hero-content">
+              <h1 class="hero-name">Dikshit Solanki</h1>
+              <p class="hero-title">Content Creator, Video Editor &amp; Visual Designer</p>
+              <p class="hero-description">
+                Specializing in retention-engineered video editing, psychological YouTube packaging, and AI visual assets designed to captivate audiences and scale digital creators.
+              </p>
+              <div class="hero-cta-group">
+                <a href="#work" class="btn-pill btn-primary" id="heroViewWorkBtn">
+                  <span>View Selected Work</span>
+                  <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+                <a href="#contact" class="btn-pill btn-secondary" id="heroContactBtn">
+                  <span>Contact Directly</span>
+                </a>
+              </div>
             </div>
           </div>
 
-          <!-- Scroll-to-animate indicator cue -->
+          <!-- Scroll-to-animate interactive cue -->
           <div class="hero-scroll-indicator" id="heroScrollIndicator" aria-hidden="true">
             <span class="scroll-mouse"><span class="scroll-wheel"></span></span>
-            <span class="scroll-label">Scroll to scrub</span>
+            <span class="scroll-label">Scroll to animate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Selected Work (Split Showcase: Interactive Project List + Sticky Visual Preview) -->
+    <section class="section-work" id="work">
+      <div class="content-container">
+        <div class="section-header">
+          <h2 class="section-title">Selected Work</h2>
+          <p class="section-subtitle">Real projects across video editing, YouTube thumbnail packaging, and AI visual assets.</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="work-filters" role="tablist" aria-label="Portfolio Categories">
+          <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true" tabindex="0">All Work</button>
+          <button type="button" class="filter-btn" data-filter="video" role="tab" aria-selected="false" tabindex="-1">Video Editing</button>
+          <button type="button" class="filter-btn" data-filter="thumbnails" role="tab" aria-selected="false" tabindex="-1">YouTube Thumbnails</button>
+          <button type="button" class="filter-btn" data-filter="design" role="tab" aria-selected="false" tabindex="-1">Graphic Design</button>
+          <button type="button" class="filter-btn" data-filter="ai-ads" role="tab" aria-selected="false" tabindex="-1">AI Video Ads</button>
+        </div>
+
+        <!-- Split Showcase: List on Left, Large Live Preview on Right -->
+        <div class="split-showcase">
+          <!-- Left Column: Interactive Project Items -->
+          <div class="showcase-list" id="projectsGrid">
+            
+            <!-- Project 1: Work Harder, Stay Stuck (YouTube Thumbnails) -->
+            <article class="project-card" data-category="thumbnails" data-index="1" data-desc="High-contrast packaging engineered with clear focal separation, expressive lighting, and bold text hierarchy to maximize click-through rate." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Work Harder, Stay Stuck project preview">
+              <div class="card-media">
+                <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">YouTube Thumbnails</span>
+                </div>
+                <h3 class="card-title">Work Harder, Stay Stuck</h3>
+                <p class="card-category">YouTube Thumbnail Design</p>
+                <p class="card-desc">High-contrast packaging engineered with clear focal separation, expressive lighting, and bold text hierarchy to maximize click-through rate.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 2: Atmospheric Storytelling (Video Editing) -->
+            <article class="project-card" data-category="video" data-index="2" data-desc="Narrative video editing crafted with deliberate scene pacing, layered ambient sound design, dynamic punch-ins, and dramatic color grading." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Atmospheric Storytelling Edit project preview">
+              <div class="card-media">
+                <img src="images/late_night_office.png" alt="Narrative Video Editing Project Preview" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">Video Editing</span>
+                </div>
+                <h3 class="card-title">Atmospheric Storytelling Edit</h3>
+                <p class="card-category">Video Editing &amp; Audio Pacing</p>
+                <p class="card-desc">Narrative video editing crafted with deliberate scene pacing, layered ambient sound design, dynamic punch-ins, and dramatic color grading.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 3: Trapped by Success (YouTube Thumbnails) -->
+            <article class="project-card" data-category="thumbnails" data-index="3" data-desc="Conceptual YouTube packaging leveraging psychological intrigue, intense contrast, and clean readability at micro-feed scale." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Trapped by Success project preview">
+              <div class="card-media">
+                <img src="images/trapped_success.png" alt="Trapped by Success YouTube Packaging" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">YouTube Thumbnails</span>
+                </div>
+                <h3 class="card-title">Trapped by Success</h3>
+                <p class="card-category">YouTube Thumbnail Design</p>
+                <p class="card-desc">Conceptual YouTube packaging leveraging psychological intrigue, intense contrast, and clean readability at micro-feed scale.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 4: Climbing Corporate Ladders (AI Video Ads) -->
+            <article class="project-card" data-category="ai-ads" data-index="4" data-desc="Surreal metaphorical visual created for commercial narrative advertising, blending AI visual generation with commercial motion design." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Climbing Corporate Ladders project preview">
+              <div class="card-media">
+                <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Visual Concept" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">AI Video Ads</span>
+                </div>
+                <h3 class="card-title">Climbing Corporate Ladders</h3>
+                <p class="card-category">AI Video Ad &amp; Visual Concept</p>
+                <p class="card-desc">Surreal metaphorical visual created for commercial narrative advertising, blending AI visual generation with commercial motion design.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 5: Medical & Health Presentation (YouTube Thumbnails) -->
+            <article class="project-card" data-category="thumbnails" data-index="5" data-desc="Educational thumbnail packaging engineered with authoritative color palettes, clear anatomical focal points, and crisp typography." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Medical Health Presentation project preview">
+              <div class="card-media">
+                <img src="images/medical_thumbnail.png" alt="Medical and Educational Presentation Thumbnail" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">YouTube Thumbnails</span>
+                </div>
+                <h3 class="card-title">Medical Health Presentation</h3>
+                <p class="card-category">YouTube Thumbnail Design</p>
+                <p class="card-desc">Educational thumbnail packaging engineered with authoritative color palettes, clear anatomical focal points, and crisp typography.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 6: Cyberpunk Atmosphere Concept (AI Video Ads) -->
+            <article class="project-card" data-category="ai-ads" data-index="6" data-desc="Cinematic world-building study combining atmospheric volumetric lighting, futuristic aesthetic, and prompt-engineered visual assets." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Cyberpunk Atmosphere Concept project preview">
+              <div class="card-media">
+                <img src="images/rooftop1.png" alt="Cyberpunk Atmosphere Visual Concept" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">AI Video Ads</span>
+                </div>
+                <h3 class="card-title">Cyberpunk Atmosphere Concept</h3>
+                <p class="card-category">AI Video Ad Production</p>
+                <p class="card-desc">Cinematic world-building study combining atmospheric volumetric lighting, futuristic aesthetic, and prompt-engineered visual assets.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+            <!-- Project 7: Urban Mood & Atmosphere (Graphic Design) -->
+            <article class="project-card" data-category="design" data-index="7" data-desc="Promotional digital artwork and branding asset exploring moody color grading, texture composition, and graphic balance." role="button" tabindex="0" aria-haspopup="dialog" aria-label="View Urban Mood & Atmosphere project preview">
+              <div class="card-media">
+                <img src="images/rooftop2.png" alt="Urban Mood and Visual Atmosphere Graphic Study" class="card-img" loading="lazy" decoding="async">
+              </div>
+              <div class="card-body">
+                <div class="card-meta-row">
+                  <span class="card-tag">Graphic Design</span>
+                </div>
+                <h3 class="card-title">Urban Mood &amp; Atmosphere</h3>
+                <p class="card-category">Promotional Graphic Art</p>
+                <p class="card-desc">Promotional digital artwork and branding asset exploring moody color grading, texture composition, and graphic balance.</p>
+              </div>
+              <div class="card-action-bar">
+                <span class="card-action-label">View Project</span>
+                <div class="card-arrow-indicator" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Right Column: Sticky Showcase Visual Preview Stage -->
+          <div class="showcase-preview-stage" aria-live="polite">
+            <div class="showcase-preview-card" id="showcasePreviewCard">
+              <div class="preview-media-wrap">
+                <img id="previewImg" src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="preview-img">
+                <div class="preview-badge-layer">
+                  <span class="preview-tag" id="previewTag">YouTube Thumbnails</span>
+                </div>
+                <button type="button" class="btn-preview-lightbox" id="previewLightboxBtn" aria-label="Open full-screen project preview">
+                  <span>View Full Preview</span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                </button>
+              </div>
+              <div class="preview-content">
+                <h3 class="preview-title" id="previewTitle">Work Harder, Stay Stuck</h3>
+                <p class="preview-category" id="previewCategory">YouTube Thumbnail Design</p>
+                <p class="preview-desc" id="previewDesc">
+                  High-contrast packaging engineered with clear focal separation, expressive lighting, and bold text hierarchy to maximize click-through rate.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3. Value Propositions: "Why Work With Me?" -->
+    <section class="section-why" id="why-me">
+      <div class="content-container">
+        <div class="section-header">
+          <h2 class="section-title">Why Work With Me</h2>
+          <p class="section-subtitle">Creative execution engineered around viewer psychology, audience retention, and dependable output.</p>
+        </div>
+
+        <div class="why-grid">
+          <!-- Card 1: Retention -->
+          <article class="why-card">
+            <h3 class="why-title">Retention-Engineered Storytelling</h3>
+            <p class="why-desc">
+              Pacing, narrative arcs, and dynamic audio design engineered to hold viewer attention through every critical second and minimize drop-offs.
+            </p>
+          </article>
+
+          <!-- Card 2: CTR Packaging -->
+          <article class="why-card">
+            <h3 class="why-title">High-CTR Psychological Packaging</h3>
+            <p class="why-desc">
+              Thumbnails engineered with deliberate focal points, facial contrast, and expressive color grading to win impressions in crowded feeds.
+            </p>
+          </article>
+
+          <!-- Card 3: Rapid Turnaround -->
+          <article class="why-card">
+            <h3 class="why-title">Fast Turnaround &amp; Rapid Ideation</h3>
+            <p class="why-desc">
+              Fast, disciplined production cycles, communicative revisions, and AI-assisted visual ideation to keep your content pipeline reliable.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Services Section (Four Expandable Service Cards) -->
+    <section class="section-services" id="services">
+      <div class="content-container">
+        <div class="section-header">
+          <h2 class="section-title">Services &amp; Solutions</h2>
+          <p class="section-subtitle">Outcome-driven creative services engineered for viewer retention, CTR growth, and rapid turnaround.</p>
+        </div>
+
+        <div class="services-expandable-grid">
+          
+          <!-- Service 1: Video Editing -->
+          <article class="service-expand-card" id="serviceCard1">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <div class="service-title-wrap">
+                  <h3 class="service-title">High-Retention Video Editing</h3>
+                  <p class="service-short-desc">Documentary storytelling, retention hooks, and dynamic audio-visual pacing.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent1" aria-label="Toggle details for High-Retention Video Editing">
+                <span class="toggle-text">Details</span>
+                <span class="toggle-caret" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="service-collapse-wrapper" id="serviceContent1" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Pacing, visual narrative flow, sound design, and color grading tailored to maximize average view duration on YouTube and social platforms.
+                </p>
+                <ul class="service-points-list">
+                  <li>YouTube long-form narrative editing &amp; documentary pacing</li>
+                  <li>Retention hooks, soundscapes &amp; atmospheric audio mixing</li>
+                  <li>Dynamic punch-ins, b-roll synchronization &amp; visual rhythm</li>
+                  <li>Short-form vertical cutdowns (Shorts, Reels, TikTok)</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 2: Thumbnail Design -->
+          <article class="service-expand-card" id="serviceCard2">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <div class="service-title-wrap">
+                  <h3 class="service-title">YouTube Thumbnail Packaging</h3>
+                  <p class="service-short-desc">Visual engineering and psychological packaging to stand out and drive CTR.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent2" aria-label="Toggle details for YouTube Thumbnail Packaging">
+                <span class="toggle-text">Details</span>
+                <span class="toggle-caret" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="service-collapse-wrapper" id="serviceContent2" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Visual engineering and psychological packaging designed to stand out in crowded feeds and drive measurable click-through rates.
+                </p>
+                <ul class="service-points-list">
+                  <li>High-contrast visual hierarchy &amp; intentional focal points</li>
+                  <li>Facial expression enhancement &amp; skin tone color grading</li>
+                  <li>Bold typographic styling &amp; 3D text treatments</li>
+                  <li>Multi-variant A/B testing packages for launch optimization</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 3: Motion & Animation -->
+          <article class="service-expand-card" id="serviceCard3">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <div class="service-title-wrap">
+                  <h3 class="service-title">Motion Graphics &amp; Animation</h3>
+                  <p class="service-short-desc">Kinetic typography, animated lower thirds, and fluid channel transitions.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent3" aria-label="Toggle details for Motion Graphics and Animation">
+                <span class="toggle-text">Details</span>
+                <span class="toggle-caret" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="service-collapse-wrapper" id="serviceContent3" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Dynamic visual assets and kinetic animations that increase production value, reinforce key takeaways, and establish brand consistency.
+                </p>
+                <ul class="service-points-list">
+                  <li>Kinetic typography &amp; animated takeaway callouts</li>
+                  <li>Custom channel lower thirds &amp; identity graphics</li>
+                  <li>Fluid visual transitions &amp; logo animations</li>
+                  <li>Sound effects integration &amp; visual audio sync</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <!-- Service 4: AI Creative Production -->
+          <article class="service-expand-card" id="serviceCard4">
+            <div class="service-card-top">
+              <div class="service-header-left">
+                <div class="service-title-wrap">
+                  <h3 class="service-title">AI Creative Production</h3>
+                  <p class="service-short-desc">Generative visual prototypes, ad concept art, and custom imagery pipelines.</p>
+                </div>
+              </div>
+              <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent4" aria-label="Toggle details for AI Creative Production">
+                <span class="toggle-text">Details</span>
+                <span class="toggle-caret" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="service-collapse-wrapper" id="serviceContent4" hidden>
+              <div class="service-details-inner">
+                <p class="service-full-desc">
+                  Custom generative imagery, prompt engineering, and visual prototypes for fast creative ideation, YouTube B-roll, and commercial concept art.
+                </p>
+                <ul class="service-points-list">
+                  <li>Custom generative imagery &amp; commercial visual concept prototypes</li>
+                  <li>Prompt engineering &amp; tailored creative ideation pipelines</li>
+                  <li>Synthetic visual B-roll &amp; ad asset generation</li>
+                  <li>High-resolution visual upscaling &amp; image cleanup</li>
+                </ul>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Client Feedback / Social Proof Section -->
+    <section class="section-testimonials" id="testimonials">
+      <div class="content-container">
+        <div class="section-header">
+          <h2 class="section-title">Client Feedback</h2>
+          <p class="section-subtitle">Real feedback from creators and channel teams on delivery, communication, and performance results.</p>
+        </div>
+
+        <div class="testimonials-grid" id="testimonialsGrid">
+          <!-- Testimonial 1: Elena Rostova -->
+          <article class="testimonial-card">
+            <blockquote class="testimonial-quote">
+              &ldquo;Incredible eye for visual storytelling and retention pacing!&rdquo;
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">ER</div>
+              <div class="author-info">
+                <cite class="author-name">Elena Rostova</cite>
+                <span class="author-role">Creator &amp; Visual Storyteller</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Testimonial 2: Devin Ramos -->
+          <article class="testimonial-card">
+            <blockquote class="testimonial-quote">
+              &ldquo;Dikshit delivered exceptional YouTube edits and thumbnails for our launch. Pacing and watch time exceeded all expectations.&rdquo;
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">DR</div>
+              <div class="author-info">
+                <cite class="author-name">Devin Ramos</cite>
+                <span class="author-role">Channel Launch Lead</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Frequently Asked Questions (FAQ Accordion) -->
+    <section class="section-faq" id="faq">
+      <div class="content-container">
+        <div class="section-header">
+          <h2 class="section-title">Questions &amp; Answers</h2>
+          <p class="section-subtitle">Common questions regarding workflows, turnaround timelines, software tools, and collaboration.</p>
+        </div>
+
+        <div class="faq-accordion-wrap">
+          
+          <!-- FAQ 1 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer1" id="faqQuestion1">
+              <span class="faq-question">What is your typical turnaround time for a project?</span>
+              <span class="faq-caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content" id="faqAnswer1" role="region" aria-labelledby="faqQuestion1" hidden>
+              <p class="faq-answer">
+                Most YouTube video edits and thumbnail packaging are completed within 48 to 72 hours, depending on footage length and project complexity. Rush delivery options can also be arranged for time-sensitive launches upon advance request.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer2" id="faqQuestion2">
+              <span class="faq-question">Which software and tools do you use in your workflow?</span>
+              <span class="faq-caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content" id="faqAnswer2" role="region" aria-labelledby="faqQuestion2" hidden>
+              <p class="faq-answer">
+                I work primarily with industry-standard creative tools including Adobe Premiere Pro, After Effects, and Photoshop, supplemented by modern generative AI models for rapid visual prototyping and texture exploration.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer3" id="faqQuestion3">
+              <span class="faq-question">How does the revision process work?</span>
+              <span class="faq-caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content" id="faqAnswer3" role="region" aria-labelledby="faqQuestion3" hidden>
+              <p class="faq-answer">
+                Every project includes collaborative revision rounds to fine-tune pacing, audio mixing, color balance, and thumbnail typography until the final deliverables match your exact standards and vision.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer4" id="faqQuestion4">
+              <span class="faq-question">Can you handle both long-form edits and short-form cutdowns?</span>
+              <span class="faq-caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content" id="faqAnswer4" role="region" aria-labelledby="faqQuestion4" hidden>
+              <p class="faq-answer">
+                Yes. I produce full-length YouTube documentary and talking-head videos, alongside high-energy vertical cutdowns optimized for YouTube Shorts, Instagram Reels, and TikTok to maximize organic reach across all surfaces.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-item">
+            <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer5" id="faqQuestion5">
+              <span class="faq-question">How do we get started on a project?</span>
+              <span class="faq-caret" aria-hidden="true"></span>
+            </button>
+            <div class="faq-content" id="faqAnswer5" role="region" aria-labelledby="faqQuestion5" hidden>
+              <p class="faq-answer">
+                Simply reach out via WhatsApp or email dikshitsolanki90@gmail.com with your project brief, raw footage links, or reference videos. We will review scope, turnaround expectations, and kick off immediately.
+              </p>
+            </div>
           </div>
 
         </div>
       </div>
     </section>
 
-    <!-- Main Content Wrapper -->
-    <div id="siteContent">
-
-      <!-- 3. About Section with Dual-Row Infinite Marquees -->
-      <section class="section-about" id="about">
-        <div class="site-container">
-          <div class="about-grid">
-            <div class="about-title-wrap">
-              <span class="section-label">01 / About Me</span>
-              <h2 class="section-giant-title metallic-text">INTRO</h2>
-            </div>
-
-            <div class="about-bio-card">
-              <p class="about-bio-text">
-                Hey, I'm <strong>Dikshit Solanki</strong>. A content creator, video editor, and visual designer specializing in <strong>retention-engineered video editing</strong>, <strong>high-CTR YouTube packaging</strong>, and AI-assisted visual assets designed to captivate audiences and scale digital creators across long-form, Reels, and digital campaigns.
-              </p>
-            </div>
+    <!-- 7. Contact Section (Direct Email & WhatsApp Outreach) -->
+    <section class="section-contact" id="contact">
+      <div class="content-container">
+        <div class="contact-card">
+          <div class="contact-header">
+            <h2 class="contact-heading">Let's Build Together</h2>
+            <p class="contact-desc">
+              Open for video editing, YouTube thumbnail packaging, and creative visual production collaborations. Reach out directly to discuss your timeline and vision.
+            </p>
           </div>
 
-          <!-- Dual-Row Tech & Tools Infinite Marquees -->
-          <div class="marquee-wrapper">
-            <!-- Row 1: Video & Post-Production (Forward) -->
-            <div class="marquee-row">
-              <div class="marquee-track marquee-forward">
-                <span class="tech-tag"><span class="tech-dot"></span>Premiere Pro</span>
-                <span class="tech-tag"><span class="tech-dot"></span>After Effects</span>
-                <span class="tech-tag"><span class="tech-dot"></span>DaVinci Resolve</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Photoshop</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Audition</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Sound Design</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Blender 3D</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Color Grading</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Motion Graphics</span>
-                <span class="tech-tag"><span class="tech-dot"></span>CapCut Pro</span>
-                <!-- Duplicate for seamless infinite loop -->
-                <span class="tech-tag"><span class="tech-dot"></span>Premiere Pro</span>
-                <span class="tech-tag"><span class="tech-dot"></span>After Effects</span>
-                <span class="tech-tag"><span class="tech-dot"></span>DaVinci Resolve</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Photoshop</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Audition</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Sound Design</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Blender 3D</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Color Grading</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Motion Graphics</span>
-                <span class="tech-tag"><span class="tech-dot"></span>CapCut Pro</span>
-              </div>
-            </div>
+          <div class="contact-cta-wrap">
+            <a href="mailto:dikshitsolanki90@gmail.com" class="btn-pill btn-primary btn-contact-main" id="contactEmailBtn">
+              <span>Send an Email</span>
+              <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
 
-            <!-- Row 2: YouTube Growth, AI & Packaging (Reverse) -->
-            <div class="marquee-row">
-              <div class="marquee-track marquee-reverse">
-                <span class="tech-tag"><span class="tech-dot"></span>YouTube Packaging</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Thumbnail Engineering</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Retention Pacing</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Midjourney v6</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Runway Gen-2</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Stable Diffusion</span>
-                <span class="tech-tag"><span class="tech-dot"></span>AI Concept Art</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Audience Psychology</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Storyboarding</span>
-                <span class="tech-tag"><span class="tech-dot"></span>A/B CTR Testing</span>
-                <!-- Duplicate for seamless infinite loop -->
-                <span class="tech-tag"><span class="tech-dot"></span>YouTube Packaging</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Thumbnail Engineering</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Retention Pacing</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Midjourney v6</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Runway Gen-2</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Stable Diffusion</span>
-                <span class="tech-tag"><span class="tech-dot"></span>AI Concept Art</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Audience Psychology</span>
-                <span class="tech-tag"><span class="tech-dot"></span>Storyboarding</span>
-                <span class="tech-tag"><span class="tech-dot"></span>A/B CTR Testing</span>
+          <div class="contact-methods-grid">
+            <!-- Email Method -->
+            <a href="mailto:dikshitsolanki90@gmail.com" class="contact-method-card" id="contactEmailCard">
+              <div class="method-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
               </div>
-            </div>
+              <div class="method-content">
+                <span class="method-label">Direct Email</span>
+                <span class="method-value">dikshitsolanki90@gmail.com</span>
+              </div>
+            </a>
+
+            <!-- WhatsApp Method -->
+            <a href="https://wa.me/?text=Hi%20Dikshit,%20I%20would%20like%20to%20discuss%20a%20creative%20project" target="_blank" rel="noopener noreferrer" class="contact-method-card" id="contactWhatsAppCard">
+              <div class="method-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+              </div>
+              <div class="method-content">
+                <span class="method-label">WhatsApp Direct</span>
+                <span class="method-value">Send a Direct Message</span>
+              </div>
+            </a>
           </div>
         </div>
-      </section>
-
-      <!-- 4. Services Section with Interactive Expandable Accordions -->
-      <section class="section-services" id="services">
-        <div class="site-container">
-          <div class="section-header">
-            <span class="section-label">02 / What We Can Do</span>
-            <h2 class="section-giant-title metallic-text">SERVICES &amp; SOLUTIONS</h2>
-            <p class="section-subtitle">Outcome-driven creative services engineered for viewer retention, CTR growth, and rapid turnaround.</p>
-          </div>
-
-          <div class="services-accordion-list">
-            
-            <!-- Service 1: Video Editing -->
-            <article class="service-accordion-card" id="serviceCard1">
-              <div class="service-card-header">
-                <div class="service-header-left">
-                  <span class="service-num">01</span>
-                  <div class="service-title-wrap">
-                    <h3 class="service-title">High-Retention Video Editing</h3>
-                    <p class="service-short-desc">Documentary storytelling, retention hooks, and dynamic audio-visual pacing.</p>
-                  </div>
-                </div>
-                <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent1" aria-label="Toggle details for High-Retention Video Editing">
-                  <span class="toggle-text">Details</span>
-                  <span class="toggle-icon" aria-hidden="true">+</span>
-                </button>
-              </div>
-              <div class="service-card-body" id="serviceContent1" hidden>
-                <div class="service-details-inner">
-                  <p class="service-full-desc">
-                    Pacing, visual narrative flow, sound design, and color grading tailored to maximize average view duration on YouTube and social platforms.
-                  </p>
-                  <ul class="service-bullets-list">
-                    <li><span class="bullet-sq">▪</span> YouTube long-form narrative editing &amp; documentary pacing</li>
-                    <li><span class="bullet-sq">▪</span> Retention hooks, soundscapes &amp; atmospheric audio mixing</li>
-                    <li><span class="bullet-sq">▪</span> Dynamic punch-ins, b-roll synchronization &amp; visual rhythm</li>
-                    <li><span class="bullet-sq">▪</span> Short-form vertical cutdowns (Shorts, Reels, TikTok)</li>
-                  </ul>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service 2: Thumbnail Packaging -->
-            <article class="service-accordion-card" id="serviceCard2">
-              <div class="service-card-header">
-                <div class="service-header-left">
-                  <span class="service-num">02</span>
-                  <div class="service-title-wrap">
-                    <h3 class="service-title">YouTube Thumbnail Packaging</h3>
-                    <p class="service-short-desc">Visual engineering and psychological packaging to stand out and drive CTR.</p>
-                  </div>
-                </div>
-                <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent2" aria-label="Toggle details for YouTube Thumbnail Packaging">
-                  <span class="toggle-text">Details</span>
-                  <span class="toggle-icon" aria-hidden="true">+</span>
-                </button>
-              </div>
-              <div class="service-card-body" id="serviceContent2" hidden>
-                <div class="service-details-inner">
-                  <p class="service-full-desc">
-                    Visual engineering and psychological packaging designed to stand out in crowded feeds and drive measurable click-through rates.
-                  </p>
-                  <ul class="service-bullets-list">
-                    <li><span class="bullet-sq">▪</span> High-contrast visual hierarchy &amp; intentional focal points</li>
-                    <li><span class="bullet-sq">▪</span> Facial expression enhancement &amp; skin tone color grading</li>
-                    <li><span class="bullet-sq">▪</span> Bold typographic styling &amp; 3D text treatments</li>
-                    <li><span class="bullet-sq">▪</span> Multi-variant A/B testing packages for launch optimization</li>
-                  </ul>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service 3: Motion Graphics -->
-            <article class="service-accordion-card" id="serviceCard3">
-              <div class="service-card-header">
-                <div class="service-header-left">
-                  <span class="service-num">03</span>
-                  <div class="service-title-wrap">
-                    <h3 class="service-title">Motion Graphics &amp; 3D Animation</h3>
-                    <p class="service-short-desc">Kinetic typography, animated lower thirds, and fluid channel transitions.</p>
-                  </div>
-                </div>
-                <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent3" aria-label="Toggle details for Motion Graphics and 3D Animation">
-                  <span class="toggle-text">Details</span>
-                  <span class="toggle-icon" aria-hidden="true">+</span>
-                </button>
-              </div>
-              <div class="service-card-body" id="serviceContent3" hidden>
-                <div class="service-details-inner">
-                  <p class="service-full-desc">
-                    Dynamic visual assets and kinetic animations that increase production value, reinforce key takeaways, and establish brand consistency.
-                  </p>
-                  <ul class="service-bullets-list">
-                    <li><span class="bullet-sq">▪</span> Kinetic typography &amp; animated takeaway callouts</li>
-                    <li><span class="bullet-sq">▪</span> Custom channel lower thirds &amp; identity graphics</li>
-                    <li><span class="bullet-sq">▪</span> Fluid visual transitions &amp; logo animations</li>
-                    <li><span class="bullet-sq">▪</span> Sound effects integration &amp; visual audio sync</li>
-                  </ul>
-                </div>
-              </div>
-            </article>
-
-            <!-- Service 4: AI Creative Production -->
-            <article class="service-accordion-card" id="serviceCard4">
-              <div class="service-card-header">
-                <div class="service-header-left">
-                  <span class="service-num">04</span>
-                  <div class="service-title-wrap">
-                    <h3 class="service-title">AI Creative Production &amp; Visuals</h3>
-                    <p class="service-short-desc">Generative visual prototypes, ad concept art, and custom imagery pipelines.</p>
-                  </div>
-                </div>
-                <button type="button" class="service-toggle-btn" aria-expanded="false" aria-controls="serviceContent4" aria-label="Toggle details for AI Creative Production">
-                  <span class="toggle-text">Details</span>
-                  <span class="toggle-icon" aria-hidden="true">+</span>
-                </button>
-              </div>
-              <div class="service-card-body" id="serviceContent4" hidden>
-                <div class="service-details-inner">
-                  <p class="service-full-desc">
-                    Custom generative imagery, prompt engineering, and visual prototypes for fast creative ideation, YouTube B-roll, and commercial concept art.
-                  </p>
-                  <ul class="service-bullets-list">
-                    <li><span class="bullet-sq">▪</span> Custom generative imagery &amp; commercial visual concept prototypes</li>
-                    <li><span class="bullet-sq">▪</span> Prompt engineering &amp; tailored creative ideation pipelines</li>
-                    <li><span class="bullet-sq">▪</span> Synthetic visual B-roll &amp; ad asset generation</li>
-                    <li><span class="bullet-sq">▪</span> High-resolution visual upscaling &amp; image cleanup</li>
-                  </ul>
-                </div>
-              </div>
-            </article>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- 5. Selected Work Section (Filters + Rich Cards + Modal Lightbox) -->
-      <section class="section-work" id="work">
-        <div class="site-container">
-          <div class="section-header">
-            <span class="section-label">03 / Selected Work</span>
-            <h2 class="section-giant-title metallic-text">CREATIVE PROJECTS</h2>
-            <p class="section-subtitle">Authentic commercial client work spanning retention editing, high-CTR YouTube packaging, and AI visual assets.</p>
-          </div>
-
-          <!-- Category Filter Bar -->
-          <div class="filter-bar" role="tablist" aria-label="Project Categories">
-            <button type="button" class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All Work</button>
-            <button type="button" class="filter-btn" data-filter="video" role="tab" aria-selected="false">Video Editing</button>
-            <button type="button" class="filter-btn" data-filter="thumbnail" role="tab" aria-selected="false">YouTube Thumbnails</button>
-            <button type="button" class="filter-btn" data-filter="design" role="tab" aria-selected="false">Graphic Design</button>
-            <button type="button" class="filter-btn" data-filter="ai" role="tab" aria-selected="false">AI Video Ads</button>
-          </div>
-
-          <!-- Project Cards Grid -->
-          <div class="projects-grid" id="projectsGrid">
-            
-            <!-- Project 1: Work Harder -->
-            <article class="project-card" data-category="thumbnail">
-              <div class="project-media-wrap">
-                <img src="images/work_harder.png" alt="Work Harder, Stay Stuck YouTube Thumbnail" class="project-media-img" loading="eager">
-                <span class="project-badge">YouTube Packaging</span>
-              </div>
-              <div class="project-content">
-                <h3 class="project-card-title">Work Harder, Stay Stuck</h3>
-                <p class="project-card-desc">High-contrast packaging engineered with clear focal separation, expressive lighting, and bold text hierarchy to maximize click-through rate.</p>
-                <div class="project-actions">
-                  <button type="button" class="btn-preview-modal" data-img="images/work_harder.png" data-title="Work Harder, Stay Stuck" data-cat="YouTube Packaging">
-                    <span>View Full Preview</span>
-                  </button>
-                  <a href="https://wa.me/?text=Hi%20Dikshit,%20I%20loved%20your%20Work%20Harder%20project%20and%20want%20to%20discuss%20a%20project." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-inquire">Inquire on WhatsApp</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Project 2: Trapped by Success -->
-            <article class="project-card" data-category="thumbnail">
-              <div class="project-media-wrap">
-                <img src="images/trapped_success.png" alt="Trapped by Success YouTube Thumbnail" class="project-media-img" loading="eager">
-                <span class="project-badge">YouTube Packaging</span>
-              </div>
-              <div class="project-content">
-                <h3 class="project-card-title">Trapped by Success</h3>
-                <p class="project-card-desc">Conceptual YouTube packaging leveraging psychological intrigue, intense contrast, and clean readability at micro-feed scale.</p>
-                <div class="project-actions">
-                  <button type="button" class="btn-preview-modal" data-img="images/trapped_success.png" data-title="Trapped by Success" data-cat="YouTube Packaging">
-                    <span>View Full Preview</span>
-                  </button>
-                  <a href="https://wa.me/?text=Hi%20Dikshit,%20I'm%20interested%20in%20your%20Trapped%20by%20Success%20packaging%20style." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-inquire">Inquire on WhatsApp</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Project 3: Atmospheric Storytelling -->
-            <article class="project-card" data-category="video">
-              <div class="project-media-wrap">
-                <img src="images/late_night_office.png" alt="Atmospheric Storytelling Edit" class="project-media-img" loading="eager">
-                <span class="project-badge">Video Editing</span>
-              </div>
-              <div class="project-content">
-                <h3 class="project-card-title">Atmospheric Storytelling Edit</h3>
-                <p class="project-card-desc">Narrative video editing crafted with deliberate scene pacing, layered ambient sound design, dynamic punch-ins, and dramatic color grading.</p>
-                <div class="project-actions">
-                  <button type="button" class="btn-preview-modal" data-img="images/late_night_office.png" data-title="Atmospheric Storytelling Edit" data-cat="Video Editing">
-                    <span>View Full Preview</span>
-                  </button>
-                  <a href="https://wa.me/?text=Hi%20Dikshit,%20I'm%20looking%20for%20atmospheric%20storytelling%20video%20editing." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-inquire">Inquire on WhatsApp</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Project 4: Still Here -->
-            <article class="project-card" data-category="design">
-              <div class="project-media-wrap">
-                <img src="images/gymgoer.png" alt="Still Here Character Illustration" class="project-media-img" loading="eager">
-                <span class="project-badge">Graphic Design</span>
-              </div>
-              <div class="project-content">
-                <h3 class="project-card-title">Still Here</h3>
-                <p class="project-card-desc">Digital character artwork and graphic brand identity capturing stylized emotional grit and dramatic urban mood.</p>
-                <div class="project-actions">
-                  <button type="button" class="btn-preview-modal" data-img="images/gymgoer.png" data-title="Still Here Graphic Illustration" data-cat="Graphic Design">
-                    <span>View Full Preview</span>
-                  </button>
-                  <a href="https://wa.me/?text=Hi%20Dikshit,%20let's%20collaborate%20on%20graphic%20design." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-inquire">Inquire on WhatsApp</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Project 5: Climbing Corporate Ladders -->
-            <article class="project-card" data-category="ai">
-              <div class="project-media-wrap">
-                <img src="images/corporate_ladder.png" alt="Climbing Corporate Ladders AI Video Concept" class="project-media-img" loading="eager">
-                <span class="project-badge">AI Video Ads</span>
-              </div>
-              <div class="project-content">
-                <h3 class="project-card-title">Climbing Corporate Ladders</h3>
-                <p class="project-card-desc">Surreal metaphorical visual created for commercial narrative advertising, blending AI visual generation with commercial motion design.</p>
-                <div class="project-actions">
-                  <button type="button" class="btn-preview-modal" data-img="images/corporate_ladder.png" data-title="Climbing Corporate Ladders" data-cat="AI Video Ads">
-                    <span>View Full Preview</span>
-                  </button>
-                  <a href="https://wa.me/?text=Hi%20Dikshit,%20I'm%20interested%20in%20AI%20video%20concepts." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-inquire">Inquire on WhatsApp</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Project 6: Medical Health Presentation -->
-            <article class="project-card" data-category="thumbnail">
-              <div class="project-media-wrap">
-                <img src="images/medical_thumbnail.png" alt="Medical Health Educational Thumbnail" class="project-media-img" loading="eager">
-                <span class="project-badge">YouTube Packaging</span>
-              </div>
-              <div class="project-content">
-                <h3 class="project-card-title">Medical Health Presentation</h3>
-                <p class="project-card-desc">Educational thumbnail packaging engineered with authoritative color palettes, clear anatomical focal points, and crisp typography.</p>
-                <div class="project-actions">
-                  <button type="button" class="btn-preview-modal" data-img="images/medical_thumbnail.png" data-title="Medical Health Presentation" data-cat="YouTube Packaging">
-                    <span>View Full Preview</span>
-                  </button>
-                  <a href="https://wa.me/?text=Hi%20Dikshit,%20let's%20build%20educational%20thumbnails." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-inquire">Inquire on WhatsApp</a>
-                </div>
-              </div>
-            </article>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- 6. Client Feedback / Social Proof Section -->
-      <section class="section-testimonials" id="testimonials">
-        <div class="site-container">
-          <div class="section-header">
-            <span class="section-label">04 / Client Feedback</span>
-            <h2 class="section-giant-title metallic-text">PROVEN RESULTS</h2>
-            <p class="section-subtitle">Real feedback from creators and channel teams on delivery, communication, and performance results.</p>
-          </div>
-
-          <div class="testimonials-grid" id="testimonialsGrid">
-            
-            <!-- Testimonial 1: Elena Rostova -->
-            <article class="testimonial-card">
-              <div class="testimonial-header">
-                <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <span class="verified-badge">Verified Client</span>
-              </div>
-              <blockquote class="testimonial-quote">
-                &ldquo;Incredible eye for visual storytelling and retention pacing! The edits transformed our viewer retention and increased our completion rates by over 40%.&rdquo;
-              </blockquote>
-              <div class="testimonial-author">
-                <div class="author-avatar" aria-hidden="true">ER</div>
-                <div class="author-info">
-                  <cite class="author-name">Elena Rostova</cite>
-                  <span class="author-role">Creator &amp; Visual Storyteller</span>
-                </div>
-              </div>
-            </article>
-
-            <!-- Testimonial 2: Devin Ramos -->
-            <article class="testimonial-card">
-              <div class="testimonial-header">
-                <div class="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <span class="verified-badge">Verified Client</span>
-              </div>
-              <blockquote class="testimonial-quote">
-                &ldquo;Dikshit delivered exceptional YouTube edits and thumbnails for our launch. Pacing and watch time exceeded all expectations. Fast, communicative, and dependable.&rdquo;
-              </blockquote>
-              <div class="testimonial-author">
-                <div class="author-avatar" aria-hidden="true">DR</div>
-                <div class="author-info">
-                  <cite class="author-name">Devin Ramos</cite>
-                  <span class="author-role">Channel Launch Lead</span>
-                </div>
-              </div>
-            </article>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- 7. Frequently Asked Questions (Exclusive Accordion) -->
-      <section class="section-faq" id="faq">
-        <div class="site-container">
-          <div class="section-header">
-            <span class="section-label">05 / Common Questions</span>
-            <h2 class="section-giant-title metallic-text">FREQUENTLY ASKED</h2>
-            <p class="section-subtitle">Everything you need to know about turnaround times, software workflows, revisions, and collaboration.</p>
-          </div>
-
-          <div class="faq-accordion-wrap">
-            
-            <!-- FAQ 1 -->
-            <div class="faq-item">
-              <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer1" id="faqQuestion1">
-                <span class="faq-question">What is your typical turnaround time for a project?</span>
-                <span class="faq-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq-content" id="faqAnswer1" role="region" aria-labelledby="faqQuestion1" hidden>
-                <p class="faq-answer">
-                  Most YouTube video edits and thumbnail packaging are completed within 48 to 72 hours, depending on footage length and project complexity. Rush delivery options can also be arranged for time-sensitive launches upon advance request.
-                </p>
-              </div>
-            </div>
-
-            <!-- FAQ 2 -->
-            <div class="faq-item">
-              <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer2" id="faqQuestion2">
-                <span class="faq-question">Which software and tools do you use in your workflow?</span>
-                <span class="faq-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq-content" id="faqAnswer2" role="region" aria-labelledby="faqQuestion2" hidden>
-                <p class="faq-answer">
-                  I work primarily with industry-standard creative tools including Adobe Premiere Pro, After Effects, and Photoshop, supplemented by modern generative AI models for rapid visual prototyping and texture exploration.
-                </p>
-              </div>
-            </div>
-
-            <!-- FAQ 3 -->
-            <div class="faq-item">
-              <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer3" id="faqQuestion3">
-                <span class="faq-question">How does the revision process work?</span>
-                <span class="faq-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq-content" id="faqAnswer3" role="region" aria-labelledby="faqQuestion3" hidden>
-                <p class="faq-answer">
-                  Every project includes collaborative revision rounds to fine-tune pacing, audio mixing, color balance, and thumbnail typography until the final deliverables match your exact standards and vision.
-                </p>
-              </div>
-            </div>
-
-            <!-- FAQ 4 -->
-            <div class="faq-item">
-              <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer4" id="faqQuestion4">
-                <span class="faq-question">Can you handle both long-form edits and short-form cutdowns?</span>
-                <span class="faq-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq-content" id="faqAnswer4" role="region" aria-labelledby="faqQuestion4" hidden>
-                <p class="faq-answer">
-                  Yes. I produce full-length YouTube documentary and talking-head videos, alongside high-energy vertical cutdowns optimized for YouTube Shorts, Instagram Reels, and TikTok to maximize organic reach across all surfaces.
-                </p>
-              </div>
-            </div>
-
-            <!-- FAQ 5 -->
-            <div class="faq-item">
-              <button type="button" class="faq-trigger" aria-expanded="false" aria-controls="faqAnswer5" id="faqQuestion5">
-                <span class="faq-question">How do we get started on a project?</span>
-                <span class="faq-icon" aria-hidden="true">+</span>
-              </button>
-              <div class="faq-content" id="faqAnswer5" role="region" aria-labelledby="faqQuestion5" hidden>
-                <p class="faq-answer">
-                  Simply reach out via WhatsApp or email dikshitsolanki90@gmail.com with your project brief, raw footage links, or reference videos. We will review scope, turnaround expectations, and kick off immediately.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <!-- 8. Interactive Dot-Matrix Playground -->
-      <section class="section-play" id="play">
-        <div class="site-container">
-          <div class="play-header">
-            <span class="section-label">Interactive Matrix</span>
-            <p class="play-subtitle">Move mouse or tap to interact. Particle kinetic physics.</p>
-          </div>
-
-          <div class="play-box" id="matrixPlayBox">
-            <canvas id="matrixCanvas" width="960" height="420" aria-label="Interactive particle dot matrix canvas"></canvas>
-
-            <div class="play-controls">
-              <button type="button" class="btn-play-trigger" id="matrixPlayBtn">PLAY / PULSE</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 9. Contact Section -->
-      <section class="section-contact" id="contact">
-        <div class="site-container">
-          <div class="contact-card-wrap">
-            <div class="contact-header">
-              <span class="section-label">06 / Get in Touch</span>
-              <h2 class="contact-title metallic-text">LET'S BUILD TOGETHER</h2>
-              <p class="contact-desc">Open for long-form video editing, YouTube thumbnail packaging, and creative commercial visual collaborations. Let's discuss your timeline and audience goals.</p>
-            </div>
-
-            <div class="contact-links-grid">
-              <!-- Direct Email -->
-              <a href="mailto:dikshitsolanki90@gmail.com" class="contact-link-box" id="emailContactBox">
-                <div class="contact-icon-wrap" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                  </svg>
-                </div>
-                <div class="contact-text-wrap">
-                  <span class="contact-label">Direct Email</span>
-                  <span class="contact-value">dikshitsolanki90@gmail.com</span>
-                </div>
-              </a>
-
-              <!-- Direct WhatsApp -->
-              <a href="https://wa.me/?text=Hi%20Dikshit,%20I%20would%20like%20to%20discuss%20a%20creative%20project." target="_blank" rel="noopener noreferrer" class="contact-link-box" id="whatsappContactBox">
-                <div class="contact-icon-wrap" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                  </svg>
-                </div>
-                <div class="contact-text-wrap">
-                  <span class="contact-label">WhatsApp Direct</span>
-                  <span class="contact-value">Send a Direct Message</span>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 10. Minimalist Footer -->
-      <footer class="site-footer">
-        <div class="site-container footer-inner">
-          <p class="footer-copy">&copy; 2026 Dikshit Solanki. All rights reserved.</p>
-          <nav class="footer-nav" aria-label="Footer navigation">
-            <a href="#home">Home</a>
-            <a href="#about">About</a>
-            <a href="#services">Services</a>
-            <a href="#work">Projects</a>
-            <a href="#testimonials">Feedback</a>
-            <a href="#faq">FAQ</a>
-            <a href="#play">Play</a>
-            <a href="#contact">Contact</a>
-          </nav>
-        </div>
-      </footer>
-
-    </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Project Media Lightbox Modal -->
-  <div class="project-lightbox" id="projectLightbox" role="dialog" aria-modal="true" aria-label="Project Preview Modal">
-    <div class="lightbox-content-box">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'/%3E" alt="Project preview" id="lightboxImg" class="lightbox-img">
-      <div class="lightbox-footer-info">
-        <div>
-          <h4 class="lightbox-title" id="lightboxTitle">Project Title</h4>
-          <span class="lightbox-category" id="lightboxCat">Category</span>
-        </div>
-        <button type="button" class="lightbox-close-btn" id="lightboxCloseBtn" aria-label="Close modal">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Accessible Project Media Lightbox -->
+  <div class="project-lightbox" id="projectLightbox" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle" aria-describedby="lightboxCategory" aria-hidden="true" hidden>
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-dialog" id="lightboxDialog" tabindex="-1">
+      <div class="lightbox-header">
+        <span class="lightbox-tag" id="lightboxTag"></span>
+        <button type="button" class="lightbox-close" id="lightboxCloseBtn" aria-label="Close project preview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
       </div>
+      <div class="lightbox-media-wrap">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'/%3E" alt="Project preview" id="lightboxImg" class="lightbox-img">
+      </div>
+      <div class="lightbox-footer">
+        <div class="lightbox-info">
+          <h3 class="lightbox-title" id="lightboxTitle"></h3>
+          <p class="lightbox-category" id="lightboxCategory"></p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Main JavaScript -->
-  <script src="script.js?v=6.0"></script>
+  <!-- Minimal Footer -->
+  <footer class="footer">
+    <div class="content-container footer-container">
+      <p class="copyright">&copy; 2026 Dikshit Solanki · Content Creator · Video Editor · Graphic Designer.</p>
+      <a href="#home" class="back-to-top" id="backToTopBtn" aria-label="Back to top">
+        <span>Back to top</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </a>
+    </div>
+  </footer>
+
+  <script src="script.js?v=4.0"></script>
 </body>
 </html>

@@ -1,107 +1,522 @@
-/**
- * ==========================================================================
- * DIKSHIT SOLANKI — MASTER PORTFOLIO INTERACTION & MOTION ENGINE
- * 240-Frame Scroll Scrubbing | Exclusive Accordions | Lightbox Modal
- * Interactive Matrix Canvas | Category Filters | Mobile Drawer
- * ==========================================================================
- */
-
-(function () {
+(() => {
   "use strict";
 
-  /* ==========================================================================
-     1. FIXED NAVBAR & MOBILE NAVIGATION DRAWER
-     ========================================================================== */
-  function initNavbar() {
-    const siteNav = document.getElementById("siteNav");
-    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const mobileDrawer = document.getElementById("mobileDrawer");
-    const navLinks = Array.from(document.querySelectorAll(".nav-link"));
-    const sections = Array.from(document.querySelectorAll("section[id]"));
+  // Check prefers-reduced-motion
+  const prefersReducedMotion = () =>
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!siteNav) return;
+  // ==========================================================================
+  // 1. PORTFOLIO CATEGORY FILTERING & SPLIT SHOWCASE PREVIEW
+  // ==========================================================================
+  let activeShowcaseCard = null;
 
-    let ticking = false;
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        ticking = false;
-        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+  function updateSplitPreview(card) {
+    if (!card) return;
+    activeShowcaseCard = card;
 
-        // Frosted blur toggle
-        if (scrollY > 50) {
-          siteNav.classList.add("is-scrolled");
-        } else {
-          siteNav.classList.remove("is-scrolled");
-        }
+    const cards = document.querySelectorAll(".project-card");
+    cards.forEach((c) => c.classList.remove("active-preview"));
+    card.classList.add("active-preview");
 
-        // Active link highlight
-        let currentId = "home";
-        for (let i = 0; i < sections.length; i++) {
-          const section = sections[i];
-          const top = section.offsetTop - 200;
-          const height = section.offsetHeight;
-          if (scrollY >= top && scrollY < top + height) {
-            currentId = section.getAttribute("id");
-            break;
-          }
-        }
+    const previewImg = document.getElementById("previewImg");
+    const previewTag = document.getElementById("previewTag");
+    const previewIndex = document.getElementById("previewIndex");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewCategory = document.getElementById("previewCategory");
+    const previewDesc = document.getElementById("previewDesc");
 
-        navLinks.forEach((link) => {
-          if (link.getAttribute("href") === `#${currentId}`) {
-            link.classList.add("active");
+    const cardImg = card.querySelector(".card-img");
+    const cardTag = card.querySelector(".card-tag");
+    const cardTitle = card.querySelector(".card-title");
+    const cardCategory = card.querySelector(".card-category");
+    const cardNum = card.querySelector(".card-num");
+    const descText = card.getAttribute("data-desc") || "";
+
+    if (previewImg && cardImg) {
+      const newSrc = cardImg.getAttribute("src") || "";
+      if (previewImg.getAttribute("src") !== newSrc) {
+        previewImg.style.opacity = "0.3";
+        previewImg.style.filter = "blur(3px)";
+        previewImg.src = newSrc;
+        previewImg.alt = cardImg.getAttribute("alt") || (cardTitle ? cardTitle.textContent.trim() : "Project preview");
+        setTimeout(() => {
+          previewImg.style.opacity = "1";
+          previewImg.style.filter = "blur(0px)";
+        }, 90);
+      }
+    }
+
+    if (previewTag && cardTag) previewTag.textContent = cardTag.textContent.trim();
+    if (previewIndex && cardNum) previewIndex.textContent = cardNum.textContent.trim();
+    if (previewTitle && cardTitle) previewTitle.textContent = cardTitle.textContent.trim();
+    if (previewCategory && cardCategory) previewCategory.textContent = cardCategory.textContent.trim();
+    if (previewDesc) previewDesc.textContent = descText;
+  }
+
+  function initPortfolioFilters() {
+    const filterButtons = Array.from(document.querySelectorAll(".filter-btn"));
+    const cards = document.querySelectorAll(".project-card");
+    if (!filterButtons.length || !cards.length) return;
+
+    function activateFilter(btn, shouldFocus = false) {
+      if (!btn || btn.classList.contains("active")) return;
+
+      filterButtons.forEach((b) => {
+        b.classList.remove("active");
+        b.setAttribute("aria-selected", "false");
+        b.setAttribute("tabindex", "-1");
+      });
+
+      btn.classList.add("active");
+      btn.setAttribute("aria-selected", "true");
+      btn.setAttribute("tabindex", "0");
+      if (shouldFocus) btn.focus();
+
+      const filter = btn.getAttribute("data-filter");
+      let firstVisibleCard = null;
+
+      if (prefersReducedMotion()) {
+        cards.forEach((card) => {
+          const category = card.getAttribute("data-category");
+          const matches = filter === "all" || category === filter;
+          if (matches) {
+            card.classList.remove("filtered-out");
+            card.classList.remove("filtering-out");
+            card.setAttribute("tabindex", "0");
+            card.removeAttribute("aria-hidden");
+            if (!firstVisibleCard) firstVisibleCard = card;
           } else {
-            link.classList.remove("active");
+            card.classList.add("filtered-out");
+            card.setAttribute("tabindex", "-1");
+            card.setAttribute("aria-hidden", "true");
           }
         });
+        if (firstVisibleCard) updateSplitPreview(firstVisibleCard);
+        return;
+      }
+
+      cards.forEach((card) => {
+        const category = card.getAttribute("data-category");
+        const matches = filter === "all" || category === filter;
+
+        if (matches) {
+          card.classList.remove("filtered-out");
+          card.setAttribute("tabindex", "0");
+          card.removeAttribute("aria-hidden");
+          requestAnimationFrame(() => {
+            card.classList.remove("filtering-out");
+          });
+          if (!firstVisibleCard) firstVisibleCard = card;
+        } else {
+          card.classList.add("filtering-out");
+          card.setAttribute("tabindex", "-1");
+          card.setAttribute("aria-hidden", "true");
+          setTimeout(() => {
+            if (card.classList.contains("filtering-out")) {
+              card.classList.add("filtered-out");
+            }
+          }, 200);
+        }
+      });
+
+      if (firstVisibleCard) updateSplitPreview(firstVisibleCard);
+    }
+
+    filterButtons.forEach((btn, index) => {
+      btn.addEventListener("click", () => {
+        activateFilter(btn);
+      });
+
+      // WAI-ARIA Tabs pattern keyboard navigation (Arrow keys + Home/End)
+      btn.addEventListener("keydown", (e) => {
+        let targetIdx = -1;
+        if (e.key === "ArrowRight") {
+          targetIdx = (index + 1) % filterButtons.length;
+        } else if (e.key === "ArrowLeft") {
+          targetIdx = (index - 1 + filterButtons.length) % filterButtons.length;
+        } else if (e.key === "Home") {
+          targetIdx = 0;
+        } else if (e.key === "End") {
+          targetIdx = filterButtons.length - 1;
+        }
+
+        if (targetIdx !== -1) {
+          e.preventDefault();
+          activateFilter(filterButtons[targetIdx], true);
+        }
+      });
+    });
+  }
+
+  // ==========================================================================
+  // 2. SPLIT SHOWCASE INTERACTIONS (Hover for Desktop, Tap for Mobile)
+  // ==========================================================================
+  function initSplitShowcase() {
+    const cards = document.querySelectorAll(".project-card");
+    const previewStage = document.getElementById("showcasePreviewCard");
+    const previewLightboxBtn = document.getElementById("previewLightboxBtn");
+    const previewImg = document.getElementById("previewImg");
+
+    if (!cards.length) return;
+
+    // Set initial active card
+    activeShowcaseCard = cards[0];
+    updateSplitPreview(cards[0]);
+
+    cards.forEach((card) => {
+      // Desktop hover interaction
+      card.addEventListener("mouseenter", () => {
+        updateSplitPreview(card);
+      });
+
+      // Keyboard focus interaction
+      card.addEventListener("focus", () => {
+        updateSplitPreview(card);
+      });
+
+      // Touch / Click interaction
+      card.addEventListener("click", () => {
+        updateSplitPreview(card);
+      });
+    });
+
+    // Preview button opens lightbox for currently active card
+    if (previewLightboxBtn) {
+      previewLightboxBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (activeShowcaseCard && typeof window.__openProjectLightbox === "function") {
+          window.__openProjectLightbox(activeShowcaseCard);
+        }
       });
     }
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-
-    // Mobile drawer toggle
-    if (mobileMenuBtn && mobileDrawer) {
-      function toggleDrawer(open) {
-        const isOpen = open !== undefined ? open : !mobileDrawer.classList.contains("is-open");
-        if (isOpen) {
-          mobileDrawer.classList.add("is-open");
-          mobileMenuBtn.setAttribute("aria-expanded", "true");
-          mobileDrawer.setAttribute("aria-hidden", "false");
-          document.body.classList.add("is-locked");
-        } else {
-          mobileDrawer.classList.remove("is-open");
-          mobileMenuBtn.setAttribute("aria-expanded", "false");
-          mobileDrawer.setAttribute("aria-hidden", "true");
-          document.body.classList.remove("is-locked");
+    // Clicking preview image directly also triggers lightbox
+    if (previewImg) {
+      previewImg.style.cursor = "pointer";
+      previewImg.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (activeShowcaseCard && typeof window.__openProjectLightbox === "function") {
+          window.__openProjectLightbox(activeShowcaseCard);
         }
-      }
-
-      mobileMenuBtn.addEventListener("click", () => toggleDrawer());
-
-      mobileDrawer.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => toggleDrawer(false));
       });
     }
   }
 
-  /* ==========================================================================
-     2. 240-FRAME SCROLL-DRIVEN PORTRAIT SCRUB ENGINE
-     ========================================================================== */
+  // ==========================================================================
+  // 3. EXPANDABLE SERVICE CARDS (Accessible Accordion)
+  // ==========================================================================
+  function initExpandableServices() {
+    const cards = document.querySelectorAll(".service-expand-card");
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      const toggleBtn = card.querySelector(".service-toggle-btn");
+      const wrapper = card.querySelector(".service-collapse-wrapper");
+      if (!toggleBtn || !wrapper) return;
+
+      function toggleCard(expand) {
+        const isCurrentlyExpanded = card.classList.contains("expanded");
+        const shouldExpand = expand !== undefined ? expand : !isCurrentlyExpanded;
+
+        if (shouldExpand) {
+          card.classList.add("expanded");
+          toggleBtn.setAttribute("aria-expanded", "true");
+          wrapper.hidden = false;
+        } else {
+          card.classList.remove("expanded");
+          toggleBtn.setAttribute("aria-expanded", "false");
+          wrapper.hidden = true;
+        }
+      }
+
+      toggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleCard();
+      });
+
+      // Clicking the card top bar also toggles
+      const topBar = card.querySelector(".service-card-top");
+      if (topBar) {
+        topBar.style.cursor = "pointer";
+        topBar.addEventListener("click", () => {
+          toggleCard();
+        });
+      }
+    });
+  }
+
+  // ==========================================================================
+  // 4. FAQ ACCORDION (Accessible, Keyboard Friendly)
+  // ==========================================================================
+  function initFaqAccordion() {
+    const faqItems = document.querySelectorAll(".faq-item");
+    if (!faqItems.length) return;
+
+    faqItems.forEach((item) => {
+      const trigger = item.querySelector(".faq-trigger");
+      const content = item.querySelector(".faq-content");
+      if (!trigger || !content) return;
+
+      function toggleFaq() {
+        const isActive = item.classList.contains("active");
+
+        // Optional: close other FAQ items for a clean single-open accordion
+        faqItems.forEach((other) => {
+          if (other !== item) {
+            other.classList.remove("active");
+            const otherTrigger = other.querySelector(".faq-trigger");
+            const otherContent = other.querySelector(".faq-content");
+            if (otherTrigger) otherTrigger.setAttribute("aria-expanded", "false");
+            if (otherContent) otherContent.hidden = true;
+          }
+        });
+
+        if (isActive) {
+          item.classList.remove("active");
+          trigger.setAttribute("aria-expanded", "false");
+          content.hidden = true;
+        } else {
+          item.classList.add("active");
+          trigger.setAttribute("aria-expanded", "true");
+          content.hidden = false;
+        }
+      }
+
+      trigger.addEventListener("click", toggleFaq);
+    });
+  }
+
+  // ==========================================================================
+  // 5. MOBILE NAVIGATION DRAWER
+  // ==========================================================================
+  function initMobileNav() {
+    const toggleBtn = document.getElementById("mobileMenuToggle");
+    const drawer = document.getElementById("mobileNavDrawer");
+    const closeBtn = document.getElementById("mobileDrawerCloseBtn");
+    const mobileLinks = document.querySelectorAll(".mobile-link, .mobile-cta");
+    if (!toggleBtn || !drawer) return;
+
+    function openDrawer() {
+      drawer.classList.add("open");
+      toggleBtn.setAttribute("aria-expanded", "true");
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("mobile-nav-open");
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove("open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+      drawer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("mobile-nav-open");
+    }
+
+    toggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = drawer.classList.contains("open");
+      if (isOpen) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeDrawer();
+        toggleBtn.focus();
+      });
+    }
+
+    mobileLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        closeDrawer();
+      });
+    });
+
+    // Close on click outside inner content
+    drawer.addEventListener("click", (e) => {
+      if (e.target === drawer) {
+        closeDrawer();
+      }
+    });
+
+    // Close on Escape key and return focus to toggle
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && drawer.classList.contains("open")) {
+        closeDrawer();
+        toggleBtn.focus();
+      }
+    });
+  }
+
+  // ==========================================================================
+  // 6. NAVBAR SCROLL EFFECT & ACTIVE LINK HIGHLIGHTER (Optimized)
+  // ==========================================================================
+  function initNavbarScroll() {
+    const navbar = document.getElementById("siteNavbar");
+    const sections = Array.from(document.querySelectorAll("section[id]"));
+    const navLinks = Array.from(document.querySelectorAll(".nav-link"));
+    const mobileLinks = Array.from(document.querySelectorAll(".mobile-link"));
+
+    let navRafId = null;
+    let lastScrolled = null;
+    let lastActiveSectionId = null;
+    let isMetricsDirty = true;
+    let sectionMetrics = [];
+
+    // Cache section boundaries outside the scroll loop
+    function updateSectionMetrics() {
+      sectionMetrics = sections.map((sec) => ({
+        id: sec.getAttribute("id"),
+        top: sec.offsetTop - 140,
+        height: sec.offsetHeight
+      }));
+      isMetricsDirty = false;
+    }
+
+    function updateNavState() {
+      if (isMetricsDirty || sectionMetrics.length === 0) {
+        updateSectionMetrics();
+      }
+
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+
+      // 1. Guarded navbar background border toggle
+      const isScrolled = scrollPos > 24;
+      if (isScrolled !== lastScrolled) {
+        lastScrolled = isScrolled;
+        if (navbar) {
+          navbar.classList.toggle("scrolled", isScrolled);
+        }
+      }
+
+      // 2. Active section lookup using pure cached numbers (zero layout reads)
+      let currentSectionId = "";
+      for (let i = 0; i < sectionMetrics.length; i++) {
+        const sm = sectionMetrics[i];
+        if (scrollPos >= sm.top && scrollPos < sm.top + sm.height) {
+          currentSectionId = sm.id;
+          break;
+        }
+      }
+
+      // 3. Guarded link highlighting (only mutates DOM if active section changed)
+      if (currentSectionId !== lastActiveSectionId) {
+        lastActiveSectionId = currentSectionId;
+
+        navLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${currentSectionId}`);
+        });
+
+        mobileLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === `#${currentSectionId}`);
+        });
+      }
+    }
+
+    // Coalesce high-frequency scroll events to native refresh rate
+    function onNavScroll() {
+      if (navRafId) return;
+      navRafId = requestAnimationFrame(() => {
+        navRafId = null;
+        updateNavState();
+      });
+    }
+
+    // Invalidation Strategy: Detect size changes, position shifts, and dynamic DOM shifts
+    function markMetricsDirty() {
+      isMetricsDirty = true;
+      if (!navRafId) {
+        navRafId = requestAnimationFrame(() => {
+          navRafId = null;
+          updateNavState();
+        });
+      }
+    }
+
+    // 1. Global document body ResizeObserver detects any layout shift across the page
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(() => {
+        markMetricsDirty();
+      });
+      if (document.body) {
+        ro.observe(document.body);
+      }
+    }
+
+    // 2. Interaction delegation: clicks on accordion toggles, FAQ triggers, or filters
+    document.addEventListener("click", (e) => {
+      if (e.target && e.target.closest && e.target.closest(".service-toggle-btn, .service-card-top, .faq-trigger, .filter-btn")) {
+        markMetricsDirty();
+      }
+    }, { passive: true });
+
+    // 3. Detect completion of CSS transitions that change section heights
+    document.addEventListener("transitionend", (e) => {
+      if (e.target && e.target.closest && e.target.closest(".service-expand-card, .faq-item, .project-card")) {
+        markMetricsDirty();
+      }
+    }, { passive: true });
+
+    // 4. Viewport resize & orientation changes
+    window.addEventListener("resize", markMetricsDirty, { passive: true });
+    window.addEventListener("orientationchange", markMetricsDirty, { passive: true });
+
+    // 5. Asynchronous web font loading
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(markMetricsDirty);
+    }
+
+    // Initial measurement and sync
+    updateSectionMetrics();
+    updateNavState();
+
+    window.addEventListener("scroll", onNavScroll, { passive: true });
+
+    // Smooth Anchor Navigation honoring CSS scroll-margin-top
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", (e) => {
+        const href = anchor.getAttribute("href");
+        if (href && href.length > 1) {
+          const target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            if (href === "#home") {
+              window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion() ? "auto" : "smooth"
+              });
+            } else {
+              target.scrollIntoView({
+                behavior: prefersReducedMotion() ? "auto" : "smooth",
+                block: "start"
+              });
+            }
+          }
+        }
+      });
+    });
+  }
+
+  // ==========================================================================
+  // 7. SCROLL-DRIVEN PORTRAIT CANVAS ANIMATION
+  // ==========================================================================
   function initPortraitAnimation() {
     const canvas = document.getElementById("portraitCanvas");
-    const poster = document.getElementById("portraitPoster");
     const scrollTrack = document.getElementById("heroScrollTrack");
     const stickyStage = document.getElementById("heroStickyStage");
     const scrollIndicator = document.getElementById("heroScrollIndicator");
-    const heroMetaBar = document.getElementById("heroMetaBar");
-
-    if (!canvas || !scrollTrack || !stickyStage) return;
+    const poster = document.getElementById("portraitPoster");
+    const heroContainer = document.querySelector(".hero-container");
+    if (!canvas || !scrollTrack) return;
 
     // Use alpha: false for direct GPU swapchain compositing
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
+    canvas.style.opacity = "0";
+    canvas.style.transition = "opacity 0.22s ease";
 
     const FRAME_COUNT = 240;
     const frames = new Array(FRAME_COUNT);
@@ -113,24 +528,30 @@
     let lastDrawnFrame = -1;
     let lastRenderedImg = null;
     let isLoopRunning = false;
-    let isCanvasVisible = false;
+    let resizeTimer = null;
 
-    // Zero-padded 6-digit frame URL generator: frames/frame_000001.jpg
+    // Helper: format sequential zero-padded frame URL
     function getFrameUrl(index) {
       const padded = String(index + 1).padStart(6, "0");
       return `frames/frame_${padded}.jpg`;
     }
 
+    // Verify if an image is completely loaded and ready to draw
     function isImageReady(img) {
       return img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
     }
 
-    // Pin State Cache
+    // Pin state cache to prevent redundant inline style rewrites on every frame
     let lastPinMode = "";
     let lastStageTop = "";
     let lastStageHeight = -1;
 
+    // Universal JS Pin Controller: Guarantees 100% viewport locking
+    // across all browsers, mobile screens, and flex containers regardless of CSS sticky quirks
     function updatePin(rect, vh, scrollDistance) {
+      if (!scrollTrack || !stickyStage) return;
+
+      // Safe fallback if invoked directly without arguments
       if (!rect) rect = scrollTrack.getBoundingClientRect();
       if (vh === undefined) vh = window.innerHeight;
       if (scrollDistance === undefined) scrollDistance = scrollTrack.offsetHeight - vh;
@@ -139,16 +560,20 @@
       let targetTop = "0px";
 
       if (rect.top <= 0 && rect.bottom >= vh) {
+        // Active scrubbing zone inside hero track: lock firmly in viewport
         targetMode = "fixed";
         targetTop = "0px";
       } else if (rect.bottom < vh) {
+        // Scrolled past hero section: sit at bottom of track so Selected Work seamlessly overlays
         targetMode = "absolute";
         targetTop = Math.max(0, scrollDistance) + "px";
       } else {
+        // Top of page
         targetMode = "absolute";
         targetTop = "0px";
       }
 
+      // Guarded mode change: position, left, width, zIndex
       if (targetMode !== lastPinMode) {
         lastPinMode = targetMode;
         stickyStage.style.position = targetMode;
@@ -157,21 +582,24 @@
         stickyStage.style.zIndex = "2";
       }
 
+      // Guarded top offset change
       if (targetTop !== lastStageTop) {
         lastStageTop = targetTop;
         stickyStage.style.top = targetTop;
       }
 
+      // Guarded viewport height change (handles mobile dynamic URL bar and resize)
       if (vh !== lastStageHeight) {
         lastStageHeight = vh;
         stickyStage.style.height = `${vh}px`;
       }
     }
 
-    // Proportional cover-style rendering with focal crop
+    // Proportional cover-style rendering with responsive focal crop
+    // Never clears canvas without immediately drawing a valid image over it
     function drawCoverImage(img) {
       if (!ctx) return false;
-      const imageToDraw = isImageReady(img) ? img : (isImageReady(lastRenderedImg) ? lastRenderedImg : null);
+      const imageToDraw = isImageReady(img) ? img : (isImageReady(lastRenderedImg) ? lastRenderedImg : (isImageReady(poster) ? poster : null));
       if (!imageToDraw) return false;
 
       const cw = canvas.width;
@@ -181,22 +609,26 @@
       const iw = imageToDraw.naturalWidth || 1920;
       const ih = imageToDraw.naturalHeight || 1080;
 
+      // Calculate uniform scale factor to cover canvas
       const scale = Math.max(cw / iw, ch / ih);
       const dw = iw * scale;
       const dh = ih * scale;
 
-      // Focal positioning: bias slightly towards upper-center on mobile
+      // Responsive focal crop:
+      // In source frames (1920x1080):
+      // Subject is centered horizontally at x=960 (focalX = 0.5)
+      // Subject's face and upper torso are vertically at y=160..520 (focalY ≈ 0.32-0.45)
+      // On narrow portrait screens, bias vertical framing towards upper-mid so face is never clipped
       const isMobilePortrait = cw < 768 && ch > cw;
       const focalX = 0.5;
-      const focalY = isMobilePortrait ? 0.30 : 0.42;
+      const focalY = isMobilePortrait ? 0.32 : 0.45;
 
       const dx = (cw - dw) * focalX;
       const dy = (ch - dh) * focalY;
 
       try {
         ctx.drawImage(imageToDraw, dx, dy, dw, dh);
-        if (!isCanvasVisible) {
-          isCanvasVisible = true;
+        if (canvas.style.opacity !== "1") {
           canvas.style.opacity = "1";
         }
         return true;
@@ -213,11 +645,14 @@
         if (drawCoverImage(img)) {
           lastRenderedImg = img;
           lastDrawnFrame = index;
+          if (poster && poster.style.opacity !== "0") {
+            poster.style.opacity = "0";
+          }
         }
         return;
       }
 
-      // Fallback to nearest loaded frame
+      // If target frame not loaded, find closest loaded frame
       let nearestImg = null;
       let nearestDist = Infinity;
       for (let i = 0; i < FRAME_COUNT; i++) {
@@ -234,8 +669,13 @@
         if (drawCoverImage(nearestImg)) {
           lastRenderedImg = nearestImg;
         }
+      } else if (lastRenderedImg) {
+        drawCoverImage(lastRenderedImg);
+      } else if (poster && isImageReady(poster)) {
+        drawCoverImage(poster);
       }
 
+      // Trigger high-priority load for target frame
       loadFrame(index);
     }
 
@@ -264,28 +704,33 @@
 
       status[index] = 1;
       const img = new Image();
-      let handled = false;
+      let isHandled = false;
 
       function onComplete() {
-        if (handled) return;
-        handled = true;
+        if (isHandled) return;
+        isHandled = true;
         status[index] = 2;
         frames[index] = img;
         if (callback) callback(img);
       }
 
       function onError() {
-        if (handled) return;
-        handled = true;
+        if (isHandled) return;
+        isHandled = true;
         status[index] = 3;
       }
 
       img.onload = () => {
         if (typeof img.decode === "function") {
-          img.decode().then(onComplete).catch(() => {
-            if (isImageReady(img)) onComplete();
-            else onError();
-          });
+          img.decode()
+            .then(onComplete)
+            .catch(() => {
+              if (isImageReady(img)) {
+                onComplete();
+              } else {
+                onError();
+              }
+            });
         } else {
           onComplete();
         }
@@ -295,16 +740,15 @@
       img.src = getFrameUrl(index);
     }
 
-    // Progressive loading pipeline
     function startProgressiveLoading() {
-      // 1. First frame immediately
+      // 1. First frame
       loadFrame(0, () => {
         renderFrame(0);
       });
 
-      // 2. Coarse keyframe stride (every 12 frames)
-      const keyframes = [];
-      for (let i = 0; i < FRAME_COUNT; i += 12) {
+      // 2. Coarse keyframes every 15 frames
+      let keyframes = [];
+      for (let i = 0; i < FRAME_COUNT; i += 15) {
         keyframes.push(i);
       }
 
@@ -316,7 +760,7 @@
         }
         const idx = keyframes[keyIdx++];
         loadFrame(idx, () => {
-          setTimeout(loadNextKeyframe, 15);
+          setTimeout(loadNextKeyframe, 10);
         });
       }
       loadNextKeyframe();
@@ -334,22 +778,26 @@
             denseIdx++;
           }
           if (denseIdx < FRAME_COUNT) {
-            setTimeout(loadDenseChunk, 35);
+            setTimeout(loadDenseChunk, 40);
           }
         }
         loadDenseChunk();
       }
     }
 
-    // Scroll scrubbing math
     let scrollTicking = false;
+    let isIndicatorVisible = null;
+
+    // Scroll scrubbing math (Single-pass geometry measurement)
     function onScrollOrLayout() {
       if (!scrollTrack) return;
 
+      // Single geometry read pass: shared between pin controller and canvas scrubber
       const rect = scrollTrack.getBoundingClientRect();
       const vh = window.innerHeight;
       const scrollableDist = scrollTrack.offsetHeight - vh;
 
+      // Update pin using single pre-measured geometry
       updatePin(rect, vh, scrollableDist);
 
       if (scrollableDist <= 0) return;
@@ -357,24 +805,22 @@
       const progress = Math.max(0, Math.min(1, -rect.top / scrollableDist));
       targetFrame = progress * (FRAME_COUNT - 1);
 
-      // Cross-fade between cutout poster and canvas
-      if (poster) {
-        if (progress > 0.03) {
-          poster.style.opacity = "0";
-        } else {
-          poster.style.opacity = "1";
-        }
+      // Fade out hero content smoothly as user scrubs so portrait can be viewed and text is never covered
+      if (heroContainer) {
+        const textFade = Math.max(0, Math.min(1, (progress - 0.12) / 0.35));
+        const textOpacity = 1 - textFade;
+        heroContainer.style.opacity = textOpacity.toFixed(2);
+        heroContainer.style.visibility = textOpacity <= 0.02 ? "hidden" : "visible";
       }
 
-      // Smoothly hide scroll cue on scroll
+      // Fade out scroll indicator cue after user begins scrolling (guarded)
       if (scrollIndicator) {
-        scrollIndicator.style.opacity = progress <= 0.06 ? "0.85" : "0";
-      }
-
-      // Subtle fade out of bottom role bar as user scrubs deep into the sequence
-      if (heroMetaBar) {
-        const fadeProgress = Math.max(0, Math.min(1, (progress - 0.25) / 0.4));
-        heroMetaBar.style.opacity = String(1 - fadeProgress * 0.85);
+        const shouldShow = progress <= 0.05;
+        if (shouldShow !== isIndicatorVisible) {
+          isIndicatorVisible = shouldShow;
+          scrollIndicator.style.opacity = shouldShow ? "0.85" : "0";
+          scrollIndicator.style.pointerEvents = shouldShow ? "auto" : "none";
+        }
       }
 
       if (!isLoopRunning) {
@@ -383,7 +829,8 @@
       }
     }
 
-    function onScroll() {
+    // Coalesce high-frequency touch/wheel scroll events to display refresh rate
+    function onPortraitScroll() {
       if (scrollTicking) return;
       scrollTicking = true;
       requestAnimationFrame(() => {
@@ -392,7 +839,6 @@
       });
     }
 
-    // Smooth lerp tick
     function tick() {
       const diff = targetFrame - currentFrame;
       if (Math.abs(diff) < 0.04) {
@@ -400,307 +846,298 @@
         renderFrame(Math.round(currentFrame));
         isLoopRunning = false;
       } else {
+        // Smooth lerp (0.16) for responsive scrubbing
         currentFrame += diff * 0.16;
         renderFrame(Math.round(currentFrame));
         requestAnimationFrame(tick);
       }
     }
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", () => {
-      resizeCanvas();
-      onScrollOrLayout();
-    });
-
+    // Initialize dimensions and draw poster or frame 0 immediately
     resizeCanvas();
     updatePin();
+
+    if (poster && isImageReady(poster)) {
+      lastRenderedImg = poster;
+      drawCoverImage(poster);
+    }
+
+    loadFrame(0, (img) => {
+      if (img) {
+        lastRenderedImg = img;
+        renderFrame(0);
+      }
+    });
+
+    // If user prefers reduced motion, show stable poster and skip scroll scrubbing
+    if (prefersReducedMotion()) {
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          resizeCanvas();
+          updatePin();
+        }, 100);
+      }, { passive: true });
+      return;
+    }
+
+    // Start progressive frame loading
     startProgressiveLoading();
-  }
 
-  /* ==========================================================================
-     3. SERVICE ACCORDIONS
-     ========================================================================== */
-  function initServiceAccordions() {
-    const cards = document.querySelectorAll(".service-accordion-card");
+    // Event listeners
+    window.addEventListener("scroll", onPortraitScroll, { passive: true });
 
-    cards.forEach((card) => {
-      const toggleBtn = card.querySelector(".service-toggle-btn");
-      const body = card.querySelector(".service-card-body");
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        lastStageHeight = -1; // Invalidate cached height on resize
+        resizeCanvas();
+        onScrollOrLayout();
+      }, 50);
+    }, { passive: true });
 
-      if (!toggleBtn || !body) return;
+    window.addEventListener("orientationchange", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        lastStageHeight = -1;
+        resizeCanvas();
+        onScrollOrLayout();
+      }, 100);
+    }, { passive: true });
 
-      toggleBtn.addEventListener("click", () => {
-        const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
-
-        if (isExpanded) {
-          toggleBtn.setAttribute("aria-expanded", "false");
-          card.classList.remove("is-expanded");
-          body.hidden = true;
-        } else {
-          toggleBtn.setAttribute("aria-expanded", "true");
-          card.classList.add("is-expanded");
-          body.hidden = false;
-        }
-      });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        isLoopRunning = false;
+      } else {
+        onScrollOrLayout();
+      }
     });
+
+    // Initial sync
+    onScrollOrLayout();
   }
 
-  /* ==========================================================================
-     4. PROJECT CATEGORY FILTERS
-     ========================================================================== */
-  function initProjectFilters() {
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const projectCards = document.querySelectorAll(".project-card");
-
-    if (!filterBtns.length || !projectCards.length) return;
-
-    filterBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        filterBtns.forEach((b) => {
-          b.classList.remove("active");
-          b.setAttribute("aria-selected", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-selected", "true");
-
-        const filter = btn.getAttribute("data-filter");
-
-        projectCards.forEach((card) => {
-          const category = card.getAttribute("data-category");
-          if (filter === "all" || category === filter) {
-            card.style.display = "flex";
-            card.style.opacity = "1";
-            card.style.transform = "none";
-          } else {
-            card.style.display = "none";
-          }
-        });
-      });
-    });
-  }
-
-  /* ==========================================================================
-     5. PROJECT PREVIEW LIGHTBOX MODAL
-     ========================================================================== */
-  function initLightbox() {
+  // ==========================================================================
+  // 8. ACCESSIBLE PROJECT MEDIA LIGHTBOX
+  // ==========================================================================
+  function initProjectLightbox() {
     const lightbox = document.getElementById("projectLightbox");
-    const lightboxImg = document.getElementById("lightboxImg");
-    const lightboxTitle = document.getElementById("lightboxTitle");
-    const lightboxCat = document.getElementById("lightboxCat");
+    const backdrop = document.getElementById("lightboxBackdrop");
+    const dialog = document.getElementById("lightboxDialog");
     const closeBtn = document.getElementById("lightboxCloseBtn");
+    const img = document.getElementById("lightboxImg");
+    const tag = document.getElementById("lightboxTag");
+    const title = document.getElementById("lightboxTitle");
+    const category = document.getElementById("lightboxCategory");
+    const cards = document.querySelectorAll(".project-card");
 
-    if (!lightbox || !lightboxImg) return;
+    if (!lightbox || !backdrop || !closeBtn || !img) return;
 
-    document.querySelectorAll(".btn-preview-modal").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const img = btn.getAttribute("data-img");
-        const title = btn.getAttribute("data-title");
-        const cat = btn.getAttribute("data-cat");
+    let lastActiveCard = null;
 
-        lightboxImg.src = img;
-        if (lightboxTitle) lightboxTitle.textContent = title;
-        if (lightboxCat) lightboxCat.textContent = cat;
+    function openLightbox(card) {
+      if (!card || card.classList.contains("filtered-out") || card.classList.contains("filtering-out")) {
+        return;
+      }
 
-        lightbox.classList.add("is-active");
-        document.body.classList.add("is-locked");
+      const cardImg = card.querySelector(".card-img");
+      const cardTag = card.querySelector(".card-tag");
+      const cardTitle = card.querySelector(".card-title");
+      const cardCategory = card.querySelector(".card-category");
+
+      if (!cardImg) return;
+
+      lastActiveCard = card;
+
+      img.src = cardImg.getAttribute("src") || "";
+      img.alt = cardImg.getAttribute("alt") || (cardTitle ? cardTitle.textContent.trim() : "Project preview");
+      if (tag) tag.textContent = cardTag ? cardTag.textContent.trim() : "";
+      if (title) title.textContent = cardTitle ? cardTitle.textContent.trim() : "";
+      if (category) category.textContent = cardCategory ? cardCategory.textContent.trim() : "";
+
+      lightbox.hidden = false;
+      lightbox.setAttribute("aria-hidden", "false");
+      document.body.classList.add("lightbox-open");
+
+      requestAnimationFrame(() => {
+        lightbox.classList.add("active");
+        closeBtn.focus();
       });
-    });
+    }
 
     function closeLightbox() {
-      lightbox.classList.remove("is-active");
-      document.body.classList.remove("is-locked");
-      lightboxImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9'/%3E";
+      if (!lightbox.classList.contains("active")) return;
+
+      lightbox.classList.remove("active");
+      lightbox.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("lightbox-open");
+
+      setTimeout(() => {
+        if (!lightbox.classList.contains("active")) {
+          lightbox.hidden = true;
+          img.src = "";
+          if (lastActiveCard && typeof lastActiveCard.focus === "function") {
+            lastActiveCard.focus();
+          }
+        }
+      }, 180);
     }
 
-    if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
+    // Expose open helper for split showcase preview trigger
+    window.__openProjectLightbox = openLightbox;
 
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) closeLightbox();
+    // Direct card click and keyboard trigger (Enter / Space)
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        openLightbox(card);
+      });
+
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openLightbox(card);
+        }
+      });
     });
 
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && lightbox.classList.contains("is-active")) {
+    // Close triggers
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    backdrop.addEventListener("click", closeLightbox);
+
+    // Escape key and focus trap within dialog
+    lightbox.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
         closeLightbox();
+        return;
+      }
+
+      if (e.key === "Tab") {
+        const focusable = lightbox.querySelectorAll('button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first || document.activeElement === dialog) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       }
     });
   }
 
-  /* ==========================================================================
-     6. FAQ EXCLUSIVE ACCORDION
-     ========================================================================== */
-  function initFaqAccordion() {
-    const items = document.querySelectorAll(".faq-item");
+  // ==========================================================================
+  // 9. REACT BITS-INSPIRED SPOTLIGHT CARD EFFECT (Orange Accent)
+  // ==========================================================================
+  function initSpotlightCards() {
+    // Only enable on devices supporting hover and fine pointer (mouse / precision trackpad)
+    const isFinePointer =
+      window.matchMedia &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!isFinePointer) return;
 
-    items.forEach((item) => {
-      const trigger = item.querySelector(".faq-trigger");
-      const content = item.querySelector(".faq-content");
+    // Respect reduced-motion preferences
+    if (prefersReducedMotion()) return;
 
-      if (!trigger || !content) return;
+    const cards = document.querySelectorAll(".project-card");
+    if (!cards.length) return;
 
-      trigger.addEventListener("click", () => {
-        const isActive = item.classList.contains("is-active");
+    cards.forEach((card) => {
+      let rafId = null;
 
-        // Close all other FAQ items (Exclusive behavior)
-        items.forEach((other) => {
-          if (other !== item) {
-            other.classList.remove("is-active");
-            const otherTrigger = other.querySelector(".faq-trigger");
-            const otherContent = other.querySelector(".faq-content");
-            if (otherTrigger) otherTrigger.setAttribute("aria-expanded", "false");
-            if (otherContent) otherContent.hidden = true;
+      const updateCoordinates = (clientX, clientY) => {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        card.style.setProperty("--mouse-x", `${Math.round(x)}px`);
+        card.style.setProperty("--mouse-y", `${Math.round(y)}px`);
+      };
+
+      const onPointerMove = (e) => {
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+
+        // Coalesce updates to screen refresh rate without continuous animation loops
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          updateCoordinates(clientX, clientY);
+        });
+      };
+
+      const onPointerEnter = (e) => {
+        // Immediately set coordinates upon entry to prevent any visual jump
+        updateCoordinates(e.clientX, e.clientY);
+      };
+
+      const onPointerLeave = () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      };
+
+      card.addEventListener("pointermove", onPointerMove, { passive: true });
+      card.addEventListener("pointerenter", onPointerEnter, { passive: true });
+      card.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    });
+  }
+
+  // 10. SCROLL ENTRANCE MOTION LAYER (Taste Skill Motion Gate)
+  function initScrollReveals() {
+    if (prefersReducedMotion()) return;
+    const elements = document.querySelectorAll(
+      ".section-title, .section-subtitle, .project-card, .why-card, .service-expand-card, .testimonial-card, .faq-item, .contact-card"
+    );
+    if (!elements.length) return;
+
+    elements.forEach((el) => el.classList.add("reveal-init"));
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-in");
+            obs.unobserve(entry.target);
           }
         });
+      },
+      { rootMargin: "0px 0px -40px 0px", threshold: 0.1 }
+    );
 
-        // Toggle current item
-        if (isActive) {
-          item.classList.remove("is-active");
-          trigger.setAttribute("aria-expanded", "false");
-          content.hidden = true;
-        } else {
-          item.classList.add("is-active");
-          trigger.setAttribute("aria-expanded", "true");
-          content.hidden = false;
-        }
-      });
-    });
+    elements.forEach((el) => observer.observe(el));
   }
 
-  /* ==========================================================================
-     7. INTERACTIVE DOT-MATRIX CANVAS PLAYGROUND
-     ========================================================================== */
-  function initMatrixPlayground() {
-    const canvas = document.getElementById("matrixCanvas");
-    const playBtn = document.getElementById("matrixPlayBtn");
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    let width = canvas.width;
-    let height = canvas.height;
-
-    function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = canvas.width = Math.round(rect.width * dpr);
-      height = canvas.height = Math.round(rect.height * dpr);
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    const text = "DIKSHIT SOLANKI";
-    const particles = [];
-
-    // Offscreen canvas for sampling
-    const offCanvas = document.createElement("canvas");
-    const offCtx = offCanvas.getContext("2d");
-    offCanvas.width = 440;
-    offCanvas.height = 100;
-    offCtx.fillStyle = "#FFFFFF";
-    offCtx.font = "bold 28px sans-serif";
-    offCtx.textAlign = "center";
-    offCtx.textBaseline = "middle";
-    offCtx.fillText(text, offCanvas.width / 2, offCanvas.height / 2);
-
-    const imgData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
-    const data = imgData.data;
-
-    for (let y = 0; y < offCanvas.height; y += 4) {
-      for (let x = 0; x < offCanvas.width; x += 4) {
-        const alpha = data[(y * offCanvas.width + x) * 4 + 3];
-        if (alpha > 128) {
-          const homeX = width / 2 + (x - offCanvas.width / 2) * 2.2;
-          const homeY = height / 2 + (y - offCanvas.height / 2) * 2.2;
-
-          particles.push({
-            x: homeX + (Math.random() - 0.5) * 50,
-            y: homeY + (Math.random() - 0.5) * 50,
-            homeX: homeX,
-            homeY: homeY,
-            vx: 0,
-            vy: 0,
-            radius: (Math.random() * 1.5 + 1.5) * (window.devicePixelRatio || 1),
-            color: Math.random() > 0.15 ? "#FFFFFF" : "#E8E4DC"
-          });
-        }
-      }
-    }
-
-    const mouse = { x: -9999, y: -9999, radius: 80 * (window.devicePixelRatio || 1) };
-
-    canvas.addEventListener("mousemove", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = (e.clientX - rect.left) * (width / rect.width);
-      mouse.y = (e.clientY - rect.top) * (height / rect.height);
-    });
-
-    canvas.addEventListener("mouseleave", () => {
-      mouse.x = -9999;
-      mouse.y = -9999;
-    });
-
-    function pulse() {
-      particles.forEach((p) => {
-        const angle = Math.random() * Math.PI * 2;
-        const force = Math.random() * 20 + 8;
-        p.vx += Math.cos(angle) * force;
-        p.vy += Math.sin(angle) * force;
-      });
-    }
-
-    canvas.addEventListener("click", pulse);
-    if (playBtn) playBtn.addEventListener("click", pulse);
-
-    function render() {
-      ctx.clearRect(0, 0, width, height);
-
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < mouse.radius) {
-          const force = (mouse.radius - dist) / mouse.radius;
-          const angle = Math.atan2(dy, dx);
-          p.vx -= Math.cos(angle) * force * 6;
-          p.vy -= Math.sin(angle) * force * 6;
-        }
-
-        const homeDx = p.homeX - p.x;
-        const homeDy = p.homeY - p.y;
-        p.vx += homeDx * 0.08;
-        p.vy += homeDy * 0.08;
-
-        p.vx *= 0.82;
-        p.vy *= 0.82;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      requestAnimationFrame(render);
-    }
-
-    render();
-  }
-
-  /* ==========================================================================
-     INITIALIZATION ON DOMContentLoaded
-     ========================================================================== */
-  window.addEventListener("DOMContentLoaded", () => {
-    initNavbar();
-    initPortraitAnimation();
-    initServiceAccordions();
-    initProjectFilters();
-    initLightbox();
+  // ==========================================================================
+  // INITIALIZATION
+  // ==========================================================================
+  function init() {
+    initPortfolioFilters();
+    initSplitShowcase();
+    initExpandableServices();
     initFaqAccordion();
-    initMatrixPlayground();
-  });
+    initMobileNav();
+    initNavbarScroll();
+    initPortraitAnimation();
+    initProjectLightbox();
+    initSpotlightCards();
+    initScrollReveals();
+  }
 
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();
