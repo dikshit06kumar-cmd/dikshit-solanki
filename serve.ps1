@@ -175,6 +175,7 @@ public class MicroServer {
                 else if (ext == ".json") mime = "application/json; charset=utf-8";
                 else if (ext == ".jpg" || ext == ".jpeg") mime = "image/jpeg";
                 else if (ext == ".png") mime = "image/png";
+                else if (ext == ".webp") mime = "image/webp";
                 else if (ext == ".pdf") mime = "application/pdf";
                 else if (ext == ".mp4") mime = "video/mp4";
                 else if (ext == ".svg") mime = "image/svg+xml";
