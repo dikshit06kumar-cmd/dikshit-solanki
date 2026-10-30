@@ -343,7 +343,7 @@ body.is-locked {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 25;
+  z-index: 50;
   pointer-events: none;
   user-select: none;
   width: max-content;
@@ -364,6 +364,7 @@ body.is-locked {
   display: inline-block;
   will-change: transform, opacity;
   transform-origin: 50% 50%;
+  opacity: 0;
 }
 
 .intro-dot {
@@ -381,7 +382,7 @@ body.is-locked {
   border-radius: 50%;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
   transform: translate(-50%, -50%);
 }
 
@@ -391,13 +392,14 @@ body.is-locked {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 20;
   pointer-events: none;
   user-select: none;
   width: max-content;
   display: flex;
   flex-direction: column;
   align-items: center;
+  opacity: 0;
 }
 
 .hero-split-title {
@@ -418,15 +420,15 @@ body.is-locked {
   will-change: transform;
 }
 
-/* Portrait Animation & Interactive Matrix Layer */
+/* Portrait Mosaic & Interactive Matrix Layer (Dikshit Solanki) */
 .hero-portrait-layer {
   position: absolute;
-  top: 50%;
+  top: 42%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  width: min(94vw, 720px);
-  height: min(78vh, 640px);
+  width: min(94vw, 760px);
+  height: min(85vh, 720px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -437,7 +439,7 @@ body.is-locked {
   mask-image: radial-gradient(ellipse 65% 65% at 50% 50%, #000 45%, rgba(0, 0, 0, 0.85) 60%, transparent 88%);
 }
 
-.hero-portrait-video {
+.hero-portrait-img {
   position: absolute;
   top: 0;
   left: 0;
@@ -446,6 +448,7 @@ body.is-locked {
   object-fit: contain;
   mix-blend-mode: screen;
   pointer-events: none;
+  opacity: 0.95;
   transition: opacity 0.6s ease;
   will-change: opacity;
 }
@@ -465,7 +468,7 @@ body.is-locked {
   .hero-portrait-layer {
     width: 95vw;
     height: 58vh;
-    top: 52%;
+    top: 50%;
   }
 }
 

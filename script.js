@@ -25,7 +25,7 @@
   const titlePartLeft = document.getElementById("titlePartLeft");
   const titlePartRight = document.getElementById("titlePartRight");
   const heroPortraitLayer = document.getElementById("heroPortraitLayer");
-  const heroPortraitVideo = document.getElementById("heroPortraitVideo");
+  const heroPortraitImg = document.getElementById("heroPortraitImg");
   const heroPortraitCanvas = document.getElementById("heroPortraitCanvas");
   const heroMetaBar = document.getElementById("heroMetaBar");
   const siteContent = document.getElementById("siteContent");
@@ -34,44 +34,33 @@
   let introCompleted = false;
 
   /* ==========================================================================
-     1. INTRO PHYSICS ANIMATION & HERO SPLIT STAGE (Hasib Engine)
+     1. INTRO PHYSICS ANIMATION & HERO SPLIT STAGE (Hasib Exact Replica)
      ========================================================================== */
   function initIntroChoreography() {
     const gsap = window.gsap;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Safety fallback: ensure page is unlocked after max 5 seconds under any circumstance
+    // Safety fallback: ensure page is unlocked after max 7.5 seconds
     const fallbackTimer = setTimeout(() => {
       finishIntro();
-    }, 5500);
+    }, 7500);
 
-    function finishIntro() {
-      if (introCompleted) return;
-      introCompleted = true;
-      clearTimeout(fallbackTimer);
+    function splitAndRevealHero() {
+      if (introPhysicsWrap) introPhysicsWrap.style.display = "none";
+      if (heroHeadlineWrap) heroHeadlineWrap.style.opacity = "1";
+      if (heroPortraitLayer) heroPortraitLayer.style.opacity = "1";
 
-      body.classList.remove("is-locked");
-
-      if (introPhysicsWrap) {
-        introPhysicsWrap.style.display = "none";
-      }
-
-      if (heroHeadlineWrap) {
-        heroHeadlineWrap.style.opacity = "1";
-        heroHeadlineWrap.style.transform = "translate(-50%, -50%)";
-      }
-
-      // Calculate gap based on screen size (Hasib split proportion)
       const isMobile = window.innerWidth < 768;
-      const splitGap = isMobile ? window.innerWidth * 0.32 : Math.min(window.innerWidth * 0.35, 540);
-      const liftY = isMobile ? -60 : -100;
+      // Exact Hasib split & placement: frames neck & collar, positions head proudly above PORTFOLIO
+      const splitGap = isMobile ? Math.min(window.innerWidth * 0.22, 90) : 200;
+      const liftY = isMobile ? 35 : 88;
 
       if (gsap && !prefersReducedMotion) {
-        gsap.to(titlePartLeft, { x: -splitGap, duration: 1.4, ease: "power3.out" });
-        gsap.to(titlePartRight, { x: splitGap, duration: 1.4, ease: "power3.out" });
-        gsap.to(heroHeadlineWrap, { y: liftY, duration: 1.4, ease: "power3.inOut" });
+        gsap.to(titlePartLeft, { x: -splitGap, duration: 1.5, ease: "power3.out" });
+        gsap.to(titlePartRight, { x: splitGap, duration: 1.5, ease: "power3.out" });
+        gsap.to(heroHeadlineWrap, { y: liftY, duration: 1.5, ease: "power3.inOut" });
         gsap.to(heroPortraitLayer, { opacity: 1, duration: 1.2, ease: "power2.out" });
-        gsap.fromTo(heroMetaBar, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 });
+        gsap.fromTo(heroMetaBar, { y: 35, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out", delay: 0.2 });
       } else {
         if (titlePartLeft) titlePartLeft.style.transform = `translateX(-${splitGap}px)`;
         if (titlePartRight) titlePartRight.style.transform = `translateX(${splitGap}px)`;
@@ -80,157 +69,217 @@
         if (heroMetaBar) heroMetaBar.style.opacity = "1";
       }
 
-      // Step 4: Play dikshitanimation when PORTFOLIO splits
-      if (heroPortraitVideo) {
-        heroPortraitVideo.currentTime = 0;
-        heroPortraitVideo.play().catch(() => {});
-      }
-
-      // Initialize the Interactive Matrix particle system on Dikshit's portrait
       initHeroInteractivePortrait();
-
-      if (siteContent) {
-        siteContent.classList.add("animate-site-in");
-      }
+      if (siteContent) siteContent.classList.add("animate-site-in");
     }
 
-    // If user prefers reduced motion or GSAP didn't load, finish immediately
+    function finishIntro() {
+      if (introCompleted) return;
+      introCompleted = true;
+      clearTimeout(fallbackTimer);
+      body.classList.remove("is-locked");
+      splitAndRevealHero();
+    }
+
     if (prefersReducedMotion || !gsap) {
       finishIntro();
       return;
     }
 
-    // Set initial states: hero portrait stays hidden until DIKSHIT morphs to PORTFOLIO
-    gsap.set(heroHeadlineWrap, { opacity: 0 });
-    gsap.set(heroPortraitLayer, { opacity: 0 });
-    gsap.set(heroMetaBar, { opacity: 0 });
+    // Wait for fonts to be ready so getBoundingClientRect is exact
+    (document.fonts?.ready ?? Promise.resolve()).then(() => {
+      if (introCompleted) return;
 
-    const chars = Array.from(introWordmark.querySelectorAll(".intro-char"));
-    // Word is "DIKSHIT": D (0), I (1), K (2), S (3), H (4), I (5), T (6)
-    // Pivot letter is first 'I' (index 1)
-    const pivotIdx = 1;
-    const pivotChar = chars[pivotIdx] || chars[0];
+      const chars = Array.from(introWordmark.querySelectorAll(".intro-char"));
+      // Word is "DIKSHIT": D (0), I (1), K (2), S (3), H (4), I (5), T (6)
+      // Pivot letter is 'I' at index 1!
+      const pivotIdx = 1;
+      const pivotChar = chars[pivotIdx] || chars[0];
+      const leftIndices = [0]; // 'D'
+      const rightIndices = [2, 3, 4, 5, 6]; // 'K', 'S', 'H', 'I', 'T'
 
-    // Measure bounding boxes
-    const vh = window.innerHeight;
-    const fontSize = parseFloat(window.getComputedStyle(introWordmark).fontSize) || 120;
-    const dotSize = fontSize * 0.22;
+      const vh = window.innerHeight;
+      const fontSize = parseFloat(window.getComputedStyle(introWordmark).fontSize) || 120;
+      const dotSize = fontSize * 0.22;
 
-    // Position intro dot above the pivot letter
-    gsap.set(introDot, {
-      width: dotSize,
-      height: dotSize,
-      opacity: 0,
-      y: -vh * 0.8
-    });
+      // Reset initial states
+      gsap.set(heroHeadlineWrap, { opacity: 0 });
+      gsap.set(heroPortraitLayer, { opacity: 0 });
+      gsap.set(heroMetaBar, { opacity: 0 });
+      gsap.set(chars, { opacity: 0, x: 0, y: 0, rotation: 0, scale: 1 });
 
-    gsap.set(chars, { opacity: 0, y: 0, rotation: 0, scale: 1 });
+      const cRect = introWordmark.getBoundingClientRect();
+      const charRects = chars.map(c => {
+        const r = c.getBoundingClientRect();
+        return {
+          left: r.left - cRect.left,
+          top: r.top - cRect.top,
+          w: r.width,
+          h: r.height,
+          cx: r.left - cRect.left + r.width / 2,
+          cy: r.top - cRect.top + r.height / 2
+        };
+      });
 
-    // GSAP Physics Master Timeline
-    const masterTL = gsap.timeline({
-      onComplete: () => {
-        morphToPortfolio();
+      const pRect = charRects[pivotIdx];
+      const base = { x: pRect.left + pRect.w / 2, y: pRect.top + pRect.h };
+      const pHeight = pRect.h * 0.85;
+
+      // Set pivot origin to bottom center
+      gsap.set(pivotChar, { transformOrigin: "50% 100%" });
+
+      // Position dot directly above pivot letter
+      gsap.set(introDot, {
+        width: dotSize,
+        height: dotSize,
+        left: base.x - dotSize / 2,
+        top: base.y + fontSize * 0.1,
+        y: -vh * 0.8,
+        opacity: 0
+      });
+
+      // Position flash element
+      const flashSize = fontSize * 2.5;
+      gsap.set(introFlash, {
+        width: flashSize,
+        height: flashSize,
+        left: 0,
+        top: 0,
+        xPercent: -50,
+        yPercent: -50,
+        opacity: 0
+      });
+
+      // Helper: calculate tip position of leaning letter at given angle
+      function getTip(angleDeg) {
+        const rad = (angleDeg * Math.PI) / 180;
+        return {
+          x: base.x + Math.sin(rad) * pHeight,
+          y: base.y - Math.cos(rad) * pHeight
+        };
       }
-    });
 
-    // 1. Ball / Dot Drops and bounces
-    masterTL
-      .set(introDot, { opacity: 1 }, 0)
-      .to(introDot, { y: 0, duration: 0.45, ease: "power2.in" }, 0)
-      .to(introDot, { scaleX: 1.45, scaleY: 0.55, duration: 0.08 }, 0.45)
-      .to(introDot, { y: -fontSize * 0.35, scaleX: 0.95, scaleY: 1.05, duration: 0.22, ease: "power1.out" }, 0.53)
-      .to(introDot, { y: 0, duration: 0.2, ease: "power2.in" }, 0.75)
-      .to(introDot, { scaleX: 1.25, scaleY: 0.75, duration: 0.06 }, 0.95)
-      .to(introDot, { y: -fontSize * 0.12, duration: 0.14, ease: "power1.out" }, 1.01)
-      .to(introDot, { y: 0, scaleX: 1, scaleY: 1, duration: 0.14, ease: "power2.in" }, 1.15);
+      // Helper: spark/flash at contact point
+      function triggerFlash(timeline, pos, intensity, atTime) {
+        timeline.set(introFlash, { x: pos.x, y: pos.y }, atTime)
+          .to(introFlash, { opacity: intensity, duration: 0.05, ease: "none" }, atTime)
+          .to(introFlash, { opacity: 0, duration: 0.32, ease: "power2.out" }, atTime + 0.05);
+      }
 
-    // 2. Letter "I" Drops down, squashes, bounces and leans (Hasib 63-degree impact!)
-    masterTL
-      .set(pivotChar, { opacity: 1, y: -vh * 0.7 }, 0.75)
-      .to(pivotChar, { y: 0, duration: 0.42, ease: "power2.in" }, 0.75)
-      .to(pivotChar, { scaleX: 1.35, scaleY: 0.65, duration: 0.07 }, 1.17)
-      .to(pivotChar, { y: -fontSize * 0.15, scaleX: 0.95, scaleY: 1.05, duration: 0.16 }, 1.24)
-      .to(pivotChar, { y: 0, scaleX: 1, scaleY: 1, duration: 0.14, ease: "power2.in" }, 1.4)
-      .to(pivotChar, { rotation: 52, duration: 0.38, ease: "back.out(1.6)", transformOrigin: "bottom center" }, 1.54);
+      // Helper: launch letter along parabolic projectile arc
+      function launchLetter(timeline, idx, startPos, atTime) {
+        const el = chars[idx];
+        const box = charRects[idx];
+        const dx = startPos.x - box.cx;
+        const dy = startPos.y - box.cy;
+        const dur = 0.52 + Math.min(Math.abs(dx) / 900, 0.32);
+        const arcH = -(Math.abs(dx) * 0.3 + fontSize * 0.25);
+        const rot = (dx > 0 ? -1 : 1) * gsap.utils.random(170, 300);
 
-    // 3. Domino Impact: Surrounding letters launch up with rotation and land elastically
-    const surroundingLetters = chars.filter((_, idx) => idx !== pivotIdx);
-    masterTL.add(() => {
-      surroundingLetters.forEach((char, i) => {
-        const dir = i < pivotIdx ? -1 : 1;
-        const dist = (i + 1) * 35;
-        const randomRot = dir * (15 + Math.random() * 25);
+        timeline
+          .set(el, { x: dx, y: dy, rotation: rot, scale: 0.3, opacity: 0, transformOrigin: "50% 50%" }, atTime)
+          .to(el, { opacity: 1, scale: 1, duration: dur * 0.45 }, atTime)
+          .to(el, { x: 0, duration: dur, ease: "power1.out" }, atTime)
+          .to(el, { y: Math.min(dy, 0) + arcH, duration: dur * 0.45, ease: "power2.out" }, atTime)
+          .to(el, { y: 0, duration: dur * 0.55, ease: "power2.in" }, atTime + dur * 0.45)
+          .to(el, { rotation: 0, duration: dur, ease: "power2.out" }, atTime)
+          .to(el, { y: -fontSize * 0.05, duration: 0.09, ease: "power2.out" }, atTime + dur)
+          .to(el, { y: 0, duration: 0.16, ease: "power2.in" }, atTime + dur + 0.09);
 
-        gsap.set(char, { opacity: 1, y: 0, x: 0, rotation: 0 });
-        gsap.fromTo(char, 
-          { y: 0, rotation: 0, scale: 0.7 },
-          {
-            y: -(fontSize * 0.35 + Math.random() * 30),
-            x: dir * dist * 0.3,
-            rotation: randomRot,
-            scale: 1,
-            duration: 0.38,
-            ease: "power2.out",
-            onComplete: () => {
-              gsap.to(char, {
-                y: 0,
-                x: 0,
-                rotation: 0,
-                duration: 0.55,
-                ease: "bounce.out"
-              });
+        return atTime + dur;
+      }
+
+      // Helper: lean pivot letter and fire domino projectiles
+      function leanAndLaunch(timeline, targetAngle, letterIndices, atTime) {
+        if (!letterIndices.length) return atTime;
+        const tip = getTip(targetAngle);
+
+        timeline.to(pivotChar, { rotation: targetAngle, duration: 0.4, ease: "back.out(1.4)" }, atTime)
+          .to(pivotChar, { rotation: targetAngle + (targetAngle < 0 ? 6 : -6), duration: 0.08 }, atTime + 0.34)
+          .to(pivotChar, { rotation: targetAngle, duration: 0.3, ease: "elastic.out(1, 0.5)" }, atTime + 0.42);
+
+        let maxT = atTime;
+        letterIndices.forEach((letterIdx, n) => {
+          const launchT = atTime + 0.34 + n * 0.1;
+          triggerFlash(timeline, tip, 0.5 - n * 0.1, launchT);
+          maxT = Math.max(maxT, launchLetter(timeline, letterIdx, tip, launchT));
+        });
+        return maxT;
+      }
+
+      // Master Timeline
+      const masterTL = gsap.timeline({
+        onComplete: morphToPortfolio
+      });
+
+      masterTL.set(chars, { opacity: 0 }, 0);
+
+      // 1. Dot drops and bounces (Hasib physics)
+      masterTL.set(introDot, { opacity: 1 }, 0)
+        .to(introDot, { y: 0, duration: 0.42, ease: "power2.in" }, 0)
+        .to(introDot, { scaleX: 1.4, scaleY: 0.52, duration: 0.06 }, 0.42)
+        .to(introDot, { y: -fontSize * 0.35, duration: 0.2 }, 0.48)
+        .to(introDot, { scaleX: 1, scaleY: 1, duration: 0.18 }, 0.48)
+        .to(introDot, { y: 0, duration: 0.18, ease: "power2.in" }, 0.68)
+        .to(introDot, { scaleX: 1.2, scaleY: 0.74, duration: 0.05 }, 0.86)
+        .to(introDot, { scaleX: 1, scaleY: 1, duration: 0.36, ease: "elastic.out(1, 0.42)" }, 0.91);
+
+      // 2. Letter "I" drops from the ceiling!
+      const fallDist = -vh * 0.75;
+      masterTL.set(pivotChar, { opacity: 1, y: fallDist }, 0.8)
+        .to(pivotChar, { y: 0, duration: 0.34, ease: "power2.in" }, 0.8)
+        .to(pivotChar, { scaleX: 1.32, scaleY: 0.64, duration: 0.06 }, 1.14)
+        .to(pivotChar, { y: -fontSize * 0.13, duration: 0.1 }, 1.2)
+        .to(pivotChar, { scaleX: 1, scaleY: 1, duration: 0.12 }, 1.2)
+        .to(pivotChar, { y: 0, duration: 0.1, ease: "power2.in" }, 1.3)
+        .to(pivotChar, { scaleX: 1.12, scaleY: 0.88, duration: 0.05 }, 1.4)
+        .to(pivotChar, { scaleX: 1, scaleY: 1, duration: 0.38, ease: "elastic.out(1, 0.4)" }, 1.45);
+
+      // 3. "I" leans left at -63° and shoots the left letter "D"!
+      let curTime = 1.6;
+      curTime = leanAndLaunch(masterTL, -63, leftIndices, curTime);
+
+      // 4. "I" leans right at +63° and shoots the right letters ("K", "S", "H", "I", "T")!
+      curTime = leanAndLaunch(masterTL, 63, rightIndices, curTime - 0.25);
+
+      // 5. "I" springs back upright!
+      masterTL.to(pivotChar, { rotation: 0, duration: 0.5, ease: "elastic.out(1, 0.55)" }, curTime - 0.15)
+        .to(introDot, { opacity: 0, scale: 0, duration: 0.3, ease: "power2.in" }, curTime - 0.1);
+
+      // 6. Scramble Morph into "PORTFOLIO"
+      function morphToPortfolio() {
+        const targetWord = "PORTFOLIO";
+        const currentChars = "DIKSHIT";
+        const steps = 12;
+        let step = 0;
+
+        const timer = setInterval(() => {
+          step++;
+          const prog = step / steps;
+          let display = "";
+          for (let i = 0; i < targetWord.length; i++) {
+            if (prog > (i / targetWord.length)) {
+              display += targetWord[i];
+            } else {
+              display += currentChars[i % currentChars.length] || targetWord[i];
             }
           }
-        );
-      });
-    }, 1.6);
+          introWordmark.innerHTML = display.split('').map(c => `<span class="intro-char">${c}</span>`).join('');
 
-    // Restore pivot letter to upright position
-    masterTL.to(pivotChar, { rotation: 0, duration: 0.45, ease: "elastic.out(1, 0.5)" }, 2.3);
-
-    // 4. Morph word into "PORTFOLIO"
-    function morphToPortfolio() {
-      const targetWord = "PORTFOLIO";
-      const currentChars = "DIKSHIT";
-      const totalSteps = 12;
-      let step = 0;
-
-      const scrambleInterval = setInterval(() => {
-        step++;
-        const progress = step / totalSteps;
-        let display = "";
-
-        for (let i = 0; i < targetWord.length; i++) {
-          if (progress > (i / targetWord.length)) {
-            display += targetWord[i];
-          } else {
-            display += currentChars[i % currentChars.length] || targetWord[i];
+          if (step >= steps) {
+            clearInterval(timer);
+            setTimeout(() => {
+              finishIntro();
+            }, 350);
           }
-        }
-
-        introWordmark.innerHTML = display.split("").map(c => `<span class="intro-char">${c}</span>`).join("");
-
-        if (step >= totalSteps) {
-          clearInterval(scrambleInterval);
-          setTimeout(() => {
-            // Transition from intro wordmark to settled hero stage
-            gsap.to(introPhysicsWrap, {
-              opacity: 0,
-              duration: 0.4,
-              onComplete: () => {
-                introPhysicsWrap.style.display = "none";
-                finishIntro();
-              }
-            });
-          }, 350);
-        }
-      }, 55);
-    }
+        }, 55);
+      }
+    });
   }
 
   /* ==========================================================================
-     HERO INTERACTIVE PARTICLE MATRIX (Dikshit Solanki Portrait)
-     Applies Interactive Matrix cursor repulsion & spring physics to Dikshit
+     2. HERO INTERACTIVE MOSAIC MATRIX (Dikshit Solanki Portrait)
+     Uses images/dikshitmain.png with square mosaic tiles & elastic cursor physics
      ========================================================================== */
   let heroPortraitInitialized = false;
 
@@ -239,13 +288,11 @@
     heroPortraitInitialized = true;
 
     const canvas = document.getElementById("heroPortraitCanvas");
-    const video = document.getElementById("heroPortraitVideo");
-    if (!canvas) return;
+    const img = document.getElementById("heroPortraitImg");
+    if (!canvas || !img) return;
 
     const ctx = canvas.getContext("2d");
     let particles = [];
-    let isInteracting = false;
-    let fadeTimeout = null;
     let isVisible = true;
     let animationFrameId = null;
 
@@ -259,11 +306,7 @@
 
     resizeCanvas();
 
-    // High-resolution portrait frame
-    const img = new Image();
-    img.src = "images/dikshitani/ezgif-frame-200.jpg";
-
-    function buildParticles() {
+    function buildTiles() {
       if (!img.complete || img.naturalWidth === 0) return;
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -283,30 +326,32 @@
         drawY = (canvas.height - drawH) / 2;
       }
 
-      const sampleW = 280;
+      // Sample image to extract mosaic square points
+      const sampleW = 240;
       const sampleH = Math.round(sampleW / imgAspect);
       const off = document.createElement("canvas");
       off.width = sampleW;
       off.height = sampleH;
       const offCtx = off.getContext("2d");
       offCtx.drawImage(img, 0, 0, sampleW, sampleH);
-      const imgData = offCtx.getImageData(0, 0, sampleW, sampleH).data;
+      const data = offCtx.getImageData(0, 0, sampleW, sampleH).data;
 
       particles = [];
       const step = 2;
       const scaleX = drawW / sampleW;
       const scaleY = drawH / sampleH;
+      const tileSize = (drawW / sampleW) * step * 0.95;
 
       for (let y = 0; y < sampleH; y += step) {
         for (let x = 0; x < sampleW; x += step) {
           const idx = (y * sampleW + x) * 4;
-          const r = imgData[idx];
-          const g = imgData[idx + 1];
-          const b = imgData[idx + 2];
+          const r = data[idx];
+          const g = data[idx + 1];
+          const b = data[idx + 2];
           const brightness = (r + g + b) / 3;
 
-          // Threshold: isolate facial features, hair, eyes, sweater from pure black
-          if (brightness > 32) {
+          // Filter out pure black background, focus on facial contours, hair, collar
+          if (brightness > 24) {
             const homeX = drawX + x * scaleX;
             const homeY = drawY + y * scaleY;
 
@@ -318,7 +363,7 @@
                 homeY: homeY,
                 vx: 0,
                 vy: 0,
-                radius: Math.max(0.75, (brightness / 255) * 2.0 * dpr),
+                size: tileSize,
                 color: `rgb(${r},${g},${b})`
               });
             }
@@ -327,40 +372,36 @@
       }
     }
 
-    img.onload = () => {
-      buildParticles();
-    };
-    if (img.complete) buildParticles();
+    if (img.complete && img.naturalWidth) {
+      buildTiles();
+    } else {
+      img.addEventListener("load", buildTiles);
+    }
 
     window.addEventListener("resize", () => {
       resizeCanvas();
-      buildParticles();
+      buildTiles();
     });
 
-    // Cursor tracking
-    const mouse = { x: -9999, y: -9999, radius: 95 * (window.devicePixelRatio || 1) };
+    // Cursor tracking with DPI scaling
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const mouse = { x: -9999, y: -9999, radius: 95 * dpr };
 
     function onPointerMove(clientX, clientY) {
       const crect = canvas.getBoundingClientRect();
       mouse.x = (clientX - crect.left) * (canvas.width / crect.width);
       mouse.y = (clientY - crect.top) * (canvas.height / crect.height);
-      isInteracting = true;
-
-      if (video) video.style.opacity = "0.2";
-      if (fadeTimeout) clearTimeout(fadeTimeout);
+      if (img) img.style.opacity = "0.45";
     }
 
     function onPointerLeave() {
       mouse.x = -9999;
       mouse.y = -9999;
-      fadeTimeout = setTimeout(() => {
-        isInteracting = false;
-        if (video) video.style.opacity = "1";
-      }, 1000);
+      if (img) img.style.opacity = "0.95";
     }
 
-    canvas.addEventListener("mousemove", (e) => onPointerMove(e.clientX, e.clientY));
-    canvas.addEventListener("mouseleave", onPointerLeave);
+    window.addEventListener("pointermove", (e) => onPointerMove(e.clientX, e.clientY), { passive: true });
+    document.addEventListener("pointerleave", onPointerLeave);
 
     canvas.addEventListener("touchmove", (e) => {
       if (e.touches.length > 0) {
@@ -369,30 +410,24 @@
     }, { passive: true });
     canvas.addEventListener("touchend", onPointerLeave);
 
-    // Pulse action on click / tap
-    function pulse() {
+    // Pulse repulsion on click
+    canvas.addEventListener("click", () => {
       particles.forEach(p => {
         const angle = Math.random() * Math.PI * 2;
-        const force = Math.random() * 25 + 10;
+        const force = Math.random() * 20 + 8;
         p.vx += Math.cos(angle) * force;
         p.vy += Math.sin(angle) * force;
       });
-      if (video) video.style.opacity = "0.2";
-      if (fadeTimeout) clearTimeout(fadeTimeout);
-      fadeTimeout = setTimeout(() => {
-        if (video) video.style.opacity = "1";
-      }, 1200);
-    }
-    canvas.addEventListener("click", pulse);
+      if (img) img.style.opacity = "0.35";
+      setTimeout(() => { if (img) img.style.opacity = "0.95"; }, 800);
+    });
 
-    // Performance: Pause simulation when scrolled out of view
+    // Observer to pause when offscreen
     const observer = new IntersectionObserver(([entry]) => {
       isVisible = entry.isIntersecting;
       if (isVisible) {
-        if (video && video.paused) video.play().catch(() => {});
         render();
       } else {
-        if (video && !video.paused) video.pause();
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
       }
     }, { threshold: 0.1 });
@@ -400,7 +435,7 @@
     const heroSection = document.getElementById("home");
     if (heroSection) observer.observe(heroSection);
 
-    // Render loop
+    // Render loop: Hasib mosaic spring physics
     function render() {
       if (!isVisible) return;
 
@@ -410,7 +445,7 @@
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
 
-          // Mouse repulsion force
+          // Cursor repulsion
           const dx = mouse.x - p.x;
           const dy = mouse.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
@@ -418,15 +453,13 @@
           if (dist < mouse.radius) {
             const force = (mouse.radius - dist) / mouse.radius;
             const angle = Math.atan2(dy, dx);
-            p.vx -= Math.cos(angle) * force * 10;
-            p.vy -= Math.sin(angle) * force * 10;
+            p.vx -= Math.cos(angle) * force * 14;
+            p.vy -= Math.sin(angle) * force * 14;
           }
 
-          // Spring return to home position (Interactive Matrix physics formula)
-          const homeDx = p.homeX - p.x;
-          const homeDy = p.homeY - p.y;
-          p.vx += homeDx * 0.08;
-          p.vy += homeDy * 0.08;
+          // Elastic spring return to home position
+          p.vx += (p.homeX - p.x) * 0.08;
+          p.vy += (p.homeY - p.y) * 0.08;
 
           // Friction damping
           p.vx *= 0.82;
@@ -436,9 +469,8 @@
           p.y += p.vy;
 
           ctx.fillStyle = p.color;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
+          // Square mosaic tiles like Hasib!
+          ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
         }
       }
 
