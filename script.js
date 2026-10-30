@@ -50,10 +50,13 @@
       if (heroHeadlineWrap) heroHeadlineWrap.style.opacity = "1";
       if (heroPortraitLayer) heroPortraitLayer.style.opacity = "1";
 
-      const isMobile = window.innerWidth < 768;
-      // Exact Hasib split & placement: frames neck & collar, positions head proudly above PORTFOLIO
-      const splitGap = isMobile ? Math.min(window.innerWidth * 0.22, 90) : 200;
-      const liftY = isMobile ? 35 : 88;
+      const w = window.innerWidth;
+      const isMobile = w < 768;
+      const isTablet = w >= 768 && w <= 1024;
+
+      // Exact Hasib split & placement across all screen types
+      const splitGap = isMobile ? Math.min(w * 0.22, 85) : (isTablet ? 140 : 200);
+      const liftY = isMobile ? 38 : (isTablet ? 65 : 88);
 
       if (gsap && !prefersReducedMotion) {
         gsap.to(titlePartLeft, { x: -splitGap, duration: 1.5, ease: "power3.out" });
@@ -71,6 +74,7 @@
 
       initHeroInteractivePortrait();
       if (siteContent) siteContent.classList.add("animate-site-in");
+      window.dispatchEvent(new Event("scroll"));
     }
 
     function finishIntro() {
@@ -481,37 +485,48 @@
   }
 
   /* ==========================================================================
-     2. FIXED NAVBAR SCROLL BLUR & ACTIVE LINKS
+     2. FIXED NAVBAR SCROLL BLUR, ACTIVE LINKS & SMOOTH SCROLLING
      ========================================================================== */
   function initNavbar() {
     if (!siteNav) return;
 
-    const sections = Array.from(document.querySelectorAll("section[id]"));
     const navLinks = Array.from(document.querySelectorAll(".nav-link"));
 
     function onScroll() {
       const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
       // Blur background on scroll
-      if (scrollY > 60) {
+      if (scrollY > 50) {
         siteNav.classList.add("is-scrolled");
       } else {
         siteNav.classList.remove("is-scrolled");
       }
 
-      // Highlight active section
+      // Highlight active section accurately using true document coordinates
+      const sections = Array.from(document.querySelectorAll("section[id]"));
+      const viewportMid = scrollY + window.innerHeight * 0.35;
+      const isAtBottom = (window.innerHeight + scrollY) >= (document.documentElement.scrollHeight - 70);
+
       let currentId = "home";
-      for (const section of sections) {
-        const top = section.offsetTop - 180;
-        const height = section.offsetHeight;
-        if (scrollY >= top && scrollY < top + height) {
-          currentId = section.getAttribute("id");
-          break;
+
+      if (isAtBottom) {
+        currentId = "contact";
+      } else {
+        for (const section of sections) {
+          const rect = section.getBoundingClientRect();
+          const docTop = rect.top + scrollY;
+          const height = section.offsetHeight;
+
+          if (viewportMid >= docTop && viewportMid < docTop + height) {
+            currentId = section.getAttribute("id");
+            break;
+          }
         }
       }
 
       navLinks.forEach(link => {
-        if (link.getAttribute("href") === `#${currentId}`) {
+        const href = link.getAttribute("href");
+        if (href === `#${currentId}`) {
           link.classList.add("active");
         } else {
           link.classList.remove("active");
@@ -520,7 +535,34 @@
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
     onScroll();
+
+    // Smooth Anchor Scrolling with precise navbar offset
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function (e) {
+        const targetId = this.getAttribute("href");
+        if (!targetId || targetId === "#") return;
+        const targetEl = document.querySelector(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          const navOffset = 64;
+          const elTop = targetEl.getBoundingClientRect().top + window.pageYOffset - navOffset;
+          window.scrollTo({
+            top: targetId === "#home" ? 0 : elTop,
+            behavior: "smooth"
+          });
+          // Close mobile drawer if open
+          if (mobileDrawer && mobileDrawer.classList.contains("is-open")) {
+            mobileDrawer.classList.remove("is-open");
+            if (mobileMenuBtn) {
+              mobileMenuBtn.setAttribute("aria-expanded", "false");
+              mobileDrawer.setAttribute("aria-hidden", "true");
+            }
+          }
+        }
+      });
+    });
 
     // Mobile Drawer Toggle
     if (mobileMenuBtn && mobileDrawer) {
@@ -535,15 +577,6 @@
           mobileMenuBtn.setAttribute("aria-expanded", "true");
           mobileDrawer.setAttribute("aria-hidden", "false");
         }
-      });
-
-      // Close drawer on clicking link
-      mobileDrawer.querySelectorAll(".mobile-nav-link").forEach(link => {
-        link.addEventListener("click", () => {
-          mobileDrawer.classList.remove("is-open");
-          mobileMenuBtn.setAttribute("aria-expanded", "false");
-          mobileDrawer.setAttribute("aria-hidden", "true");
-        });
       });
     }
   }
