@@ -11,3 +11,5 @@ skills-lock.json
 .impeccable/critique/
 .taste-skill/inspect/
 scratch/
+.vercel/
+*.zip

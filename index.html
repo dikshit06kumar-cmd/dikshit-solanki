@@ -16,7 +16,7 @@
   <meta property="og:image" content="images/trapped_success.png">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=5.0">
+  <link rel="stylesheet" href="style.css?v=5.1">
 
   <!-- GSAP CDN for High-Performance Physics Choreography -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -100,9 +100,10 @@
         </h1>
       </div>
 
-      <!-- Center Portrait Cutout Layer -->
+      <!-- Center Portrait Layer (dikshitanimation + interactive matrix) -->
       <div class="hero-portrait-layer" id="heroPortraitLayer">
-        <img src="images/dikshit_cutout.png" alt="Dikshit Solanki" class="hero-portrait-img" id="heroPortraitImg">
+        <video id="heroPortraitVideo" src="dikshitanimation.mp4" playsinline muted loop preload="auto" class="hero-portrait-video" aria-hidden="true"></video>
+        <canvas id="heroPortraitCanvas" class="hero-portrait-canvas" aria-label="Interactive particle portrait of Dikshit Solanki"></canvas>
       </div>
 
       <!-- Floating Subtitle and CTAs -->
@@ -510,6 +511,6 @@
   </div>
 
   <!-- Main JavaScript -->
-  <script src="script.js?v=5.0"></script>
+  <script src="script.js?v=5.1"></script>
 </body>
 </html>

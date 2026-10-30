@@ -25,6 +25,8 @@
   const titlePartLeft = document.getElementById("titlePartLeft");
   const titlePartRight = document.getElementById("titlePartRight");
   const heroPortraitLayer = document.getElementById("heroPortraitLayer");
+  const heroPortraitVideo = document.getElementById("heroPortraitVideo");
+  const heroPortraitCanvas = document.getElementById("heroPortraitCanvas");
   const heroMetaBar = document.getElementById("heroMetaBar");
   const siteContent = document.getElementById("siteContent");
 
@@ -59,16 +61,16 @@
         heroHeadlineWrap.style.transform = "translate(-50%, -50%)";
       }
 
-      // Calculate gap based on screen size
+      // Calculate gap based on screen size (Hasib split proportion)
       const isMobile = window.innerWidth < 768;
-      const splitGap = isMobile ? window.innerWidth * 0.22 : 240;
+      const splitGap = isMobile ? window.innerWidth * 0.32 : Math.min(window.innerWidth * 0.35, 540);
       const liftY = isMobile ? -60 : -100;
 
       if (gsap && !prefersReducedMotion) {
-        gsap.to(titlePartLeft, { x: -splitGap, duration: 1.2, ease: "power3.out" });
-        gsap.to(titlePartRight, { x: splitGap, duration: 1.2, ease: "power3.out" });
-        gsap.to(heroHeadlineWrap, { y: liftY, duration: 1.2, ease: "power3.inOut" });
-        gsap.to(heroPortraitLayer, { opacity: 1, duration: 1, ease: "power2.out" });
+        gsap.to(titlePartLeft, { x: -splitGap, duration: 1.4, ease: "power3.out" });
+        gsap.to(titlePartRight, { x: splitGap, duration: 1.4, ease: "power3.out" });
+        gsap.to(heroHeadlineWrap, { y: liftY, duration: 1.4, ease: "power3.inOut" });
+        gsap.to(heroPortraitLayer, { opacity: 1, duration: 1.2, ease: "power2.out" });
         gsap.fromTo(heroMetaBar, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2 });
       } else {
         if (titlePartLeft) titlePartLeft.style.transform = `translateX(-${splitGap}px)`;
@@ -77,6 +79,15 @@
         if (heroPortraitLayer) heroPortraitLayer.style.opacity = "1";
         if (heroMetaBar) heroMetaBar.style.opacity = "1";
       }
+
+      // Step 4: Play dikshitanimation when PORTFOLIO splits
+      if (heroPortraitVideo) {
+        heroPortraitVideo.currentTime = 0;
+        heroPortraitVideo.play().catch(() => {});
+      }
+
+      // Initialize the Interactive Matrix particle system on Dikshit's portrait
+      initHeroInteractivePortrait();
 
       if (siteContent) {
         siteContent.classList.add("animate-site-in");
@@ -89,9 +100,9 @@
       return;
     }
 
-    // Set initial states
+    // Set initial states: hero portrait stays hidden until DIKSHIT morphs to PORTFOLIO
     gsap.set(heroHeadlineWrap, { opacity: 0 });
-    gsap.set(heroPortraitLayer, { opacity: 0.95 });
+    gsap.set(heroPortraitLayer, { opacity: 0 });
     gsap.set(heroMetaBar, { opacity: 0 });
 
     const chars = Array.from(introWordmark.querySelectorAll(".intro-char"));
@@ -215,6 +226,226 @@
         }
       }, 55);
     }
+  }
+
+  /* ==========================================================================
+     HERO INTERACTIVE PARTICLE MATRIX (Dikshit Solanki Portrait)
+     Applies Interactive Matrix cursor repulsion & spring physics to Dikshit
+     ========================================================================== */
+  let heroPortraitInitialized = false;
+
+  function initHeroInteractivePortrait() {
+    if (heroPortraitInitialized) return;
+    heroPortraitInitialized = true;
+
+    const canvas = document.getElementById("heroPortraitCanvas");
+    const video = document.getElementById("heroPortraitVideo");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let isInteracting = false;
+    let fadeTimeout = null;
+    let isVisible = true;
+    let animationFrameId = null;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+    }
+
+    resizeCanvas();
+
+    // High-resolution portrait frame
+    const img = new Image();
+    img.src = "images/dikshitani/ezgif-frame-200.jpg";
+
+    function buildParticles() {
+      if (!img.complete || img.naturalWidth === 0) return;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const imgAspect = img.naturalWidth / img.naturalHeight;
+      const canvasAspect = canvas.width / canvas.height;
+      let drawW, drawH, drawX, drawY;
+
+      if (imgAspect > canvasAspect) {
+        drawH = canvas.height;
+        drawW = drawH * imgAspect;
+        drawX = (canvas.width - drawW) / 2;
+        drawY = 0;
+      } else {
+        drawW = canvas.width;
+        drawH = drawW / imgAspect;
+        drawX = 0;
+        drawY = (canvas.height - drawH) / 2;
+      }
+
+      const sampleW = 280;
+      const sampleH = Math.round(sampleW / imgAspect);
+      const off = document.createElement("canvas");
+      off.width = sampleW;
+      off.height = sampleH;
+      const offCtx = off.getContext("2d");
+      offCtx.drawImage(img, 0, 0, sampleW, sampleH);
+      const imgData = offCtx.getImageData(0, 0, sampleW, sampleH).data;
+
+      particles = [];
+      const step = 2;
+      const scaleX = drawW / sampleW;
+      const scaleY = drawH / sampleH;
+
+      for (let y = 0; y < sampleH; y += step) {
+        for (let x = 0; x < sampleW; x += step) {
+          const idx = (y * sampleW + x) * 4;
+          const r = imgData[idx];
+          const g = imgData[idx + 1];
+          const b = imgData[idx + 2];
+          const brightness = (r + g + b) / 3;
+
+          // Threshold: isolate facial features, hair, eyes, sweater from pure black
+          if (brightness > 32) {
+            const homeX = drawX + x * scaleX;
+            const homeY = drawY + y * scaleY;
+
+            if (homeX >= 0 && homeX <= canvas.width && homeY >= 0 && homeY <= canvas.height) {
+              particles.push({
+                x: homeX,
+                y: homeY,
+                homeX: homeX,
+                homeY: homeY,
+                vx: 0,
+                vy: 0,
+                radius: Math.max(0.75, (brightness / 255) * 2.0 * dpr),
+                color: `rgb(${r},${g},${b})`
+              });
+            }
+          }
+        }
+      }
+    }
+
+    img.onload = () => {
+      buildParticles();
+    };
+    if (img.complete) buildParticles();
+
+    window.addEventListener("resize", () => {
+      resizeCanvas();
+      buildParticles();
+    });
+
+    // Cursor tracking
+    const mouse = { x: -9999, y: -9999, radius: 95 * (window.devicePixelRatio || 1) };
+
+    function onPointerMove(clientX, clientY) {
+      const crect = canvas.getBoundingClientRect();
+      mouse.x = (clientX - crect.left) * (canvas.width / crect.width);
+      mouse.y = (clientY - crect.top) * (canvas.height / crect.height);
+      isInteracting = true;
+
+      if (video) video.style.opacity = "0.2";
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+    }
+
+    function onPointerLeave() {
+      mouse.x = -9999;
+      mouse.y = -9999;
+      fadeTimeout = setTimeout(() => {
+        isInteracting = false;
+        if (video) video.style.opacity = "1";
+      }, 1000);
+    }
+
+    canvas.addEventListener("mousemove", (e) => onPointerMove(e.clientX, e.clientY));
+    canvas.addEventListener("mouseleave", onPointerLeave);
+
+    canvas.addEventListener("touchmove", (e) => {
+      if (e.touches.length > 0) {
+        onPointerMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+    canvas.addEventListener("touchend", onPointerLeave);
+
+    // Pulse action on click / tap
+    function pulse() {
+      particles.forEach(p => {
+        const angle = Math.random() * Math.PI * 2;
+        const force = Math.random() * 25 + 10;
+        p.vx += Math.cos(angle) * force;
+        p.vy += Math.sin(angle) * force;
+      });
+      if (video) video.style.opacity = "0.2";
+      if (fadeTimeout) clearTimeout(fadeTimeout);
+      fadeTimeout = setTimeout(() => {
+        if (video) video.style.opacity = "1";
+      }, 1200);
+    }
+    canvas.addEventListener("click", pulse);
+
+    // Performance: Pause simulation when scrolled out of view
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible) {
+        if (video && video.paused) video.play().catch(() => {});
+        render();
+      } else {
+        if (video && !video.paused) video.pause();
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      }
+    }, { threshold: 0.1 });
+
+    const heroSection = document.getElementById("home");
+    if (heroSection) observer.observe(heroSection);
+
+    // Render loop
+    function render() {
+      if (!isVisible) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (particles.length > 0) {
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
+          // Mouse repulsion force
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < mouse.radius) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            const angle = Math.atan2(dy, dx);
+            p.vx -= Math.cos(angle) * force * 10;
+            p.vy -= Math.sin(angle) * force * 10;
+          }
+
+          // Spring return to home position (Interactive Matrix physics formula)
+          const homeDx = p.homeX - p.x;
+          const homeDy = p.homeY - p.y;
+          p.vx += homeDx * 0.08;
+          p.vy += homeDy * 0.08;
+
+          // Friction damping
+          p.vx *= 0.82;
+          p.vy *= 0.82;
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    }
+
+    render();
   }
 
   /* ==========================================================================
