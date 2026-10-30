@@ -888,13 +888,13 @@ body.is-locked {
    ========================================================================== */
 .section-work {
   background-color: var(--bg-color);
-  padding: 100px 24px;
+  padding: 80px 24px 50px;
   position: relative;
 }
 
 @media (min-width: 768px) {
   .section-work {
-    padding: 140px 48px;
+    padding: 120px 48px 60px;
   }
 }
 
@@ -1094,18 +1094,39 @@ body.is-locked {
   border-color: #25D366;
 }
 
+/* Section Separator Line */
+.section-divider-wrap {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .section-divider-wrap {
+    padding: 0 48px;
+  }
+}
+
+.section-divider-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.22) 15%, rgba(255, 255, 255, 0.22) 85%, transparent 100%);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.12);
+}
+
 /* ==========================================================================
    6. CONTACT SECTION
    ========================================================================== */
 .section-contact {
   background-color: var(--bg-color);
-  padding: 100px 24px;
+  padding: 50px 24px 100px;
   position: relative;
 }
 
 @media (min-width: 768px) {
   .section-contact {
-    padding: 140px 48px;
+    padding: 60px 48px 120px;
   }
 }
 
@@ -1152,6 +1173,8 @@ body.is-locked {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 36px;
 }
 
 @media (min-width: 768px) {
@@ -1169,13 +1192,69 @@ body.is-locked {
   align-items: center;
   gap: 20px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-link-box .contact-icon-wrap,
+.contact-link-box .contact-label,
+.contact-link-box .contact-value {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .contact-link-box:hover {
   background: rgba(255, 255, 255, 0.07);
   border-color: var(--border-strong);
   transform: translateY(-3px);
+}
+
+/* Direct Email - Red Hover State */
+.contact-link-email:hover,
+#emailContactBox:hover {
+  background: rgba(234, 67, 53, 0.08);
+  border-color: #EA4335;
+  box-shadow: 0 10px 32px rgba(234, 67, 53, 0.25);
+  transform: translateY(-4px);
+}
+
+.contact-link-email:hover .contact-icon-wrap,
+#emailContactBox:hover .contact-icon-wrap {
+  background: rgba(234, 67, 53, 0.2);
+  color: #EA4335;
+}
+
+.contact-link-email:hover .contact-label,
+#emailContactBox:hover .contact-label {
+  color: #EA4335;
+}
+
+.contact-link-email:hover .contact-value,
+#emailContactBox:hover .contact-value {
+  color: #EA4335;
+}
+
+/* WhatsApp Direct - WhatsApp Green Hover State */
+.contact-link-whatsapp:hover,
+#whatsappContactBox:hover {
+  background: rgba(37, 211, 102, 0.08);
+  border-color: #25D366;
+  box-shadow: 0 10px 32px rgba(37, 211, 102, 0.25);
+  transform: translateY(-4px);
+}
+
+.contact-link-whatsapp:hover .contact-icon-wrap,
+#whatsappContactBox:hover .contact-icon-wrap {
+  background: rgba(37, 211, 102, 0.2);
+  color: #25D366;
+}
+
+.contact-link-whatsapp:hover .contact-label,
+#whatsappContactBox:hover .contact-label {
+  color: #25D366;
+}
+
+.contact-link-whatsapp:hover .contact-value,
+#whatsappContactBox:hover .contact-value {
+  color: #25D366;
 }
 
 .contact-icon-wrap {
