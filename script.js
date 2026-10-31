@@ -51,12 +51,19 @@
       if (heroPortraitLayer) heroPortraitLayer.style.opacity = "1";
 
       const w = window.innerWidth;
-      const isMobile = w < 768;
-      const isTablet = w >= 768 && w <= 1024;
+      const isSmallMobile = w <= 380;
+      const isMobile = w < 600;
+      const isTablet = w >= 600 && w <= 1024;
 
-      // Exact Hasib split & placement across all screen types
-      const splitGap = isMobile ? Math.min(w * 0.22, 85) : (isTablet ? 140 : 200);
-      const liftY = isMobile ? 38 : (isTablet ? 65 : 88);
+      // Exact split & placement across all screen types
+      const splitGap = isSmallMobile
+        ? Math.min(w * 0.12, 38)
+        : (isMobile
+            ? Math.min(w * 0.15, 54)
+            : (isTablet
+                ? Math.min(w * 0.16, 120)
+                : 200));
+      const liftY = isSmallMobile ? 22 : (isMobile ? 30 : (isTablet ? 65 : 88));
 
       if (gsap && !prefersReducedMotion) {
         gsap.to(titlePartLeft, { x: -splitGap, duration: 1.5, ease: "power3.out" });
@@ -341,7 +348,8 @@
       const data = offCtx.getImageData(0, 0, sampleW, sampleH).data;
 
       particles = [];
-      const step = 2;
+      const isMobile = window.innerWidth < 600;
+      const step = isMobile ? 3 : 2;
       const scaleX = drawW / sampleW;
       const scaleY = drawH / sampleH;
       const tileSize = (drawW / sampleW) * step * 0.95;
@@ -554,28 +562,44 @@
           });
           // Close mobile drawer if open
           if (mobileDrawer && mobileDrawer.classList.contains("is-open")) {
-            mobileDrawer.classList.remove("is-open");
-            if (mobileMenuBtn) {
-              mobileMenuBtn.setAttribute("aria-expanded", "false");
-              mobileDrawer.setAttribute("aria-hidden", "true");
-            }
+            closeMobileDrawer();
           }
         }
       });
     });
 
-    // Mobile Drawer Toggle
+    // Mobile Drawer Toggle with State Control & Escape Key Handling
+    function openMobileDrawer() {
+      if (!mobileDrawer || !mobileMenuBtn) return;
+      mobileDrawer.classList.add("is-open");
+      mobileMenuBtn.classList.add("is-active");
+      mobileMenuBtn.setAttribute("aria-expanded", "true");
+      mobileDrawer.setAttribute("aria-hidden", "false");
+      body.classList.add("is-locked");
+    }
+
+    function closeMobileDrawer() {
+      if (!mobileDrawer || !mobileMenuBtn) return;
+      mobileDrawer.classList.remove("is-open");
+      mobileMenuBtn.classList.remove("is-active");
+      mobileMenuBtn.setAttribute("aria-expanded", "false");
+      mobileDrawer.setAttribute("aria-hidden", "true");
+      body.classList.remove("is-locked");
+    }
+
     if (mobileMenuBtn && mobileDrawer) {
       mobileMenuBtn.addEventListener("click", () => {
         const isOpen = mobileDrawer.classList.contains("is-open");
         if (isOpen) {
-          mobileDrawer.classList.remove("is-open");
-          mobileMenuBtn.setAttribute("aria-expanded", "false");
-          mobileDrawer.setAttribute("aria-hidden", "true");
+          closeMobileDrawer();
         } else {
-          mobileDrawer.classList.add("is-open");
-          mobileMenuBtn.setAttribute("aria-expanded", "true");
-          mobileDrawer.setAttribute("aria-hidden", "false");
+          openMobileDrawer();
+        }
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && mobileDrawer.classList.contains("is-open")) {
+          closeMobileDrawer();
         }
       });
     }
